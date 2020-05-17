@@ -1,0 +1,54 @@
+{
+  "name": "node-install-release",
+  "version": "0.1.1",
+  "description": "Cross-platform solution for installing releases of Node.js",
+  "keywords": [
+    "node",
+    "version",
+    "versions",
+    "install",
+    "dist",
+    "release",
+    "releases"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:kmalakoff/node-install-release.git"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "compat": "nvs --engines -- mocha-compat test/spec/**/*.test.js  --timeout=9999999",
+    "format": "prettier --write '**/*.js'",
+    "lint": "eslint .",
+    "test": "mocha-compat test/spec/**/*.test.js --timeout=9999999"
+  },
+  "dependencies": {
+    "arch": "^2.1.2",
+    "end-with": "^1.0.2",
+    "get-remote": "^0.2.1",
+    "lodash.find": "^4.6.0",
+    "mkdirp": "^0.5.5",
+    "node-filename-to-dist-paths": "^0.1.0",
+    "node-servers": "^1.0.3",
+    "queue-cb": "^1.1.2",
+    "rimraf": "^1.0.9",
+    "version-string-to-version": "^0.1.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.0.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "mocha-compat": "^3.5.5",
+    "nvs": "^0.3.0",
+    "prettier": "^2.0.5"
+  },
+  "engines": {
+    "node": ">=0.8"
+  }
+}
