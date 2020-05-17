@@ -18,19 +18,21 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "compat": "nvs --engines -- mocha-compat test/spec/**/*.test.js  --timeout=9999999",
+    "compat": "nvs --engines -- mocha-compat test/spec/**/*.test.js --no-timeouts",
     "format": "prettier --write '**/*.js'",
     "lint": "eslint .",
-    "test": "mocha-compat test/spec/**/*.test.js --timeout=9999999"
+    "test": "mocha-compat test/spec/**/*.test.js --no-timeouts"
   },
   "dependencies": {
     "arch": "^2.1.2",
+    "cross-spawn-cb": "^0.2.2",
     "end-with": "^1.0.2",
     "get-remote": "^0.2.1",
     "lodash.find": "^4.6.0",
     "mkdirp": "^0.5.5",
     "node-filename-to-dist-paths": "^0.1.0",
     "node-servers": "^1.0.3",
+    "osenv": "^0.1.5",
     "queue-cb": "^1.1.2",
     "rimraf": "^1.0.9",
     "version-string-to-version": "^0.1.0"
