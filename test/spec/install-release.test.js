@@ -92,7 +92,7 @@ describe('install-release', function () {
       });
     }
 
-    it.only('v0.8 (win32,x64)', function (done) {
+    it('v0.8 (win32,x64)', function (done) {
       var installPath = path.join(INSTALLED_DIR, 'v0.8-win32-x64');
       installRelease('v0.8', installPath, assign({ platform: 'win32', arch: 'x64' }, OPTIONS), function (err, res) {
         assert.ok(!err);
