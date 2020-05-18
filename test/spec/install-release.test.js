@@ -13,11 +13,11 @@ var OPTIONS = {
 };
 
 describe('install-release', function () {
-  // before(function (callback) {
-  //   rimraf(INSTALLED_DIR, function () {
-  //     rimraf(OPTIONS.cacheDirectory, callback.bind(null, null));
-  //   });
-  // });
+  before(function (callback) {
+    rimraf(INSTALLED_DIR, function () {
+      rimraf(OPTIONS.cacheDirectory, callback.bind(null, null));
+    });
+  });
 
   describe('happy path', function () {
     // TODO: remove platform specific after troubleshooting decompress on windows
@@ -61,7 +61,7 @@ describe('install-release', function () {
 
     // TODO: remove platform specific after troubleshooting decompress on windows
     if (process.platform !== 'win32') {
-      it.only('v12 (local src)', function (done) {
+      it('v12 (local src)', function (done) {
         var installPath = path.join(INSTALLED_DIR, 'v12-local-src');
         installRelease('v12', installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
           assert.ok(!err);

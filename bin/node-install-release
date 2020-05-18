@@ -4,9 +4,10 @@ var program = require('commander');
 var assign = require('object.assign');
 var path = require('path');
 
-program.option('a, --platform [platform]', 'Platform like darwin');
-program.option('a, --a [arch]', 'Architecure x64, x86, arm-pi');
-program.option('c, --cacheDirectory [cacheDirectory]', 'Cache directory');
+program.option('-a, --platform [platform]', 'Platform like darwin');
+program.option('-a, --arch [arch]', 'Architecure x64, x86, arm-pi');
+program.option('-f, --filename [filename]', 'Distribution filename from https://nodejs.org/dist/index.json');
+program.option('-c, --cacheDirectory [cacheDirectory]', 'Cache directory');
 program.parse(process.argv);
 
 var args = Array.prototype.slice.call(program.args, 0);
