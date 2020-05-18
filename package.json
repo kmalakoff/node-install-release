@@ -43,7 +43,7 @@
     "rimraf": "^1.0.9",
     "semver": "^6.3.0",
     "single-line-log": "^1.1.2",
-    "version-string-to-version": "^0.1.0"
+    "version-string-to-version": "^0.2.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
@@ -55,7 +55,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "mocha-compat": "^3.5.5",
-    "nvs": "^0.4.0",
+    "nvs": "^0.4.1",
     "prettier": "^2.0.5"
   },
   "engines": {
