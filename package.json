@@ -1,6 +1,6 @@
 {
   "name": "node-install-release",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Cross-platform solution for installing releases of Node.js",
   "keywords": [
     "node",
@@ -43,7 +43,7 @@
     "rimraf": "^1.0.9",
     "semver": "^6.3.0",
     "single-line-log": "^1.1.2",
-    "version-string-to-version": "^0.1.0"
+    "version-string-to-version": "^0.2.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
