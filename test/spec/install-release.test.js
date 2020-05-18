@@ -1,10 +1,10 @@
 var assert = require('assert');
 var path = require('path');
-var fs = require('fs');
 var assign = require('object.assign');
-// var rimraf = require('rimraf');
+var rimraf = require('rimraf');
 
 var installRelease = require('../..');
+var validateInstall = require('../lib/validateInstall');
 
 var TMP_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp'));
 var INSTALL_DIR = path.join(TMP_DIR, 'installed');
@@ -12,45 +12,18 @@ var OPTIONS = {
   cacheDirectory: path.join(TMP_DIR, 'cache'),
 };
 
-function validateInstall(installPath, options) {
-  options = options || {};
-  var platform = options.platform || process.platform;
-
-  if (platform === 'win32') {
-    try {
-      fs.accessSync(path.join(installPath, 'node.exe'));
-      fs.accessSync(path.join(installPath, 'npm'));
-      fs.accessSync(path.join(installPath, 'npm.cmd'));
-      // fs.accessSync(path.join(installPath, 'npx'));
-      // fs.accessSync(path.join(installPath, 'npx.cmd'));
-      // fs.accessSync(path.join(installPath, 'install_tools.bat'));
-      fs.accessSync(path.join(installPath, 'node_modules', 'npm'));
-    } catch (err) {
-      assert(!err, err.message);
-    }
-  } else {
-    try {
-      fs.accessSync(path.join(installPath, 'bin', 'node'));
-      fs.accessSync(path.join(installPath, 'bin', 'npm'));
-      // try {
-      //   fs.accessSync(path.join(installPath, 'bin', 'npx'));
-      // } catch (err) {
-      //   fs.accessSync(path.join(installPath, 'bin', 'node-waf'));
-      // }
-      // fs.accessSync(path.join(installPath, 'include', 'node'));
-      fs.accessSync(path.join(installPath, 'lib', 'node_modules', 'npm'));
-    } catch (err) {
-      assert(!err, err.message);
-    }
-  }
+function clean(callback) {
+  rimraf(INSTALL_DIR, function () {
+    rimraf(OPTIONS.cacheDirectory, callback.bind(null, null));
+  });
 }
 
 describe('install-release', function () {
-  // beforeEach(rimraf.bind(null, INSTALL_DIR));
-  // after(rimraf.bind(null, INSTALL_DIR));
+  beforeEach(clean);
+  after(clean);
 
   describe('happy path', function () {
-    // TODO: remove platform specific after troubleshooting decompress
+    // TODO: remove platform specific after troubleshooting decompress on windows
     if (process.platform !== 'win32') {
       it('v12 (darwin,x64)', function (done) {
         var installPath = path.join(INSTALL_DIR, 'v12-darwin-x64');
@@ -89,7 +62,7 @@ describe('install-release', function () {
       });
     });
 
-    it('v12 (local src)', function (done) {
+    it.skip('v12 (local src)', function (done) {
       var installPath = path.join(INSTALL_DIR, 'v12-local-src');
       installRelease('v12', installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
         assert.ok(!err);
@@ -98,7 +71,7 @@ describe('install-release', function () {
       });
     });
 
-    // TODO: remove platform specific after troubleshooting decompress
+    // TODO: remove platform specific after troubleshooting decompress on windows
     if (process.platform !== 'win32') {
       it('v0.8 (darwin,x64)', function (done) {
         var installPath = path.join(INSTALL_DIR, 'v0.8-darwin-x64');
