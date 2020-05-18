@@ -1,6 +1,6 @@
 {
   "name": "node-install-release",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Cross-platform solution for installing releases of Node.js",
   "keywords": [
     "node",
@@ -36,15 +36,14 @@
     "mkdirp": "^0.5.5",
     "ncp": "^2.0.0",
     "node-filename-to-dist-paths": "^0.1.0",
-    "node-servers": "^1.0.3",
+    "node-semvers": "^0.4.3",
     "object.assign": "^4.1.0",
     "osenv": "^0.1.5",
     "progress-stream": "^2.0.0",
     "queue-cb": "^1.1.2",
     "rimraf": "^1.0.9",
     "semver": "^6.3.0",
-    "single-line-log": "^1.1.2",
-    "version-string-to-version": "^0.2.0"
+    "single-line-log": "^1.1.2"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
