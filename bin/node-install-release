@@ -1,14 +1,24 @@
 #!/usr/bin/env node
 
-var args = Array.prototype.slice.call(process.argv, 2);
-if (args.length <= 0) {
-  console.log('err command. Example usage: nir version');
+var program = require('commander');
+var assign = require('object.assign');
+var path = require('path');
+
+program.option('a, --platform [platform]', 'Platform like darwin');
+program.option('a, --a [arch]', 'Architecure x64, x86, arm-pi');
+program.option('c, --cacheDirectory [cacheDirectory]', 'Cache directory');
+program.parse(process.argv);
+
+var args = Array.prototype.slice.call(program.args, 0);
+if (args.length < 1) {
+  console.log('Missing command. Example usage: nir version [directory]');
   return process.exit(-1);
 }
 
 var nir = require('..');
+if (args.length === 1) args.push(path.join(process.cwd(), args[0]));
 
-nir(args[0], args[1], args.slice(2), { stdio: 'inherit' }, function (err) {
+nir(args[0], args[1], assign({ stdio: 'inherit' }, program), function (err) {
   if (err) {
     console.log(err.message);
     return process.exit(err.code || -1);

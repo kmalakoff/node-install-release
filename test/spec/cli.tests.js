@@ -7,6 +7,7 @@ var crossSpawn = require('cross-spawn-cb');
 var installRelease = require('../..');
 var validateInstall = require('../lib/validateInstall');
 
+var CLI = path.join(__dirname, '..', '..', 'bin', 'node-install-release');
 var TMP_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp'));
 var INSTALLED_DIR = path.join(TMP_DIR, 'installed');
 var OPTIONS = {
@@ -14,17 +15,18 @@ var OPTIONS = {
 };
 
 describe('install-release', function () {
-  before(function (callback) {
-    rimraf(INSTALLED_DIR, function () {
-      rimraf(OPTIONS.cacheDirectory, callback.bind(null, null));
-    });
-  });
+  // before(function (callback) {
+  //   rimraf(INSTALLED_DIR, function () {
+  //     rimraf(OPTIONS.cacheDirectory, callback.bind(null, null));
+  //   });
+  // });
 
   describe('happy path', function () {
     // TODO: remove platform specific after troubleshooting decompress on windows
     if (process.platform !== 'win32') {
       it('v12 (darwin,x64)', function (done) {
         var installPath = path.join(INSTALLED_DIR, 'v12-darwin-x64');
+
         installRelease('v12', installPath, assign({ platform: 'darwin', arch: 'x64' }, OPTIONS), function (err, res) {
           assert.ok(!err);
           validateInstall(installPath, { platform: 'darwin' });
@@ -130,7 +132,7 @@ var EOL = /\r\n|\r|\n/;
 describe('cli', function () {
   describe('happy path', function () {
     it('npm whoami', function (done) {
-      crossSpawn(path.join(__dirname, '..', '..', 'bin', 'node-install-release'), ['12', 'npm', 'whoami'], { stdout: 'string' }, function (err, res) {
+      crossSpawn(CLI, ['12', 'npm', 'whoami'], { stdout: 'string' }, function (err, res) {
         assert.ok(!err);
         assert.equal(res.code, 0);
         assert.ok(res.stdout.split(EOL).slice(-2, -1)[0].length > 1);
@@ -139,7 +141,7 @@ describe('cli', function () {
     });
 
     it('12', function (done) {
-      crossSpawn(path.join(__dirname, '..', '..', 'bin', 'node-install-release'), ['12', 'node', '--version'], { stdout: 'string' }, function (err, res) {
+      crossSpawn(CLI, ['12', 'node', '--version'], { stdout: 'string' }, function (err, res) {
         assert.ok(!err);
         assert.equal(res.code, 0);
         assert.equal(res.stdout.split(EOL).slice(-2, -1)[0], 'v12.16.3');
@@ -148,7 +150,7 @@ describe('cli', function () {
     });
 
     it('one version with options', function (done) {
-      crossSpawn(path.join(__dirname, '..', '..', 'bin', 'node-install-release'), ['lts/argon', NODE, '--version'], { stdout: 'string' }, function (err, res) {
+      crossSpawn(CLI, ['lts/argon', NODE, '--version'], { stdout: 'string' }, function (err, res) {
         assert.ok(!err);
         assert.equal(res.code, 0);
         assert.equal(res.stdout.split(EOL).slice(-2, -1)[0], 'v4.9.1');
@@ -159,7 +161,7 @@ describe('cli', function () {
 
   describe('unhappy path', function () {
     it('err version (undefined)', function (done) {
-      crossSpawn(path.join(__dirname, '..', '..', 'bin', 'node-install-release'), [undefined], { stdout: 'string' }, function (err, res) {
+      crossSpawn(CLI, [undefined], { stdout: 'string' }, function (err, res) {
         assert.ok(!err);
         assert.ok(res.code !== 0);
         done();
@@ -167,7 +169,7 @@ describe('cli', function () {
     });
 
     it('err version (null)', function (done) {
-      crossSpawn(path.join(__dirname, '..', '..', 'bin', 'node-install-release'), [null, NODE, '--version'], { stdout: 'string' }, function (err, res) {
+      crossSpawn(CLI, [null, NODE, '--version'], { stdout: 'string' }, function (err, res) {
         assert.ok(!err);
         assert.ok(res.code !== 0);
         done();
@@ -175,7 +177,7 @@ describe('cli', function () {
     });
 
     it('invalid versions', function (done) {
-      crossSpawn(path.join(__dirname, '..', '..', 'bin', 'node-install-release'), ['junk', NODE, '--version'], { stdout: 'string' }, function (err, res) {
+      crossSpawn(CLI, ['junk', NODE, '--version'], { stdout: 'string' }, function (err, res) {
         assert.ok(!err);
         assert.ok(res.code !== 0);
         done();
