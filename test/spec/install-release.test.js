@@ -1,6 +1,6 @@
 var assert = require('assert');
 var path = require('path');
-var assign = require('object.assign');
+var assign = require('object-assign');
 var rimraf = require('rimraf');
 
 var installRelease = require('../..');
@@ -56,6 +56,20 @@ describe('install-release', function () {
         assert.ok(!err);
         validateInstall(installPath);
         done();
+      });
+    });
+
+    describe('promise', function () {
+      if (typeof Promise === 'undefined') return; // no promise support
+
+      it('v12 (local)', function (done) {
+        var installPath = path.join(INSTALLED_DIR, 'v12-local');
+        installRelease('v12', installPath, OPTIONS)
+          .then(function (res) {
+            validateInstall(installPath);
+            done();
+          })
+          .catch(done);
       });
     });
 
