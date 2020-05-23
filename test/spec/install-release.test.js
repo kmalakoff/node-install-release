@@ -41,7 +41,7 @@ describe('install-release', function () {
       });
     }
 
-    it.only('v12 (win32,x64)', function (done) {
+    it('v12 (win32,x64)', function (done) {
       var installPath = path.join(INSTALLED_DIR, 'v12-win32-x64');
       installRelease('v12', installPath, assign({ platform: 'win32', arch: 'x64' }, OPTIONS), function (err, res) {
         assert.ok(!err);
