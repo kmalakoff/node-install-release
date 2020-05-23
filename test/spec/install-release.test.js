@@ -20,26 +20,23 @@ describe('install-release', function () {
   });
 
   describe('happy path', function () {
-    // TODO: remove platform specific after troubleshooting decompress on windows
-    if (process.platform !== 'win32') {
-      it('v12 (darwin,x64)', function (done) {
-        var installPath = path.join(INSTALLED_DIR, 'v12-darwin-x64');
-        installRelease('v12', installPath, assign({ platform: 'darwin', arch: 'x64' }, OPTIONS), function (err, res) {
-          assert.ok(!err);
-          validateInstall(installPath, { platform: 'darwin' });
-          done();
-        });
+    it('v12 (darwin,x64)', function (done) {
+      var installPath = path.join(INSTALLED_DIR, 'v12-darwin-x64');
+      installRelease('v12', installPath, assign({ platform: 'darwin', arch: 'x64' }, OPTIONS), function (err, res) {
+        assert.ok(!err);
+        validateInstall(installPath, { platform: 'darwin' });
+        done();
       });
+    });
 
-      it('v12 (linux,x64)', function (done) {
-        var installPath = path.join(INSTALLED_DIR, 'v12-linux-x64');
-        installRelease('v12', installPath, assign({ platform: 'linux', arch: 'x64' }, OPTIONS), function (err, res) {
-          assert.ok(!err);
-          validateInstall(installPath, { platform: 'linux' });
-          done();
-        });
+    it('v12 (linux,x64)', function (done) {
+      var installPath = path.join(INSTALLED_DIR, 'v12-linux-x64');
+      installRelease('v12', installPath, assign({ platform: 'linux', arch: 'x64' }, OPTIONS), function (err, res) {
+        assert.ok(!err);
+        validateInstall(installPath, { platform: 'linux' });
+        done();
       });
-    }
+    });
 
     it('v12 (win32,x64)', function (done) {
       var installPath = path.join(INSTALLED_DIR, 'v12-win32-x64');
@@ -73,38 +70,32 @@ describe('install-release', function () {
       });
     });
 
-    // TODO: remove platform specific after troubleshooting decompress on windows
-    if (process.platform !== 'win32') {
-      it.skip('v12 (local src)', function (done) {
-        var installPath = path.join(INSTALLED_DIR, 'v12-local-src');
-        installRelease('v12', installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
-          assert.ok(!err);
-          validateInstall(installPath);
-          done();
-        });
+    it.skip('v12 (local src)', function (done) {
+      var installPath = path.join(INSTALLED_DIR, 'v12-local-src');
+      installRelease('v12', installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
+        assert.ok(!err);
+        validateInstall(installPath);
+        done();
       });
-    }
+    });
 
-    // TODO: remove platform specific after troubleshooting decompress on windows
-    if (process.platform !== 'win32') {
-      it('v0.8 (darwin,x64)', function (done) {
-        var installPath = path.join(INSTALLED_DIR, 'v0.8-darwin-x64');
-        installRelease('v0.8', installPath, assign({ platform: 'darwin', arch: 'x64' }, OPTIONS), function (err, res) {
-          assert.ok(!err);
-          validateInstall(installPath, { platform: 'darwin' });
-          done();
-        });
+    it('v0.8 (darwin,x64)', function (done) {
+      var installPath = path.join(INSTALLED_DIR, 'v0.8-darwin-x64');
+      installRelease('v0.8', installPath, assign({ platform: 'darwin', arch: 'x64' }, OPTIONS), function (err, res) {
+        assert.ok(!err);
+        validateInstall(installPath, { platform: 'darwin' });
+        done();
       });
+    });
 
-      it('v0.8 (linux,x64)', function (done) {
-        var installPath = path.join(INSTALLED_DIR, 'v0.8-linux-x64');
-        installRelease('v0.8', installPath, assign({ platform: 'linux', arch: 'x64' }, OPTIONS), function (err, res) {
-          assert.ok(!err);
-          validateInstall(installPath, { platform: 'linux' });
-          done();
-        });
+    it('v0.8 (linux,x64)', function (done) {
+      var installPath = path.join(INSTALLED_DIR, 'v0.8-linux-x64');
+      installRelease('v0.8', installPath, assign({ platform: 'linux', arch: 'x64' }, OPTIONS), function (err, res) {
+        assert.ok(!err);
+        validateInstall(installPath, { platform: 'linux' });
+        done();
       });
-    }
+    });
 
     it('v0.8 (win32,x64)', function (done) {
       var installPath = path.join(INSTALLED_DIR, 'v0.8-win32-x64');
@@ -124,16 +115,14 @@ describe('install-release', function () {
       });
     });
 
-    if (process.platform !== 'win32') {
-      it.skip('v0.8 (local src)', function (done) {
-        var installPath = path.join(INSTALLED_DIR, 'v0.8-local-src');
-        installRelease('v0.8', installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
-          assert.ok(!err);
-          validateInstall(installPath);
-          done();
-        });
+    it.skip('v0.8 (local src)', function (done) {
+      var installPath = path.join(INSTALLED_DIR, 'v0.8-local-src');
+      installRelease('v0.8', installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
+        assert.ok(!err);
+        validateInstall(installPath);
+        done();
       });
-    }
+    });
   });
 
   describe('unhappy path', function () {});
