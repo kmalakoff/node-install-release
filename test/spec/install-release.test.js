@@ -16,14 +16,16 @@ var TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: '
 
 function addTests(version, target) {
   var platform = target.platform || 'local';
-  var arch = target.platform || 'local';
+  var arch = target.arch || 'local';
 
-  it(version + ' (' + platform + ',' + arch + ')', function (done) {
-    var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
-    installRelease(version, installPath, assign({}, target, OPTIONS), function (err) {
-      assert.ok(!err);
-      validateInstall(installPath, target);
-      done();
+  describe('dist', function () {
+    it(version + ' (' + platform + ',' + arch + ')', function (done) {
+      var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
+      installRelease(version, installPath, assign({}, target, OPTIONS), function (err) {
+        assert.ok(!err);
+        validateInstall(installPath, target);
+        done();
+      });
     });
   });
 
@@ -31,7 +33,7 @@ function addTests(version, target) {
     if (typeof Promise === 'undefined') return; // no promise support
 
     it(version + ' (' + platform + ',' + arch + ') - promise', function (done) {
-      var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
+      var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-promise');
       installRelease(version, installPath, assign({}, target, OPTIONS))
         .then(function (res) {
           validateInstall(installPath, target);
@@ -41,17 +43,19 @@ function addTests(version, target) {
     });
   });
 
-  it.skip(version + ' (' + platform + ',' + arch + ') - src', function (done) {
-    var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-src');
-    installRelease(version, installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
-      assert.ok(!err);
-      validateInstall(installPath);
-      done();
+  describe('source', function () {
+    it.skip(version + ' (' + platform + ',' + arch + ') - src', function (done) {
+      var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-src');
+      installRelease(version, installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
+        assert.ok(!err);
+        validateInstall(installPath);
+        done();
+      });
     });
   });
 }
 
-describe('install-release', function () {
+describe.only('install-release', function () {
   before(function (callback) {
     rimraf(INSTALLED_DIR, function () {
       rimraf(OPTIONS.cacheDirectory, callback.bind(null, null));

@@ -16,7 +16,7 @@ var TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: '
 
 function addTests(version, target) {
   var platform = target.platform || 'local';
-  var arch = target.platform || 'local';
+  var arch = target.arch || 'local';
 
   it(version + ' (' + platform + ',' + arch + ')', function (done) {
     var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
