@@ -11,6 +11,27 @@ var INSTALLED_DIR = path.join(TMP_DIR, 'installed');
 var OPTIONS = {
   cacheDirectory: path.join(TMP_DIR, 'cache'),
 };
+var VERSIONS = ['v12', 'v0.8'];
+var TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
+
+function addTests(version, target) {
+  var platform = target.platform || 'local';
+  var arch = target.platform || 'local';
+
+  it(version + ' (' + platform + ',' + arch + ')', function (done) {
+    var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
+    var args = ['v12', installPath, '--cacheDirectory', OPTIONS.cacheDirectory];
+    if (platform !== 'local') args = args.concat(['--platform', platform]);
+    if (arch !== 'local') args = args.concat(['--arch', arch]);
+
+    crossSpawn(CLI, args, { stdio: 'inherit' }, function (err, res) {
+      assert.ok(!err);
+      assert.equal(res.code, 0);
+      validateInstall(installPath, target);
+      done();
+    });
+  });
+}
 
 describe('cli', function () {
   before(function (callback) {
@@ -20,131 +41,11 @@ describe('cli', function () {
   });
 
   describe('happy path', function () {
-    it('v12 (darwin,x64)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v12-darwin-x64');
-      crossSpawn(
-        CLI,
-        ['v12', installPath, '--platform', 'darwin', '--arch', 'x64', '--cacheDirectory', OPTIONS.cacheDirectory],
-        { stdio: 'inherit' },
-        function (err, res) {
-          assert.ok(!err);
-          assert.equal(res.code, 0);
-          validateInstall(installPath, { platform: 'darwin' });
-          done();
-        }
-      );
-    });
-
-    it('v12 (linux,x64)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v12-linux-x64');
-      crossSpawn(CLI, ['v12', installPath, '--platform', 'linux', '--arch', 'x64', '--cacheDirectory', OPTIONS.cacheDirectory], { stdio: 'inherit' }, function (
-        err,
-        res
-      ) {
-        assert.ok(!err);
-        assert.equal(res.code, 0);
-        validateInstall(installPath, { platform: 'linux' });
-        done();
-      });
-    });
-
-    it('v12 (win32,x64)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v12-win32-x64');
-      crossSpawn(CLI, ['v12', installPath, '--platform', 'win32', '--arch', 'x64', '--cacheDirectory', OPTIONS.cacheDirectory], { stdio: 'inherit' }, function (
-        err,
-        res
-      ) {
-        assert.ok(!err);
-        assert.equal(res.code, 0);
-        validateInstall(installPath, { platform: 'win32' });
-        done();
-      });
-    });
-
-    it('v12 (local)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v12-local');
-      crossSpawn(CLI, ['v12', installPath, '--cacheDirectory', OPTIONS.cacheDirectory], { stdio: 'inherit' }, function (err, res) {
-        assert.ok(!err);
-        assert.equal(res.code, 0);
-        validateInstall(installPath);
-        done();
-      });
-    });
-
-    it.skip('v12 (local src)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v12-local-src');
-      crossSpawn(CLI, ['v12', installPath, '--filename', 'src', '--cacheDirectory', OPTIONS.cacheDirectory], { stdio: 'inherit' }, function (err, res) {
-        assert.ok(!err);
-        assert.equal(res.code, 0);
-        validateInstall(installPath);
-        done();
-      });
-    });
-
-    it('v0.8 (darwin,x64)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v0.8-darwin-x64');
-      crossSpawn(
-        CLI,
-        ['v0.8', installPath, '--platform', 'darwin', '--arch', 'x64', '--cacheDirectory', OPTIONS.cacheDirectory],
-        { stdio: 'inherit' },
-        function (err, res) {
-          assert.ok(!err);
-          assert.equal(res.code, 0);
-          validateInstall(installPath, { platform: 'darwin' });
-          done();
-        }
-      );
-    });
-
-    it('v0.8 (linux,x64)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v0.8-linux-x64');
-      crossSpawn(
-        CLI,
-        ['v0.8', installPath, '--platform', 'linux', '--arch', 'x64', '--cacheDirectory', OPTIONS.cacheDirectory],
-        { stdio: 'inherit' },
-        function (err, res) {
-          assert.ok(!err);
-          assert.equal(res.code, 0);
-          validateInstall(installPath, { platform: 'linux' });
-          done();
-        }
-      );
-    });
-
-    it('v0.8 (win32,x64)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v0.8-win32-x64');
-      crossSpawn(
-        CLI,
-        ['v0.8', installPath, '--platform', 'win32', '--arch', 'x64', '--cacheDirectory', OPTIONS.cacheDirectory],
-        { stdio: 'inherit' },
-        function (err, res) {
-          assert.ok(!err);
-          assert.equal(res.code, 0);
-          validateInstall(installPath, { platform: 'win32' });
-          done();
-        }
-      );
-    });
-
-    it('v0.8 (local)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v0.8-local');
-      crossSpawn(CLI, ['v0.8', installPath, '--cacheDirectory', OPTIONS.cacheDirectory], { stdio: 'inherit' }, function (err, res) {
-        assert.ok(!err);
-        assert.equal(res.code, 0);
-        validateInstall(installPath);
-        done();
-      });
-    });
-
-    it.skip('v0.8 (local src)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v0.8-local-src');
-      crossSpawn(CLI, ['v0.8', installPath, '--filename', 'src', '--cacheDirectory', OPTIONS.cacheDirectory], { stdio: 'inherit' }, function (err, res) {
-        assert.ok(!err);
-        assert.equal(res.code, 0);
-        validateInstall(installPath);
-        done();
-      });
-    });
+    for (var i = 0; i < VERSIONS.length; i++) {
+      for (var j = 0; j < TARGETS.length; j++) {
+        addTests(VERSIONS[i], TARGETS[j]);
+      }
+    }
   });
 
   describe('unhappy path', function () {});
