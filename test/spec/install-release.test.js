@@ -11,8 +11,47 @@ var INSTALLED_DIR = path.join(TMP_DIR, 'installed');
 var OPTIONS = {
   cacheDirectory: path.join(TMP_DIR, 'cache'),
 };
+var VERSIONS = ['v12', 'v0.8'];
+var TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
 
-describe.only('install-release', function () {
+function addTests(version, target) {
+  var platform = target.platform || 'local';
+  var arch = target.platform || 'local';
+
+  it(version + ' (' + platform + ',' + arch + ')', function (done) {
+    var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
+    installRelease(version, installPath, assign({}, target, OPTIONS), function (err) {
+      assert.ok(!err);
+      validateInstall(installPath, target);
+      done();
+    });
+  });
+
+  describe('promise', function () {
+    if (typeof Promise === 'undefined') return; // no promise support
+
+    it(version + ' (' + platform + ',' + arch + ') - promise', function (done) {
+      var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
+      installRelease(version, installPath, assign({}, target, OPTIONS))
+        .then(function (res) {
+          validateInstall(installPath, target);
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+  it.skip(version + ' (' + platform + ',' + arch + ') - src', function (done) {
+    var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-src');
+    installRelease(version, installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
+      assert.ok(!err);
+      validateInstall(installPath);
+      done();
+    });
+  });
+}
+
+describe('install-release', function () {
   before(function (callback) {
     rimraf(INSTALLED_DIR, function () {
       rimraf(OPTIONS.cacheDirectory, callback.bind(null, null));
@@ -20,110 +59,13 @@ describe.only('install-release', function () {
   });
 
   describe('happy path', function () {
-    it('v12 (darwin,x64)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v12-darwin-x64');
-      installRelease('v12', installPath, assign({ platform: 'darwin', arch: 'x64' }, OPTIONS), function (err, res) {
-        assert.ok(!err);
-        validateInstall(installPath, { platform: 'darwin' });
-        done();
-      });
-    });
-
-    it('v12 (linux,x64)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v12-linux-x64');
-      installRelease('v12', installPath, assign({ platform: 'linux', arch: 'x64' }, OPTIONS), function (err, res) {
-        assert.ok(!err);
-        validateInstall(installPath, { platform: 'linux' });
-        done();
-      });
-    });
-
-    it('v12 (win32,x64)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v12-win32-x64');
-      installRelease('v12', installPath, assign({ platform: 'win32', arch: 'x64' }, OPTIONS), function (err, res) {
-        assert.ok(!err);
-        validateInstall(installPath, { platform: 'win32' });
-        done();
-      });
-    });
-
-    it('v12 (local)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v12-local');
-      installRelease('v12', installPath, OPTIONS, function (err, res) {
-        assert.ok(!err);
-        validateInstall(installPath);
-        done();
-      });
-    });
-
-    describe('promise', function () {
-      if (typeof Promise === 'undefined') return; // no promise support
-
-      it('v12 (local)', function (done) {
-        var installPath = path.join(INSTALLED_DIR, 'v12-local');
-        installRelease('v12', installPath, OPTIONS)
-          .then(function (res) {
-            validateInstall(installPath);
-            done();
-          })
-          .catch(done);
-      });
-    });
-
-    it.skip('v12 (local src)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v12-local-src');
-      installRelease('v12', installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
-        assert.ok(!err);
-        validateInstall(installPath);
-        done();
-      });
-    });
-
-    it('v0.8 (darwin,x64)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v0.8-darwin-x64');
-      installRelease('v0.8', installPath, assign({ platform: 'darwin', arch: 'x64' }, OPTIONS), function (err, res) {
-        assert.ok(!err);
-        validateInstall(installPath, { platform: 'darwin' });
-        done();
-      });
-    });
-
-    it('v0.8 (linux,x64)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v0.8-linux-x64');
-      installRelease('v0.8', installPath, assign({ platform: 'linux', arch: 'x64' }, OPTIONS), function (err, res) {
-        assert.ok(!err);
-        validateInstall(installPath, { platform: 'linux' });
-        done();
-      });
-    });
-
-    it('v0.8 (win32,x64)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v0.8-win32-x64');
-      installRelease('v0.8', installPath, assign({ platform: 'win32', arch: 'x64' }, OPTIONS), function (err, res) {
-        assert.ok(!err);
-        validateInstall(installPath, { platform: 'win32' });
-        done();
-      });
-    });
-
-    it('v0.8 (local)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v0.8-local');
-      installRelease('v0.8', installPath, OPTIONS, function (err, res) {
-        assert.ok(!err);
-        validateInstall(installPath);
-        done();
-      });
-    });
-
-    it.skip('v0.8 (local src)', function (done) {
-      var installPath = path.join(INSTALLED_DIR, 'v0.8-local-src');
-      installRelease('v0.8', installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
-        assert.ok(!err);
-        validateInstall(installPath);
-        done();
-      });
-    });
+    for (var i = 0; i < VERSIONS.length; i++) {
+      for (var j = 0; j < TARGETS.length; j++) {
+        addTests(VERSIONS[i], TARGETS[j]);
+      }
+    }
   });
 
+  // TODO
   describe('unhappy path', function () {});
 });
