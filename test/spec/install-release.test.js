@@ -55,7 +55,7 @@ function addTests(version, target) {
   });
 }
 
-describe.only('install-release', function () {
+describe('install-release', function () {
   before(function (callback) {
     rimraf(INSTALLED_DIR, function () {
       rimraf(OPTIONS.cacheDirectory, callback.bind(null, null));
