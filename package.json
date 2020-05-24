@@ -21,7 +21,6 @@
     "nir": "./bin/node-install-release"
   },
   "scripts": {
-    "compat": "nvs --engines -- mocha-compat test/spec/**/*.test.js --no-timeouts",
     "format": "eslint . --fix",
     "lint": "eslint .",
     "test": "mocha-compat test/spec/**/*.test.js --no-timeouts"
@@ -36,7 +35,7 @@
     "lodash.find": "^4.6.0",
     "mkdirp-classic": "^0.5.3",
     "ncp": "^2.0.0",
-    "node-filename-to-dist-paths": "^0.1.1",
+    "node-filename-to-dist-paths": "^0.1.2",
     "node-semvers": "^0.4.4",
     "object-assign": "^4.1.1",
     "osenv": "^0.1.5",
@@ -55,7 +54,6 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "mocha-compat": "^3.5.5",
-    "nvs": "^0.4.4",
     "prettier": "^2.0.5"
   },
   "engines": {
