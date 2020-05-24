@@ -12,7 +12,7 @@ var OPTIONS = {
   cacheDirectory: path.join(TMP_DIR, 'cache'),
 };
 
-describe('install-release', function () {
+describe.only('install-release', function () {
   before(function (callback) {
     rimraf(INSTALLED_DIR, function () {
       rimraf(OPTIONS.cacheDirectory, callback.bind(null, null));
