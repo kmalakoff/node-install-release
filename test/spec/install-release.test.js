@@ -54,7 +54,7 @@ function addTests(version, target) {
     });
   });
 
-  describe.only('source', function () {
+  describe.skip('source', function () {
     it(version + ' (' + platform + ',' + arch + ') - src', function (done) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-src');
       installRelease(version, installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
