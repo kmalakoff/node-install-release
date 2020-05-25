@@ -11,8 +11,8 @@ var INSTALLED_DIR = path.join(TMP_DIR, 'installed');
 var OPTIONS = {
   cacheDirectory: path.join(TMP_DIR, 'cache'),
 };
-var VERSIONS = ['v12', 'v0.8'];
-var TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
+var VERSIONS = ['v12', 'v4', 'v0.8'];
+var TARGETS = [{}];
 
 function addTests(version, target) {
   var platform = target.platform || 'local';
