@@ -10,6 +10,7 @@ var TMP_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp'));
 var INSTALLED_DIR = path.join(TMP_DIR, 'installed');
 var OPTIONS = {
   cacheDirectory: path.join(TMP_DIR, 'cache'),
+  buildDirectory: path.join(TMP_DIR, 'build'),
 };
 var VERSIONS = ['v12', 'v4', 'v0.8'];
 var TARGETS = [{}];
