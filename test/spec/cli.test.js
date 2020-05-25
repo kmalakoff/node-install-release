@@ -20,7 +20,7 @@ function addTests(version, target) {
 
   it(version + ' (' + platform + ',' + arch + ')', function (done) {
     var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
-    var args = ['v12', installPath, '--cacheDirectory', OPTIONS.cacheDirectory];
+    var args = [version, installPath, '--cacheDirectory', OPTIONS.cacheDirectory];
     if (platform !== 'local') args = args.concat(['--platform', platform]);
     if (arch !== 'local') args = args.concat(['--arch', arch]);
 
