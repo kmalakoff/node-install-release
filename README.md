@@ -23,7 +23,7 @@ installRelease('v12', installPath, { platform: 'darwin', arch: 'x64' }, function
   assert.ok(!err);
 });
 
-// promise - default for the system
+// promise - use the local system for platform and arch
 await installRelease('v12', installPath);
 
 // promise - from source (using https://nodejs.org/dist/index.json filename)
