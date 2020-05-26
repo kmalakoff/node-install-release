@@ -54,7 +54,7 @@ function addTests(version, target) {
     });
   });
 
-  describe.skip('source', function () {
+  describe.only('source', function () {
     it(version + ' (' + platform + ',' + arch + ') - src', function (done) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-src');
       installRelease(version, installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
@@ -69,7 +69,7 @@ function addTests(version, target) {
 describe('install-release', function () {
   before(function (callback) {
     rimraf(INSTALLED_DIR, function () {
-      rimraf(OPTIONS.cacheDirectory, callback.bind(null, null));
+      rimraf(TMP_DIR, callback.bind(null, null));
     });
   });
 
