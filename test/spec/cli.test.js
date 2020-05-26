@@ -12,7 +12,7 @@ var OPTIONS = {
   cacheDirectory: path.join(TMP_DIR, 'cache'),
   buildDirectory: path.join(TMP_DIR, 'build'),
 };
-var VERSIONS = ['v12', 'v4', 'v0.8'];
+var VERSIONS = ['v12'];
 var TARGETS = [{}];
 
 function addTests(version, target) {
@@ -37,7 +37,7 @@ function addTests(version, target) {
 describe('cli', function () {
   before(function (callback) {
     rimraf(INSTALLED_DIR, function () {
-      rimraf(OPTIONS.cacheDirectory, callback.bind(null, null));
+      rimraf(TMP_DIR, callback.bind(null, null));
     });
   });
 
