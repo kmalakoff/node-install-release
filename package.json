@@ -36,7 +36,7 @@
     "mkpath": "^1.0.0",
     "ncp": "^2.0.0",
     "node-filename-to-dist-paths": "^0.1.2",
-    "node-semvers": "^0.4.8",
+    "node-semvers": "^0.4.11",
     "object-assign": "^4.1.1",
     "osenv": "^0.1.5",
     "queue-cb": "^1.1.2",
