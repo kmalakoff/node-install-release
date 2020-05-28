@@ -6,3 +6,8 @@ export CPPFLAGS="-I/usr/local/opt/llvm/include -I/usr/local/opt/openssl@1.1/incl
 export PKG_CONFIG_PATH="/usr/local/Cellar/openssl@1.1/1.1.1g/lib/pkgconfig:\$PKG_CONFIG_PATH"
 export CXX=clang++
 export GYPFLAGS=-Dmac_deployment_target=10.15
+
+// Ubuntu 
+// sudo update-alternatives --config c++
+export CC=/usr/bin/clang
+export CXX=/usr/bin/clang++
