@@ -13,7 +13,9 @@ var OPTIONS = {
   buildDirectory: path.join(TMP_DIR, 'build'),
 };
 var VERSIONS = ['v14', 'v12', 'v10', 'v8', 'v6', 'v4', 'v0.10', 'v0.8'];
-VERSIONS = ['v14', 'v12', 'v10', 'v8', 'v6', 'v4', 'v0.10', 'v0.8', 'v0.6'];
+// VERSIONS = ['v14', 'v12', 'v10', 'v8', 'v6', 'v4', 'v0.10', 'v0.8', 'v0.6'];
+// VERSIONS = ['v0.8'];
+VERSIONS = ['v14'];
 var TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
 TARGETS = [{}];
 
@@ -55,7 +57,7 @@ function addTests(version, target) {
     });
   });
 
-  describe.only('source', function () {
+  describe.skip('source', function () {
     it(version + ' (' + platform + ',' + arch + ') - src', function (done) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-src');
       installRelease(version, installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
@@ -67,7 +69,7 @@ function addTests(version, target) {
   });
 }
 
-describe('install-release', function () {
+describe.only('install-release', function () {
   // before(function (callback) {
   //   rimraf(INSTALLED_DIR, function () {
   //     rimraf(TMP_DIR, callback.bind(null, null));
