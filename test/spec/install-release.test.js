@@ -14,6 +14,7 @@ var OPTIONS = {
 };
 var VERSIONS = ['v14', 'v12', 'v10', 'v8', 'v6', 'v4', 'v0.10', 'v0.8'];
 var TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
+TARGETS = [{}];
 
 function addTests(version, target) {
   var platform = target.platform || 'local';
@@ -53,7 +54,7 @@ function addTests(version, target) {
     });
   });
 
-  describe.skip('source', function () {
+  describe.only('source', function () {
     it(version + ' (' + platform + ',' + arch + ') - src', function (done) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-src');
       installRelease(version, installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
@@ -66,11 +67,11 @@ function addTests(version, target) {
 }
 
 describe('install-release', function () {
-  before(function (callback) {
-    rimraf(INSTALLED_DIR, function () {
-      rimraf(TMP_DIR, callback.bind(null, null));
-    });
-  });
+  // before(function (callback) {
+  //   rimraf(INSTALLED_DIR, function () {
+  //     rimraf(TMP_DIR, callback.bind(null, null));
+  //   });
+  // });
 
   describe('happy path', function () {
     for (var i = 0; i < VERSIONS.length; i++) {
