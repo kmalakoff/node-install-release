@@ -13,7 +13,7 @@ var OPTIONS = {
   buildDirectory: path.join(TMP_DIR, 'build'),
 };
 var VERSIONS = ['v14', 'v12', 'v10', 'v8', 'v6', 'v4', 'v0.10', 'v0.8'];
-// VERSIONS = ['v14'];
+VERSIONS = ['v14', 'v0.8'];
 var TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
 // TARGETS = [{}];
 // TARGETS = [{ platform: 'win32', arch: 'x64' }];
