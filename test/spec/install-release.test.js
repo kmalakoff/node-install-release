@@ -13,6 +13,7 @@ var OPTIONS = {
   buildDirectory: path.join(TMP_DIR, 'build'),
 };
 var VERSIONS = ['v14', 'v12', 'v10', 'v8', 'v6', 'v4', 'v0.10', 'v0.8'];
+// VERSIONS = ['v14'];
 var TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
 // TARGETS = [{}];
 
@@ -21,7 +22,7 @@ function addTests(version, target) {
   var arch = target.arch || 'local';
 
   describe('dist', function () {
-    it(version + ' (' + platform + ',' + arch + ')', function (done) {
+    it.only(version + ' (' + platform + ',' + arch + ')', function (done) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
       installRelease(version, installPath, assign({}, target, OPTIONS), function (err) {
         assert.ok(!err);
