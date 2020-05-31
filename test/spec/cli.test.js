@@ -27,7 +27,6 @@ function addTests(version, target) {
 
     crossSpawn(CLI, args, { stdio: 'inherit' }, function (err, res) {
       assert.ok(!err);
-      assert.equal(res.code, 0);
       validateInstall(installPath, target);
       done();
     });
