@@ -28,6 +28,5 @@ var getopts = require('getopts-compat');
       return process.exit(err.code || -1);
     }
     console.log('Installed Node.js in ' + installPath);
-    process.exit(0);
   });
 })();
