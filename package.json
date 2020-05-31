@@ -18,10 +18,10 @@
   "license": "MIT",
   "main": "index.js",
   "bin": {
-    "nir": "./bin/node-install-release"
+    "nir": "./bin/node-install-release.js"
   },
   "scripts": {
-    "format": "eslint . --fix",
+    "format": "prettier --write .",
     "lint": "eslint .",
     "test": "mocha-compat test/spec/**/*.test.js --no-timeouts"
   },
@@ -45,7 +45,6 @@
     "osenv": "^0.1.5",
     "queue-cb": "^1.1.4",
     "rimraf": "^1.0.9",
-    "semver": "^5.7.1",
     "single-line-log": "^1.1.2"
   },
   "devDependencies": {
