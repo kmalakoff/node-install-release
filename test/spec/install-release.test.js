@@ -23,7 +23,7 @@ function addTests(version, target) {
   var arch = target.arch || 'local';
 
   describe('dist', function () {
-    it.only(version + ' (' + platform + ',' + arch + ')', function (done) {
+    it(version + ' (' + platform + ',' + arch + ')', function (done) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
       installRelease(version, installPath, assign({}, target, OPTIONS), function (err) {
         assert.ok(!err);
