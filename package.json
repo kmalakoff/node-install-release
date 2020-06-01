@@ -31,7 +31,7 @@
     "end-of-stream": "^1.4.4",
     "end-with": "^1.0.2",
     "exit": "^0.1.2",
-    "fast-extract": "^0.1.15",
+    "fast-extract": "^0.1.17",
     "fs-access-compat": "^1.0.1",
     "get-remote": "^0.4.11",
     "getopts-compat": "^2.2.5",
