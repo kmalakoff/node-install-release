@@ -1,6 +1,6 @@
 {
   "name": "node-install-release",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "Cross-platform solution for installing releases of Node.js",
   "keywords": [
     "node",
@@ -28,6 +28,7 @@
   "dependencies": {
     "arch": "^2.1.2",
     "cross-spawn-cb": "^0.3.1",
+    "end-of-stream": "^1.4.4",
     "end-with": "^1.0.2",
     "fast-extract": "^0.1.15",
     "fs-access-compat": "^1.0.1",
