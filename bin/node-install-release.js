@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
 var getopts = require('getopts-compat');
+var exit = require('exit');
+var assign = require('object-assign');
+var nir = require('..');
 
 (function () {
   var options = getopts(process.argv.slice(3), {
@@ -15,18 +18,16 @@ var getopts = require('getopts-compat');
   var args = process.argv.slice(2, 3).concat(options._);
   if (args.length < 1) {
     console.log('Missing command. Example usage: nir version [directory]');
-    return process.exit(-1);
+    return exit(-1);
   }
-
-  var assign = require('object-assign');
-  var nir = require('..');
 
   var installPath = args.length > 1 ? args[1] : null;
   nir(args[0], installPath, assign({ stdio: 'inherit' }, options), function (err, installPath) {
     if (err) {
       console.log(err.message);
-      return process.exit(err.code || -1);
+      return exit(err.code || -1);
     }
-    console.log('Installed Node.js in ' + installPath);
+    console.log('Installed Node.js (' + args[0] + ') in ' + installPath);
+    exit(0);
   });
 })();
