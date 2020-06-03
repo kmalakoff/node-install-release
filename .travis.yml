@@ -15,4 +15,4 @@ os:
   - windows
 script:
   - npm install cross-env@2
-  - ./node_modules/.bin/cross-env NODE_OPTIONS=--max_old_space_size=8192 CI=true ./node_modules/.bin/mocha-compat test/spec/**/*.test.js --no-timeouts
+  - ./node_modules/.bin/cross-env NODE_OPTIONS=--max_old_space_size=3072 CI=true ./node_modules/.bin/mocha-compat test/spec/**/*.test.js --no-timeouts
