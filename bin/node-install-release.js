@@ -7,7 +7,8 @@ var nir = require('..');
 
 (function () {
   var options = getopts(process.argv.slice(3), {
-    alias: { platform: 'p', arch: 'a', filename: 'f', cacheDirectory: 'c' },
+    alias: { platform: 'p', arch: 'a', filename: 'f', cacheDirectory: 'c', silent: 's' },
+    boolean: ['silent'],
   });
 
   // define.option('-p, --platform [platform]', 'Platform like darwin');
@@ -27,7 +28,9 @@ var nir = require('..');
       console.log(err.message);
       return exit(err.code || -1);
     }
-    console.log('Installed Node.js (' + args[0] + ') in ' + installPath);
+
+    if (!options.silent) console.log('Installed Node.js (' + args[0] + ') in ' + installPath);
+
     exit(0);
   });
 })();
