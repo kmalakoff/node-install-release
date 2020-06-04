@@ -21,14 +21,13 @@ function addTests(version, target) {
 
   it(version + ' (' + platform + ',' + arch + ')', function (done) {
     var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
-    var args = [version, installPath, '--cacheDirectory', OPTIONS.cacheDirectory];
+    var args = [version, installPath, '--cacheDirectory', OPTIONS.cacheDirectory, '--silent'];
     if (platform !== 'local') args = args.concat(['--platform', platform]);
     if (arch !== 'local') args = args.concat(['--arch', arch]);
 
     crossSpawn(CLI, args, { stdio: 'inherit' }, function (err, res) {
       assert.ok(!err);
-      validateInstall(installPath, target);
-      done();
+      validateInstall(version, installPath, target, done);
     });
   });
 }

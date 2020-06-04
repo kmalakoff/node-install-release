@@ -27,8 +27,7 @@ function addTests(version, target) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
       installRelease(version, installPath, assign({}, target, OPTIONS), function (err) {
         assert.ok(!err);
-        validateInstall(installPath, target);
-        done();
+        validateInstall(version, installPath, target, done);
       });
     });
 
@@ -36,8 +35,7 @@ function addTests(version, target) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
       installRelease(version, installPath, assign({}, target, OPTIONS), function (err) {
         assert.ok(!err);
-        validateInstall(installPath, target);
-        done();
+        validateInstall(version, installPath, target, done);
       });
     });
   });
@@ -49,8 +47,7 @@ function addTests(version, target) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-promise');
       installRelease(version, installPath, assign({}, target, OPTIONS))
         .then(function (res) {
-          validateInstall(installPath, target);
-          done();
+          validateInstall(version, installPath, target, done);
         })
         .catch(done);
     });
@@ -61,8 +58,7 @@ function addTests(version, target) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-src');
       installRelease(version, installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
         assert.ok(!err);
-        validateInstall(installPath);
-        done();
+        validateInstall(version, installPath);
       });
     });
   });
