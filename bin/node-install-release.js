@@ -23,14 +23,25 @@ var nir = require('..');
   }
 
   var installPath = args.length > 1 ? args[1] : null;
-  nir(args[0], installPath, assign({ stdio: 'inherit' }, options), function (err, installPath) {
+  nir(args[0], installPath, assign({ stdio: 'inherit' }, options), function (err, results) {
     if (err) {
       console.log(err.message);
       return exit(err.code || -1);
     }
+    var errors = results.filter(function (result) {
+      return !!result.error;
+    });
 
-    if (!options.silent) console.log('Installed Node.js (' + args[0] + ') in ' + installPath);
+    if (!options.silent) {
+      console.log('\n======================');
+      for (var index = 0; index < results.length; index++) {
+        var result = results[index];
+        if (result.error) console.log(result.version + ' not installed. Error: ' + result.error.message);
+        else console.log(result.version + ' installed in: ' + result.fullPath);
+      }
+      console.log('======================');
+    }
 
-    exit(0);
+    exit(errors.length ? -1 : 0);
   });
 })();
