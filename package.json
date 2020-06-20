@@ -45,7 +45,7 @@
     "node-resolve-versions": "^0.1.5",
     "object-assign": "^4.1.1",
     "osenv": "^0.1.5",
-    "queue-cb": "^1.1.4",
+    "queue-cb": "^1.1.5",
     "rimraf": "^2.7.1",
     "single-line-log2": "^1.1.3"
   },
