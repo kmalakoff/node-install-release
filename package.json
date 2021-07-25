@@ -1,6 +1,6 @@
 {
   "name": "node-install-release",
-  "version": "0.1.31",
+  "version": "0.2.0",
   "description": "Cross-platform solution for installing releases of Node.js",
   "keywords": [
     "node",
@@ -64,7 +64,7 @@
     "fs-access-sync-compat": "^1.0.1",
     "is-version": "^0.2.0",
     "mocha-compat": "^3.5.5",
-    "node-version-utils": "^0.1.10",
+    "node-version-utils": "^0.2.0",
     "prettier": "^2.3.2"
   },
   "engines": {
