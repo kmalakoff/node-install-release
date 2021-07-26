@@ -1,6 +1,6 @@
 {
   "name": "node-install-release",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Cross-platform solution for installing releases of Node.js",
   "keywords": [
     "node",
@@ -40,7 +40,7 @@
     "lodash.keys": "^4.2.0",
     "match-semver": "^0.1.0",
     "mkpath": "^1.0.0",
-    "node-filename-to-dist-paths": "^0.1.6",
+    "node-filename-to-dist-paths": "^0.1.7",
     "node-resolve-versions": "^0.2.1",
     "object-assign": "^4.1.1",
     "osenv": "^0.1.5",
