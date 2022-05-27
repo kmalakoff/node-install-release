@@ -1,6 +1,5 @@
 var assert = require('assert');
 var path = require('path');
-var assign = require('object-assign');
 var rimraf = require('rimraf');
 
 var installRelease = require('../..');
@@ -26,7 +25,7 @@ function addTests(version, target) {
   describe('dist', function () {
     it(version + ' (' + platform + ',' + arch + ')', function (done) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
-      installRelease(version, installPath, assign({}, target, OPTIONS), function (err) {
+      installRelease(version, installPath, Object.assign({}, target, OPTIONS), function (err) {
         assert.ok(!err);
         validateInstall(version, installPath, target, done);
       });
@@ -34,7 +33,7 @@ function addTests(version, target) {
 
     it(version + ' (' + platform + ',' + arch + ')', function (done) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
-      installRelease(version, installPath, assign({}, target, OPTIONS), function (err) {
+      installRelease(version, installPath, Object.assign({}, target, OPTIONS), function (err) {
         assert.ok(!err);
         validateInstall(version, installPath, target, done);
       });
@@ -46,7 +45,7 @@ function addTests(version, target) {
 
     it(version + ' (' + platform + ',' + arch + ') - promise', function (done) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-promise');
-      installRelease(version, installPath, assign({}, target, OPTIONS))
+      installRelease(version, installPath, Object.assign({}, target, OPTIONS))
         .then(function (res) {
           validateInstall(version, installPath, target, done);
         })
@@ -57,7 +56,7 @@ function addTests(version, target) {
   describe.skip('source', function () {
     it(version + ' (' + platform + ',' + arch + ') - src', function (done) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-src');
-      installRelease(version, installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
+      installRelease(version, installPath, Object.assign({ filename: 'src' }, OPTIONS), function (err, res) {
         assert.ok(!err);
         validateInstall(version, installPath);
       });
