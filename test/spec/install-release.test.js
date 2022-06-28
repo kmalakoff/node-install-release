@@ -1,6 +1,6 @@
 var assert = require('assert');
 var path = require('path');
-var assign = require('object-assign');
+var assign = require('just-extend');
 var rimraf = require('rimraf');
 
 var installRelease = require('../..');

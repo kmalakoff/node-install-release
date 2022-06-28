@@ -2,7 +2,7 @@
 
 var getopts = require('getopts-compat');
 var exit = require('exit');
-var assign = require('object-assign');
+var assign = require('just-extend');
 var nir = require('..');
 
 (function () {
