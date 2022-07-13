@@ -39,13 +39,13 @@ module.exports = function validateInstall(version, installPath, options, done) {
   // if not the native platform, do not try running
   if (platform !== process.platform) return done();
 
-  versionUtils.spawn(installPath, NODE, ['--version'], { stdout: 'string' }, function (err, res) {
+  versionUtils.spawn(installPath, NODE, ['--version'], { encoding: 'utf8' }, function (err, res) {
     assert.ok(!err);
     var lines = cr(res.stdout).split('\n');
     assert.ok(isVersion(lines.slice(-2, -1)[0], 'v'));
     assert.ok(lines.slice(-2, -1)[0].indexOf(version) === 0);
 
-    versionUtils.spawn(installPath, 'npm', ['--version'], { stdout: 'string' }, function (err, res) {
+    versionUtils.spawn(installPath, 'npm', ['--version'], { encoding: 'utf8' }, function (err, res) {
       assert.ok(!err);
       var lines = cr(res.stdout).split('\n');
       assert.ok(isVersion(lines.slice(-2, -1)[0]));
