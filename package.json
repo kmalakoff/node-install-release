@@ -67,7 +67,7 @@
     "fs-access-sync-compat": "^1.0.2",
     "is-version": "^0.2.1",
     "mocha-compat": "^3.5.5",
-    "node-version-utils": "^0.5.2",
+    "node-version-utils": "^0.5.3",
     "prettier": "^2.7.1"
   },
   "engines": {
