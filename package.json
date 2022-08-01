@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "core-js": "^3.24.1",
-    "cross-spawn-cb": "^0.6.7",
+    "cross-spawn-cb": "^0.6.8",
     "end-with": "^1.0.2",
     "exit": "^0.1.2",
     "fast-extract": "^0.3.4",
@@ -48,7 +48,7 @@
     "mkpath": "^1.0.0",
     "node-filename-to-dist-paths": "^0.1.14",
     "node-resolve-versions": "^0.3.3",
-    "node-version-call": "^0.3.3",
+    "node-version-call": "^0.3.4",
     "osenv": "^0.1.5",
     "pump": "^3.0.0",
     "queue-cb": "^1.1.7",
