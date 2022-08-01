@@ -2,7 +2,6 @@
 
 var getopts = require('getopts-compat');
 var exit = require('exit');
-var assign = require('just-extend');
 var nir = require('..');
 
 (function () {
@@ -23,7 +22,7 @@ var nir = require('..');
   }
 
   var installPath = args.length > 1 ? args[1] : null;
-  nir(args[0], installPath, assign({ stdio: 'inherit' }, options), function (err, results) {
+  nir(args[0], installPath, Object.assign({ stdio: 'inherit' }, options), function (err, results) {
     if (err) {
       console.log(err.message);
       return exit(err.code || -1);
