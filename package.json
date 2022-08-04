@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "core-js": "^3.24.1",
-    "cross-spawn-cb": "^0.6.11",
+    "cross-spawn-cb": "^0.6.12",
     "end-with": "^1.0.2",
     "exit": "^0.1.2",
     "fast-extract": "^0.3.4",
