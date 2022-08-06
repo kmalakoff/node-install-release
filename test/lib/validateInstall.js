@@ -46,6 +46,11 @@ module.exports = function validateInstall(version, installPath, options, done) {
     assert.ok(lines.slice(-2, -1)[0].indexOf(version) === 0);
 
     versionUtils.spawn(installPath, 'npm', ['--version'], { encoding: 'utf8' }, function (err, res) {
+      // npm WARN config global `--global`, `--local` are deprecated. Use `--location=global` instead
+      if (err && err.stderr && err.stderr.indexOf('npm WARN') === 0) {
+        res = err;
+        err = null;
+      }
       assert.ok(!err);
       var lines = cr(res.stdout).split('\n');
       assert.ok(isVersion(lines.slice(-2, -1)[0]));
