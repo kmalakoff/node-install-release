@@ -48,7 +48,7 @@
     "mkpath": "^1.0.0",
     "node-filename-to-dist-paths": "^0.1.15",
     "node-resolve-versions": "^0.3.6",
-    "node-version-call": "^0.3.16",
+    "node-version-call": "^0.3.17",
     "osenv": "^0.1.5",
     "pump": "^3.0.0",
     "queue-cb": "^1.1.7",
@@ -67,7 +67,7 @@
     "fs-access-sync-compat": "^1.0.2",
     "is-version": "^0.2.1",
     "mocha-compat": "^3.5.5",
-    "node-version-utils": "^0.5.5",
+    "node-version-utils": "^0.5.6",
     "prettier": "^2.7.1"
   },
   "engines": {
