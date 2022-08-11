@@ -1,6 +1,6 @@
 {
   "name": "node-install-release",
-  "version": "0.3.17",
+  "version": "0.3.18",
   "description": "Cross-platform solution for installing releases of Node.js",
   "keywords": [
     "node",
