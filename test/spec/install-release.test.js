@@ -1,6 +1,7 @@
 var assert = require('assert');
 var path = require('path');
 var rimraf = require('rimraf');
+var resolveVersions = require('node-resolve-versions');
 
 var installRelease = require('../..');
 var validateInstall = require('../lib/validateInstall');
@@ -11,10 +12,8 @@ var OPTIONS = {
   cacheDirectory: path.join(TMP_DIR, 'cache'),
   buildDirectory: path.join(TMP_DIR, 'build'),
 };
-var VERSIONS = ['v16', 'v14', 'v12', 'v10', 'v8', 'v6', 'v4', 'v0.10', 'v0.8'];
-VERSIONS = ['v16', 'v0.8'];
-// VERSIONS = ['v0.8'];
-// VERSIONS = ['v14'];
+var VERSIONS = resolveVersions.sync('>=0.8', { range: 'major,even' })
+// VERSIONS = ['v4'];
 var TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
 // TARGETS = [{}];
 // TARGETS = [{ platform: 'win32', arch: 'x64' }];
@@ -23,8 +22,8 @@ function addTests(version, target) {
   var platform = target.platform || 'local';
   var arch = target.arch || 'local';
 
-  describe.only('dist', function () {
-    it(version + ' (' + platform + ',' + arch + ')', function (done) {
+  describe(version + ' (' + platform + ',' + arch + ')', function () {
+    it.only('dist', function (done) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
       installRelease(version, installPath, Object.assign({}, target, OPTIONS), function (err) {
         assert.ok(!err);
@@ -32,17 +31,7 @@ function addTests(version, target) {
       });
     });
 
-    it(version + ' (' + platform + ',' + arch + ')', function (done) {
-      var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
-      installRelease(version, installPath, Object.assign({}, target, OPTIONS), function (err) {
-        assert.ok(!err);
-        validateInstall(version, installPath, target, done);
-      });
-    });
-  });
-
-  describe('promise', function () {
-    it(version + ' (' + platform + ',' + arch + ') - promise', function (done) {
+    it('promise', function (done) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-promise');
       installRelease(version, installPath, Object.assign({}, target, OPTIONS))
         .then(function (res) {
@@ -52,13 +41,11 @@ function addTests(version, target) {
     });
   });
 
-  describe.skip('source', function () {
-    it(version + ' (' + platform + ',' + arch + ') - src', function (done) {
-      var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-src');
-      installRelease(version, installPath, Object.assign({ filename: 'src' }, OPTIONS), function (err, res) {
-        assert.ok(!err);
-        validateInstall(version, installPath);
-      });
+  it.skip('source', function (done) {
+    var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-src');
+    installRelease(version, installPath, Object.assign({ filename: 'src' }, OPTIONS), function (err, res) {
+      assert.ok(!err);
+      validateInstall(version, installPath);
     });
   });
 }
