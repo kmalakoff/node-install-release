@@ -25,27 +25,27 @@ function addTests(version, target) {
   var platform = target.platform || 'local';
   var arch = target.arch || 'local';
 
-  describe(version + ' (' + platform + ',' + arch + ')', function () {
-    it('dist', function (done) {
-      var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
-      installRelease(version, installPath, Object.assign({}, target, OPTIONS), function (err) {
+  describe(`${version} (${platform},${arch})`, () => {
+    it('dist', (done) => {
+      var installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}`);
+      installRelease(version, installPath, Object.assign({}, target, OPTIONS), (err) => {
         assert.ok(!err);
         validateInstall(version, installPath, target, done);
       });
     });
 
-    it('promise', function (done) {
-      var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-promise');
+    it('promise', (done) => {
+      var installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}-promise`);
       installRelease(version, installPath, Object.assign({}, target, OPTIONS))
-        .then(function (res) {
+        .then((_res) => {
           validateInstall(version, installPath, target, done);
         })
         .catch(done);
     });
 
-    it.skip('source', function (done) {
-      var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-src');
-      installRelease(version, installPath, Object.assign({ filename: 'src' }, OPTIONS), function (err, res) {
+    it.skip('source', (done) => {
+      var installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}-src`);
+      installRelease(version, installPath, Object.assign({ filename: 'src' }, OPTIONS), (err, _res) => {
         assert.ok(!err);
         validateInstall(version, installPath, done);
       });
@@ -53,9 +53,9 @@ function addTests(version, target) {
   });
 }
 
-describe('install-release', function () {
-  before(function (callback) {
-    rimraf(INSTALLED_DIR, function () {
+describe('install-release', () => {
+  before((callback) => {
+    rimraf(INSTALLED_DIR, () => {
       rimraf(TMP_DIR, callback.bind(null, null));
     });
   });
