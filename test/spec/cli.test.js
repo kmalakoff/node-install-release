@@ -19,27 +19,27 @@ function addTests(version, target) {
   var platform = target.platform || 'local';
   var arch = target.arch || 'local';
 
-  it(version + ' (' + platform + ',' + arch + ')', function (done) {
-    var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
+  it(`${version} (${platform},${arch})`, (done) => {
+    var installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}`);
     var args = [version, installPath, '--cacheDirectory', OPTIONS.cacheDirectory, '--silent'];
     if (platform !== 'local') args = args.concat(['--platform', platform]);
     if (arch !== 'local') args = args.concat(['--arch', arch]);
 
-    crossSpawn(CLI, args, { stdio: 'inherit' }, function (err, res) {
+    crossSpawn(CLI, args, { stdio: 'inherit' }, (err, _res) => {
       assert.ok(!err);
       validateInstall(version, installPath, target, done);
     });
   });
 }
 
-describe('cli', function () {
-  before(function (callback) {
-    rimraf(INSTALLED_DIR, function () {
+describe('cli', () => {
+  before((callback) => {
+    rimraf(INSTALLED_DIR, () => {
       rimraf(TMP_DIR, callback.bind(null, null));
     });
   });
 
-  describe('happy path', function () {
+  describe('happy path', () => {
     for (var i = 0; i < VERSIONS.length; i++) {
       for (var j = 0; j < TARGETS.length; j++) {
         addTests(VERSIONS[i], TARGETS[j]);
@@ -47,5 +47,5 @@ describe('cli', function () {
     }
   });
 
-  describe('unhappy path', function () {});
+  describe('unhappy path', () => {});
 });
