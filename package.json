@@ -1,8 +1,16 @@
 {
   "name": "node-install-release",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "Cross-platform solution for installing releases of Node.js",
-  "keywords": ["node", "version", "versions", "install", "dist", "release", "releases"],
+  "keywords": [
+    "node",
+    "version",
+    "versions",
+    "install",
+    "dist",
+    "release",
+    "releases"
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:kmalakoff/node-install-release.git"
@@ -10,7 +18,9 @@
   "license": "MIT",
   "main": "dist/cjs/index.js",
   "types": "dist/types/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "bin": {
     "nir": "./bin/node-install-release.js"
   },
@@ -60,6 +70,8 @@
   },
   "tsds": {
     "source": "src/index.js",
-    "targets": ["cjs"]
+    "targets": [
+      "cjs"
+    ]
   }
 }
