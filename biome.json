@@ -10,7 +10,8 @@
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "single"
+      "quoteStyle": "single",
+      "trailingComma": "es5"
     }
   },
   "linter": {
@@ -18,7 +19,9 @@
     "rules": {
       "recommended": true,
       "complexity": {
-        "noForEach": "off"
+        "noForEach": "off",
+        "useArrowFunction": "off",
+        "useOptionalChain": "off"
       },
       "correctness": {
         "noUnusedVariables": "warn",
@@ -27,7 +30,8 @@
       "style": {
         "noVar": "off",
         "noParameterAssign": "off",
-        "noArguments": "off"
+        "noArguments": "off",
+        "useTemplate": "off"
       }
     }
   }
