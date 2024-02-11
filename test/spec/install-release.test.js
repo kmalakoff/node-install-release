@@ -3,7 +3,7 @@ var path = require('path');
 var rimraf = require('rimraf');
 var resolveVersions = require('node-resolve-versions');
 
-var installRelease = require('../..');
+var installRelease = require('node-install-release');
 var validateInstall = require('../lib/validateInstall');
 
 var TMP_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp'));
@@ -14,12 +14,17 @@ var OPTIONS = {
 };
 var VERSIONS = resolveVersions.sync('>=0.8', { range: 'major,even' });
 // VERSIONS = ['v4'];
-// VERSIONS = ['v10'];
+// VERSIONS = ['v6'];
+// VERSIONS = ['v16'];
 
 var TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
 // TARGETS = [{}];
 // TARGETS = [{ platform: 'win32', arch: 'x64' }];
 TARGETS = [{ platform: 'darwin', arch: 'x64' }];
+
+// remove NODE_OPTIONS from ts-dev-stack
+// biome-ignore lint/performance/noDelete: <explanation>
+delete process.env.NODE_OPTIONS;
 
 function addTests(version, target) {
   var platform = target.platform || 'local';

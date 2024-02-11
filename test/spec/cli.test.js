@@ -15,6 +15,10 @@ var OPTIONS = {
 var VERSIONS = ['v12'];
 var TARGETS = [{}];
 
+// remove NODE_OPTIONS from ts-dev-stack
+// biome-ignore lint/performance/noDelete: <explanation>
+delete process.env.NODE_OPTIONS;
+
 function addTests(version, target) {
   var platform = target.platform || 'local';
   var arch = target.arch || 'local';
