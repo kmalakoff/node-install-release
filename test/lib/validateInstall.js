@@ -39,21 +39,18 @@ module.exports = function validateInstall(version, installPath, options, done) {
   // if not the native platform, do not try running
   if (platform !== process.platform) return done();
 
-  versionUtils.spawn(installPath, NODE, ['--version'], { encoding: 'utf8' }, (err, res) => {
+  versionUtils.spawn(installPath, NODE, ['--version'], { encoding: 'utf8', env: {} }, (err, res) => {
     assert.ok(!err);
     var lines = cr(res.stdout).split('\n');
-    assert.ok(isVersion(lines.slice(-2, -1)[0], 'v'));
-    assert.ok(lines.slice(-2, -1)[0].indexOf(version) === 0);
+    var spawnVersion = lines.slice(-2, -1)[0];
+    assert.ok(isVersion(spawnVersion, 'v'));
+    assert.ok(spawnVersion.indexOf(version) === 0);
 
     versionUtils.spawn(installPath, 'npm', ['--version'], { encoding: 'utf8' }, (err, res) => {
-      // npm WARN config global `--global`, `--local` are deprecated. Use `--location=global` instead
-      if (err?.stderr && err.stderr.indexOf('npm WARN') === 0) {
-        res = err;
-        err = null;
-      }
-      assert.ok(!err);
-      var lines = cr(res.stdout).split('\n');
-      assert.ok(isVersion(lines.slice(-2, -1)[0]));
+      var stdout = err?.stdout || res.stdout;
+      var lines = cr(stdout).split('\n');
+      var spawnVersionNPM = lines.slice(-2, -1)[0];
+      assert.ok(isVersion(spawnVersionNPM));
       done();
     });
   });
