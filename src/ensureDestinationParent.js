@@ -1,8 +1,8 @@
-var path = require('path');
-var mkpath = require('mkpath');
+const path = require('path');
+const mkpath = require('mkpath');
 
 module.exports = function ensureDestinationParent(dest, callback) {
-  var parent = path.dirname(dest);
+  const parent = path.dirname(dest);
   if (parent === '.' || parent === '/') return callback();
   mkpath(parent, (err) => {
     callback(err);

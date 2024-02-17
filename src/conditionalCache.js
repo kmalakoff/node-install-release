@@ -1,9 +1,9 @@
-var path = require('path');
-var get = require('get-remote');
-var access = require('fs-access-compat');
+const path = require('path');
+const get = require('get-remote');
+const access = require('fs-access-compat');
 
-var progress = require('./progress');
-var ensureDestinationParent = require('./ensureDestinationParent');
+const progress = require('./progress');
+const ensureDestinationParent = require('./ensureDestinationParent');
 
 module.exports = function conditionalCache(endpoint, dest, options, callback) {
   if (typeof options === 'function') {

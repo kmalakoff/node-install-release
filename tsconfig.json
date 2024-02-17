@@ -12,5 +12,5 @@
     "allowJs": true
   },
   "exclude": ["node_modules", "dist", "test/data"],
-  "include": ["src"]
+  "include": ["src", "test"]
 }
