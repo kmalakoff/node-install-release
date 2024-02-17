@@ -1,13 +1,14 @@
-var path = require('path');
-var Queue = require('queue-cb');
-var mkpath = require('mkpath');
+require('./polyfills');
+const path = require('path');
+const Queue = require('queue-cb');
+const mkpath = require('mkpath');
 
-var resolveVersions = require('node-resolve-versions');
+const resolveVersions = require('node-resolve-versions');
 
-var installVersion = require('./installVersion');
+const installVersion = require('./installVersion');
 
-var NIR_DIR = path.join(require('osenv').home(), '.nir');
-var DEFAULT_OPTIONS = {
+const NIR_DIR = path.join(require('osenv').home(), '.nir');
+const DEFAULT_OPTIONS = {
   cacheDirectory: path.join(NIR_DIR, 'cache'),
   buildDirectory: path.join(NIR_DIR, 'build'),
   downloadURL: function downloadURL(relativePath) {
@@ -21,15 +22,15 @@ module.exports = function install(versionDetails, dest, options, callback) {
     if (err) return callback(err);
     if (!versions.length) return callback(new Error(`Could not resolve versions for: ${JSON.stringify(versionDetails)}`));
 
-    var results = [];
-    var queue = new Queue(1);
+    const results = [];
+    const queue = new Queue(1);
     queue.defer((callback) => {
       mkpath(options.cacheDirectory, callback.bind(null, null));
     });
-    for (var index = 0; index < versions.length; index++) {
+    for (let index = 0; index < versions.length; index++) {
       ((version) => {
         queue.defer((callback) => {
-          var installDirectory = dest && versions.length > 1 ? path.join(dest, version.version) : dest;
+          const installDirectory = dest && versions.length > 1 ? path.join(dest, version.version) : dest;
           installVersion(version, installDirectory, options, (err, fullPath) => {
             if (err) return callback(err);
             results.push({ version: version.version, error: err, fullPath: fullPath });

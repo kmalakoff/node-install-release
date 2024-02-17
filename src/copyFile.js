@@ -1,9 +1,9 @@
-var fs = require('fs');
-var rimraf = require('rimraf');
-var pump = require('pump');
-var Queue = require('queue-cb');
+const fs = require('fs');
+const rimraf = require('rimraf');
+const pump = require('pump');
+const Queue = require('queue-cb');
 
-var ensureDestinationParent = require('./ensureDestinationParent');
+const ensureDestinationParent = require('./ensureDestinationParent');
 
 function streamCopyFile(src, dest, callback) {
   fs.stat(src, (err) => {
@@ -12,10 +12,10 @@ function streamCopyFile(src, dest, callback) {
   });
 }
 
-var copyFile = fs.copyFile || streamCopyFile;
+const copyFile = fs.copyFile || streamCopyFile;
 
 module.exports = function safeCopyFile(src, dest, callback) {
-  var queue = new Queue(1);
+  const queue = new Queue(1);
 
   queue.defer(ensureDestinationParent.bind(null, dest));
   queue.defer((callback) => {

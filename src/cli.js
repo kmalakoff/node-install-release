@@ -1,11 +1,9 @@
-#!/usr/bin/env node
+import exit from 'exit';
+import getopts from 'getopts-compat';
+import nir from './index.js';
 
-var getopts = require('getopts-compat');
-var exit = require('exit');
-var nir = require('..');
-
-(function () {
-  var options = getopts(process.argv.slice(3), {
+export default (argv) => {
+  const options = getopts(argv.slice(1), {
     alias: { platform: 'p', arch: 'a', filename: 'f', cacheDirectory: 'c', silent: 's' },
     boolean: ['silent'],
   });
@@ -15,32 +13,30 @@ var nir = require('..');
   // define.option('-f, --filename [filename]', 'Distribution filename from https://nodejs.org/dist/index.json');
   // define.option('-c, --cacheDirectory [cacheDirectory]', 'Cache directory');
 
-  var args = process.argv.slice(2, 3).concat(options._);
+  const args = argv.slice(0, 1).concat(options._);
   if (args.length < 1) {
     console.log('Missing command. Example usage: nir version [directory]');
     return exit(-1);
   }
 
-  var installPath = args.length > 1 ? args[1] : null;
-  nir(args[0], installPath, Object.assign({ stdio: 'inherit' }, options), function (err, results) {
+  const installPath = args.length > 1 ? args[1] : null;
+  nir(args[0], installPath, Object.assign({ stdio: 'inherit' }, options), (err, results) => {
     if (err) {
       console.log(err.message);
       return exit(err.code || -1);
     }
-    var errors = results.filter(function (result) {
-      return !!result.error;
-    });
+    const errors = results.filter((result) => !!result.error);
 
     if (!options.silent) {
       console.log('\n======================');
-      for (var index = 0; index < results.length; index++) {
-        var result = results[index];
-        if (result.error) console.log(result.version + ' not installed. Error: ' + result.error.message);
-        else console.log(result.version + ' installed in: ' + result.fullPath);
+      for (let index = 0; index < results.length; index++) {
+        const result = results[index];
+        if (result.error) console.log(`${result.version} not installed. Error: ${result.error.message}`);
+        else console.log(`${result.version} installed in: ${result.fullPath}`);
       }
       console.log('======================');
     }
 
     exit(errors.length ? -1 : 0);
   });
-})();
+};

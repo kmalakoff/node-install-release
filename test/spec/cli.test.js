@@ -1,31 +1,31 @@
-var assert = require('assert');
-var path = require('path');
-var rimraf = require('rimraf');
-var crossSpawn = require('cross-spawn-cb');
-
-var validateInstall = require('../lib/validateInstall');
-
-var CLI = path.join(__dirname, '..', '..', 'bin', 'node-install-release.js');
-var TMP_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp'));
-var INSTALLED_DIR = path.join(TMP_DIR, 'installed');
-var OPTIONS = {
-  cacheDirectory: path.join(TMP_DIR, 'cache'),
-  buildDirectory: path.join(TMP_DIR, 'build'),
-};
-var VERSIONS = ['v12'];
-var TARGETS = [{}];
-
 // remove NODE_OPTIONS from ts-dev-stack
 // biome-ignore lint/performance/noDelete: <explanation>
 delete process.env.NODE_OPTIONS;
 
+const assert = require('assert');
+const path = require('path');
+const rimraf = require('rimraf');
+const crossSpawn = require('cross-spawn-cb');
+
+const validateInstall = require('../lib/validateInstall');
+
+const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.js');
+const TMP_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp'));
+const INSTALLED_DIR = path.join(TMP_DIR, 'installed');
+const OPTIONS = {
+  cacheDirectory: path.join(TMP_DIR, 'cache'),
+  buildDirectory: path.join(TMP_DIR, 'build'),
+};
+const VERSIONS = ['v12'];
+const TARGETS = [{}];
+
 function addTests(version, target) {
-  var platform = target.platform || 'local';
-  var arch = target.arch || 'local';
+  const platform = target.platform || 'local';
+  const arch = target.arch || 'local';
 
   it(`${version} (${platform},${arch})`, (done) => {
-    var installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}`);
-    var args = [version, installPath, '--cacheDirectory', OPTIONS.cacheDirectory, '--silent'];
+    const installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}`);
+    let args = [version, installPath, '--cacheDirectory', OPTIONS.cacheDirectory, '--silent'];
     if (platform !== 'local') args = args.concat(['--platform', platform]);
     if (arch !== 'local') args = args.concat(['--arch', arch]);
 
@@ -44,8 +44,8 @@ describe('cli', () => {
   });
 
   describe('happy path', () => {
-    for (var i = 0; i < VERSIONS.length; i++) {
-      for (var j = 0; j < TARGETS.length; j++) {
+    for (let i = 0; i < VERSIONS.length; i++) {
+      for (let j = 0; j < TARGETS.length; j++) {
         addTests(VERSIONS[i], TARGETS[j]);
       }
     }

@@ -1,7 +1,6 @@
-require('./polyfills');
-var install = require('./install');
+import install from './install';
 
-function installRelease(versionDetails, dest, options, callback) {
+export default function installRelease(versionDetails, dest, options, callback) {
   if (typeof options === 'function') {
     callback = options;
     options = null;
@@ -15,5 +14,3 @@ function installRelease(versionDetails, dest, options, callback) {
     });
   });
 }
-
-module.exports = installRelease;

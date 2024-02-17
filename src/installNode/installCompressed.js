@@ -1,14 +1,14 @@
-var path = require('path');
-var access = require('fs-access-compat');
-var rimraf = require('rimraf');
+const path = require('path');
+const access = require('fs-access-compat');
+const rimraf = require('rimraf');
 
-var conditionalCache = require('../conditionalCache');
-var conditionalExtract = require('../conditionalExtract');
-var progress = require('../progress');
+const conditionalCache = require('../conditionalCache');
+const conditionalExtract = require('../conditionalExtract');
+const progress = require('../progress');
 
 module.exports = function installCompressed(relativePath, dest, _record, options, callback) {
-  var downloadPath = options.downloadURL(relativePath);
-  var cachePath = path.join(options.cacheDirectory, path.basename(downloadPath));
+  const downloadPath = options.downloadURL(relativePath);
+  const cachePath = path.join(options.cacheDirectory, path.basename(downloadPath));
 
   conditionalCache(downloadPath, cachePath, (err) => {
     if (err) return callback(err);
@@ -19,9 +19,9 @@ module.exports = function installCompressed(relativePath, dest, _record, options
         if (err) return callback(err);
 
         // some compressed versions of node come with npm pre-installed, but we want to override with a specific version
-        var platform = options.platform || process.platform;
-        var libPath = platform === 'win32' ? dest : path.join(dest, 'lib');
-        var installPath = path.join(libPath, 'node_modules', 'npm');
+        const platform = options.platform || process.platform;
+        const libPath = platform === 'win32' ? dest : path.join(dest, 'lib');
+        const installPath = path.join(libPath, 'node_modules', 'npm');
         rimraf(installPath, () => {
           callback(err);
         });

@@ -1,5 +1,5 @@
-var installBin = require('./installBin');
-var installLib = require('./installLib');
+const installBin = require('./installBin');
+const installLib = require('./installLib');
 
 module.exports = function install(version, dest, options, callback) {
   installLib(version, dest, options, (err) => {
