@@ -1,9 +1,9 @@
-var path = require('path');
-var extract = require('fast-extract');
-var mkpath = require('mkpath');
-var access = require('fs-access-compat');
+const path = require('path');
+const extract = require('fast-extract').default;
+const mkpath = require('mkpath');
+const access = require('fs-access-compat');
 
-var progress = require('./progress');
+const progress = require('./progress');
 
 module.exports = function conditionalExtract(src, dest, options, callback) {
   if (typeof options === 'function') {
@@ -16,7 +16,7 @@ module.exports = function conditionalExtract(src, dest, options, callback) {
     if (!err) return callback(); // already exists
 
     mkpath(path.dirname(dest), () => {
-      var extractOptions = Object.assign({ strip: 1, progress: progress, time: 1000 }, options);
+      const extractOptions = Object.assign({ strip: 1, progress: progress, time: 1000 }, options);
 
       extract(src, dest, extractOptions, (err) => {
         console.log('');

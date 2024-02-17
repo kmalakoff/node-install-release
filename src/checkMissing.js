@@ -1,8 +1,8 @@
-var path = require('path');
-var fs = require('fs');
-var keys = require('lodash.keys');
+const path = require('path');
+const fs = require('fs');
+const keys = require('lodash.keys');
 
-var PLATFORM_FILES = {
+const PLATFORM_FILES = {
   win32: {
     node: ['node.exe'],
     npm: ['npm', 'npm.cmd'],
@@ -14,17 +14,17 @@ var PLATFORM_FILES = {
 };
 
 module.exports = function checkMissing(dest, options, callback) {
-  var platform = options.platform || process.platform;
-  var files = PLATFORM_FILES[platform] || PLATFORM_FILES.posix;
-  var binPath = platform === 'win32' ? dest : path.join(dest, 'bin');
+  const platform = options.platform || process.platform;
+  const files = PLATFORM_FILES[platform] || PLATFORM_FILES.posix;
+  const binPath = platform === 'win32' ? dest : path.join(dest, 'bin');
 
   fs.readdir(binPath, (err, names) => {
     if (err || !names.length) return callback(null, keys(files));
 
-    var missing = [];
-    for (var key in files) {
-      var needed = files[key];
-      for (var index = 0; index < needed.length; index++) {
+    const missing = [];
+    for (const key in files) {
+      const needed = files[key];
+      for (let index = 0; index < needed.length; index++) {
         if (!~names.indexOf(needed[index])) {
           missing.push(key);
           break;

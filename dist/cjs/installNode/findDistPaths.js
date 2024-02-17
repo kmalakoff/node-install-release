@@ -9,7 +9,7 @@ module.exports = function findDistPaths(version, options) {
         var filename = filenames[index];
         if (!~version.files.indexOf(filename)) continue;
         var relativePaths = distPaths(filename, version.version);
-        if (relativePaths === null || relativePaths === void 0 ? void 0 : relativePaths.length) return {
+        if (relativePaths && relativePaths.length) return {
             version: version.version,
             filename: filename,
             relativePaths: relativePaths

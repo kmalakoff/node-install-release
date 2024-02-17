@@ -18,26 +18,26 @@
   "license": "MIT",
   "main": "dist/cjs/index.js",
   "types": "dist/types/index.d.ts",
+  "bin": {
+    "nir": "./bin/cli.js"
+  },
   "files": [
     "dist"
   ],
-  "bin": {
-    "nir": "./bin/node-install-release.js"
-  },
   "scripts": {
     "build": "tsds build",
     "deploy": "tsds deploy",
-    "format": "biome check --apply src/ test/",
-    "test": "tsds test:node --timeout=40000",
-    "test:engines": "nvu engines tsds test:node",
+    "format": "biome check --apply-unsafe src/ test/",
+    "test": "tsds test:node --no-timeouts",
+    "test:engines": "nvu engines npm test",
     "version": "tsds version"
   },
   "dependencies": {
-    "core-js": "^3.35.1",
-    "cross-spawn-cb": "^0.6.14",
+    "core-js": "^3.36.0",
+    "cross-spawn-cb": "^0.6.18",
     "end-with": "^1.0.2",
     "exit": "^0.1.2",
-    "fast-extract": "^0.4.8",
+    "fast-extract": "^0.5.0",
     "fs-access-compat": "^1.0.3",
     "function-exec-sync": "^0.2.11",
     "get-remote": "^0.8.3",
@@ -47,7 +47,7 @@
     "lodash.keys": "^4.2.0",
     "mkpath": "^1.0.0",
     "node-filename-to-dist-paths": "^0.2.4",
-    "node-resolve-versions": "^0.3.9",
+    "node-resolve-versions": "^0.3.10",
     "osenv": "^0.1.5",
     "pump": "^3.0.0",
     "queue-cb": "^1.1.7",
@@ -57,19 +57,19 @@
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
     "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.19",
     "cr": "^0.1.0",
     "depcheck": "^1.4.7",
     "fs-access-sync-compat": "^1.0.2",
     "is-version": "^0.2.1",
-    "mocha-compat": "^3.5.5",
     "node-version-utils": "^0.5.6",
-    "ts-dev-stack": "^0.9.2"
+    "ts-dev-stack": "^0.13.0"
   },
   "engines": {
     "node": ">=0.8"
   },
   "tsds": {
-    "source": "src/index.js",
+    "source": "src/index.mjs",
     "targets": [
       "cjs"
     ]

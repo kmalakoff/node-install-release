@@ -1,9 +1,9 @@
 // Inline until merged: https://github.com/jakejarvis/arch/blob/detect-arm/index.js
 
 /*! arch. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
-var cp = require('child_process');
-var fs = require('fs');
-var path = require('path');
+const cp = require('child_process');
+const fs = require('fs');
+const path = require('path');
 
 /**
  * Returns the operating system's CPU architecture. This is different than
@@ -17,8 +17,8 @@ module.exports = function arch() {
    * https://developer.apple.com/documentation/apple-silicon/about-the-rosetta-translation-environment
    */
   if (process.platform === 'darwin') {
-    var nativeArm = process.arch === 'arm64';
-    var rosettaArm = cp.execSync('sysctl -in sysctl.proc_translated', { encoding: 'utf8' }) === '1\n';
+    const nativeArm = process.arch === 'arm64';
+    const rosettaArm = cp.execSync('sysctl -in sysctl.proc_translated', { encoding: 'utf8' }) === '1\n';
 
     return nativeArm || rosettaArm ? 'arm64' : 'x64';
   }
@@ -29,15 +29,15 @@ module.exports = function arch() {
    * See: https://twitter.com/feross/status/776949077208510464
    */
   if (process.platform === 'win32') {
-    var useEnv = false;
+    let useEnv = false;
     try {
       useEnv = !!(process.env.SYSTEMROOT && fs.statSync(process.env.SYSTEMROOT));
     } catch (_err) {}
 
-    var sysRoot = useEnv ? process.env.SYSTEMROOT : 'C:\\Windows';
+    const sysRoot = useEnv ? process.env.SYSTEMROOT : 'C:\\Windows';
 
     // If %SystemRoot%\SysNative exists, we are in a WOW64 FS Redirected application.
-    var isWOW64 = false;
+    let isWOW64 = false;
     try {
       isWOW64 = !!fs.statSync(path.join(sysRoot, 'sysnative'));
     } catch (_err) {}
@@ -50,11 +50,11 @@ module.exports = function arch() {
    */
   if (process.platform === 'linux') {
     try {
-      var output1 = cp.execSync('uname -a', { encoding: 'utf8' });
+      const output1 = cp.execSync('uname -a', { encoding: 'utf8' });
       if (~output1.indexOf('raspberrypi')) return 'arm-pi';
     } catch (_err) {}
 
-    var output = cp.execSync('getconf LONG_BIT', { encoding: 'utf8' });
+    const output = cp.execSync('getconf LONG_BIT', { encoding: 'utf8' });
     return output === '64\n' ? 'x64' : 'x86';
   }
 

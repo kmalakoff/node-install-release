@@ -1,4 +1,5 @@
 "use strict";
+require("./polyfills");
 var path = require("path");
 var Queue = require("queue-cb");
 var mkpath = require("mkpath");

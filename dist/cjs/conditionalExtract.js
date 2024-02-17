@@ -1,6 +1,6 @@
 "use strict";
 var path = require("path");
-var extract = require("fast-extract");
+var extract = require("fast-extract").default;
 var mkpath = require("mkpath");
 var access = require("fs-access-compat");
 var progress = require("./progress");

@@ -1,28 +1,28 @@
-var osArch = require('os').arch || require('../arch');
+const osArch = require('os').arch || require('../arch');
 
-var PLATFORM_OS = {
+const PLATFORM_OS = {
   win32: 'win',
   darwin: 'osx',
 };
 
-var PLATFORM_FILES = {
+const PLATFORM_FILES = {
   win32: ['zip', 'exe'],
   darwin: ['tar'],
 };
 
 module.exports = function prebuiltFilenames(options) {
-  var platform = options.platform || process.platform;
-  var os = PLATFORM_OS[platform] || platform;
-  var archs = [options.arch || osArch()];
+  const platform = options.platform || process.platform;
+  const os = PLATFORM_OS[platform] || platform;
+  const archs = [options.arch || osArch()];
   if (platform === 'darwin' && archs[0] === 'arm64') archs.push('x64'); // fallback
 
-  var files = PLATFORM_FILES[platform];
-  var results = [];
-  for (var i = 0; i < archs.length; i++) {
+  const files = PLATFORM_FILES[platform];
+  const results = [];
+  for (let i = 0; i < archs.length; i++) {
     if (typeof files === 'undefined') {
       results.push(`${os}-${archs[i]}`);
     } else {
-      for (var j = 0; j < files.length; j++) {
+      for (let j = 0; j < files.length; j++) {
         results.push(`${os}-${archs[i]}-${files[j]}`);
       }
     }

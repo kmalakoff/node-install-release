@@ -17,7 +17,7 @@ module.exports = function installLib(version, dest, options, callback) {
         var found = releases.find(function(record) {
             return record.version === version.version;
         });
-        var npmMajorPair = (found === null || found === void 0 ? void 0 : found.npm) ? +found.npm.split(".")[0] : NPM_MIN_VERSION;
+        var npmMajorPair = found && found.npm ? +found.npm.split(".")[0] : NPM_MIN_VERSION;
         var npmMajor = Math.max(npmMajorPair, NPM_MIN_VERSION);
         get(NPM_DIST_TAGS_URL).json(function(err, res2) {
             if (err) return callback(err);

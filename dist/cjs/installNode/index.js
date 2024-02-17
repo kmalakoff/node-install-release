@@ -20,7 +20,7 @@ module.exports = function install(version, dest, options, callback) {
     record = findDistPaths(version, {
         filename: "src"
     });
-    if (record === null || record === void 0 ? void 0 : record.relativePaths.length) return installSource(record.relativePaths[0], dest, record, options, callback);
+    if (record && record.relativePaths.length) return installSource(record.relativePaths[0], dest, record, options, callback);
     callback(new Error("Unable to install ".concat(version)));
 };
 

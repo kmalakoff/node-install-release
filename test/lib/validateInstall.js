@@ -1,15 +1,15 @@
-var assert = require('assert');
-var path = require('path');
-var accessSync = require('fs-access-sync-compat');
-var versionUtils = require('node-version-utils');
-var cr = require('cr');
-var isVersion = require('is-version');
+const assert = require('assert');
+const path = require('path');
+const accessSync = require('fs-access-sync-compat');
+const versionUtils = require('node-version-utils');
+const cr = require('cr');
+const isVersion = require('is-version');
 
-var NODE = process.platform === 'win32' ? 'node.exe' : 'node';
+const NODE = process.platform === 'win32' ? 'node.exe' : 'node';
 
 module.exports = function validateInstall(version, installPath, options, done) {
   options = options || {};
-  var platform = options.platform || process.platform;
+  const platform = options.platform || process.platform;
 
   if (platform === 'win32') {
     try {
@@ -41,15 +41,15 @@ module.exports = function validateInstall(version, installPath, options, done) {
 
   versionUtils.spawn(installPath, NODE, ['--version'], { encoding: 'utf8', env: {} }, (err, res) => {
     assert.ok(!err);
-    var lines = cr(res.stdout).split('\n');
-    var spawnVersion = lines.slice(-2, -1)[0];
+    const lines = cr(res.stdout).split('\n');
+    const spawnVersion = lines.slice(-2, -1)[0];
     assert.ok(isVersion(spawnVersion, 'v'));
     assert.ok(spawnVersion.indexOf(version) === 0);
 
     versionUtils.spawn(installPath, 'npm', ['--version'], { encoding: 'utf8' }, (err, res) => {
-      var stdout = err?.stdout || res.stdout;
-      var lines = cr(stdout).split('\n');
-      var spawnVersionNPM = lines.slice(-2, -1)[0];
+      const stdout = err ? err.stdout : res.stdout;
+      const lines = cr(stdout).split('\n');
+      const spawnVersionNPM = lines.slice(-2, -1)[0];
       assert.ok(isVersion(spawnVersionNPM));
       done();
     });

@@ -1,13 +1,13 @@
-var path = require('path');
-var access = require('fs-access-compat');
+const path = require('path');
+const access = require('fs-access-compat');
 
-var conditionalCache = require('../conditionalCache');
-var copyFile = require('../copyFile');
+const conditionalCache = require('../conditionalCache');
+const copyFile = require('../copyFile');
 
 module.exports = function installExe(relativePath, dest, record, options, callback) {
-  var downloadPath = options.downloadURL(relativePath);
-  var cachePath = path.join(options.cacheDirectory, `node-${record.version}.exe`);
-  var destPath = path.join(dest, path.basename(relativePath));
+  const downloadPath = options.downloadURL(relativePath);
+  const cachePath = path.join(options.cacheDirectory, `node-${record.version}.exe`);
+  const destPath = path.join(dest, path.basename(relativePath));
 
   access(destPath, (err) => {
     if (!err) return callback(); // already exists
