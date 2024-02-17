@@ -1,2 +1,2 @@
-ignores: ["depcheck", "eslint-*"]
+ignores: ["node-install-release", "depcheck", "ts-dev-stack", "@types/*"]
 ignoreDirs: [".tmp"]

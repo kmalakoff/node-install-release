@@ -1,18 +1,18 @@
-var path = require('path');
-var spawn = require('cross-spawn-cb');
-var Queue = require('queue-cb');
+const path = require('path');
+const spawn = require('cross-spawn-cb');
+const Queue = require('queue-cb');
 
-var access = require('fs-access-compat');
-var conditionalCopy = require('../../conditionalCopy');
+const access = require('fs-access-compat');
+const conditionalCopy = require('../../conditionalCopy');
 
 module.exports = function installWin32(buildPath, dest, _options, callback) {
-  var buildSource = path.join(buildPath, 'out', 'Release', 'node.exe');
-  var buildTarget = path.join(dest, 'node.exe');
+  const buildSource = path.join(buildPath, 'out', 'Release', 'node.exe');
+  const buildTarget = path.join(dest, 'node.exe');
 
   access(buildTarget, (err) => {
     if (!err) return callback(); // already exists
 
-    var queue = new Queue(1);
+    const queue = new Queue(1);
     queue.defer((callback) => {
       access(buildSource, (err) => {
         if (!err) return callback(); // already exists
