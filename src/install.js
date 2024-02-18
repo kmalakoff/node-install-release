@@ -1,4 +1,3 @@
-require('./polyfills');
 const path = require('path');
 const Queue = require('queue-cb');
 const mkpath = require('mkpath');

@@ -37,7 +37,7 @@
     "cross-spawn-cb": "^0.6.18",
     "end-with": "^1.0.2",
     "exit": "^0.1.2",
-    "fast-extract": "^0.5.0",
+    "fast-extract": "^1.0.0",
     "fs-access-compat": "^1.0.3",
     "function-exec-sync": "^0.2.11",
     "get-remote": "^0.8.3",
@@ -63,7 +63,7 @@
     "fs-access-sync-compat": "^1.0.2",
     "is-version": "^0.2.1",
     "node-version-utils": "^0.5.6",
-    "ts-dev-stack": "^0.13.0"
+    "ts-dev-stack": "^0.14.0"
   },
   "engines": {
     "node": ">=0.8"
