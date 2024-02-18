@@ -1,3 +1,4 @@
+require('./polyfills');
 import install from './install';
 
 export default function installRelease(versionDetails, dest, options, callback) {

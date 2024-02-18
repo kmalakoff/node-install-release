@@ -1,5 +1,4 @@
 "use strict";
-require("./polyfills");
 var path = require("path");
 var Queue = require("queue-cb");
 var mkpath = require("mkpath");
@@ -46,9 +45,4 @@ module.exports = function install(versionDetails, dest, options, callback) {
         });
     });
 };
-
-if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {
-  Object.defineProperty(exports.default, '__esModule', { value: true });
-  for (var key in exports) exports.default[key] = exports[key];
-  module.exports = exports.default;
-}
+/* CJS INTEROP */ if (exports.__esModule && exports.default) { module.exports = exports.default; for (var key in exports) module.exports[key] = exports[key]; }
