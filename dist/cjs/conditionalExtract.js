@@ -1,11 +1,11 @@
 "use strict";
-var path = require("path");
-var extract = require("fast-extract").default;
-var mkpath = require("mkpath");
-var access = require("fs-access-compat");
-var progress = require("./progress");
+var path = require('path');
+var extract = require('fast-extract').default;
+var mkpath = require('mkpath');
+var access = require('fs-access-compat');
+var progress = require('./progress');
 module.exports = function conditionalExtract(src, dest, options, callback) {
-    if (typeof options === "function") {
+    if (typeof options === 'function') {
         callback = options;
         options = null;
     }
@@ -19,7 +19,7 @@ module.exports = function conditionalExtract(src, dest, options, callback) {
                 time: 1000
             }, options);
             extract(src, dest, extractOptions, function(err) {
-                console.log("");
+                console.log('');
                 callback(err);
             });
         });

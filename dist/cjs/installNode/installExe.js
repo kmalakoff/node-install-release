@@ -1,8 +1,8 @@
 "use strict";
-var path = require("path");
-var access = require("fs-access-compat");
-var conditionalCache = require("../conditionalCache");
-var copyFile = require("../copyFile");
+var path = require('path');
+var access = require('fs-access-compat');
+var conditionalCache = require('../conditionalCache');
+var copyFile = require('../copyFile');
 module.exports = function installExe(relativePath, dest, record, options, callback) {
     var downloadPath = options.downloadURL(relativePath);
     var cachePath = path.join(options.cacheDirectory, "node-".concat(record.version, ".exe"));

@@ -1,16 +1,16 @@
 "use strict";
-var osArch = require("os").arch || require("../arch");
+var osArch = require('os').arch || require('../arch');
 var PLATFORM_OS = {
-    win32: "win",
-    darwin: "osx"
+    win32: 'win',
+    darwin: 'osx'
 };
 var PLATFORM_FILES = {
     win32: [
-        "zip",
-        "exe"
+        'zip',
+        'exe'
     ],
     darwin: [
-        "tar"
+        'tar'
     ]
 };
 module.exports = function prebuiltFilenames(options) {
@@ -19,11 +19,11 @@ module.exports = function prebuiltFilenames(options) {
     var archs = [
         options.arch || osArch()
     ];
-    if (platform === "darwin" && archs[0] === "arm64") archs.push("x64"); // fallback
+    if (platform === 'darwin' && archs[0] === 'arm64') archs.push('x64'); // fallback
     var files = PLATFORM_FILES[platform];
     var results = [];
     for(var i = 0; i < archs.length; i++){
-        if (typeof files === "undefined") {
+        if (typeof files === 'undefined') {
             results.push("".concat(os, "-").concat(archs[i]));
         } else {
             for(var j = 0; j < files.length; j++){

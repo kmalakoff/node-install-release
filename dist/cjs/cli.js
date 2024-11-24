@@ -19,14 +19,14 @@ function _interop_require_default(obj) {
 var _default = function(argv) {
     var options = (0, _getoptscompat.default)(argv.slice(1), {
         alias: {
-            platform: "p",
-            arch: "a",
-            filename: "f",
-            cacheDirectory: "c",
-            silent: "s"
+            platform: 'p',
+            arch: 'a',
+            filename: 'f',
+            cacheDirectory: 'c',
+            silent: 's'
         },
         boolean: [
-            "silent"
+            'silent'
         ]
     });
     // define.option('-p, --platform [platform]', 'Platform like darwin');
@@ -35,12 +35,12 @@ var _default = function(argv) {
     // define.option('-c, --cacheDirectory [cacheDirectory]', 'Cache directory');
     var args = argv.slice(0, 1).concat(options._);
     if (args.length < 1) {
-        console.log("Missing command. Example usage: nir version [directory]");
+        console.log('Missing command. Example usage: nir version [directory]');
         return (0, _exit.default)(-1);
     }
     var installPath = args.length > 1 ? args[1] : null;
     (0, _index.default)(args[0], installPath, Object.assign({
-        stdio: "inherit"
+        stdio: 'inherit'
     }, options), function(err, results) {
         if (err) {
             console.log(err.message);
@@ -50,13 +50,13 @@ var _default = function(argv) {
             return !!result.error;
         });
         if (!options.silent) {
-            console.log("\n======================");
+            console.log('\n======================');
             for(var index = 0; index < results.length; index++){
                 var result = results[index];
                 if (result.error) console.log("".concat(result.version, " not installed. Error: ").concat(result.error.message));
                 else console.log("".concat(result.version, " installed in: ").concat(result.fullPath));
             }
-            console.log("======================");
+            console.log('======================');
         }
         (0, _exit.default)(errors.length ? -1 : 0);
     });

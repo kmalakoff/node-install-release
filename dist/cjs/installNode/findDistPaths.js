@@ -1,6 +1,6 @@
 "use strict";
-var distPaths = require("node-filename-to-dist-paths");
-var prebuiltFilenames = require("./filenames");
+var distPaths = require('node-filename-to-dist-paths');
+var prebuiltFilenames = require('./filenames');
 module.exports = function findDistPaths(version, options) {
     var filenames = options.filename ? [
         options.filename

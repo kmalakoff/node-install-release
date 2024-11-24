@@ -1,9 +1,9 @@
 "use strict";
-var access = require("fs-access-compat");
-var copyFile = require("./copyFile");
-var ensureDestinationParent = require("./ensureDestinationParent");
+var access = require('fs-access-compat');
+var copyFile = require('./copyFile');
+var ensureDestinationParent = require('./ensureDestinationParent');
 module.exports = function conditionalCopy(src, dest, optional, callback) {
-    if (typeof optional === "function") {
+    if (typeof optional === 'function') {
         callback = optional;
         optional = false;
     }

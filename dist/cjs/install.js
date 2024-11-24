@@ -1,20 +1,20 @@
 "use strict";
-var path = require("path");
-var Queue = require("queue-cb");
-var mkpath = require("mkpath");
-var resolveVersions = require("node-resolve-versions");
-var installVersion = require("./installVersion");
-var NIR_DIR = path.join(require("osenv").home(), ".nir");
+var path = require('path');
+var Queue = require('queue-cb');
+var mkpath = require('mkpath');
+var resolveVersions = require('node-resolve-versions');
+var installVersion = require('./installVersion');
+var NIR_DIR = path.join(require('osenv').home(), '.nir');
 var DEFAULT_OPTIONS = {
-    cacheDirectory: path.join(NIR_DIR, "cache"),
-    buildDirectory: path.join(NIR_DIR, "build"),
+    cacheDirectory: path.join(NIR_DIR, 'cache'),
+    buildDirectory: path.join(NIR_DIR, 'build'),
     downloadURL: function downloadURL(relativePath) {
         return "https://nodejs.org/dist/".concat(relativePath);
     }
 };
 module.exports = function install(versionDetails, dest, options, callback) {
     options = Object.assign({}, DEFAULT_OPTIONS, options, {
-        path: "raw"
+        path: 'raw'
     });
     resolveVersions(versionDetails, options, function(err, versions) {
         if (err) return callback(err);
