@@ -30,7 +30,7 @@ function addTests(version, target) {
     if (arch !== 'local') args = args.concat(['--arch', arch]);
 
     crossSpawn(CLI, args, { stdio: 'inherit' }, (err, _res) => {
-      assert.ok(!err);
+      assert.ok(!err, err ? err.message : '');
       validateInstall(version, installPath, target, done);
     });
   });
