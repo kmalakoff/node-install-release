@@ -41,15 +41,14 @@ module.exports = function validateInstall(version, installPath, options, done) {
 
   versionUtils.spawn(installPath, NODE, ['--version'], { encoding: 'utf8', env: {} }, (err, res) => {
     assert.ok(!err, err ? err.message : '');
-    const _stdout = res.stdout || err.stdout;
     const lines = cr(res.stdout).split('\n');
     const spawnVersion = lines.slice(-2, -1)[0];
     assert.ok(isVersion(spawnVersion, 'v'));
     assert.ok(spawnVersion.indexOf(version) === 0);
 
     versionUtils.spawn(installPath, 'npm', ['--version'], { encoding: 'utf8' }, (err, res) => {
-      const stdout = err ? err.stdout : res.stdout;
-      const lines = cr(stdout).split('\n');
+      const _stdout = err ? err.stdout : res.stdout;
+      const lines = cr(res.stdout).split('\n');
       const spawnVersionNPM = lines.slice(-2, -1)[0];
       assert.ok(isVersion(spawnVersionNPM));
       done();
