@@ -4,7 +4,7 @@ var Queue = require('queue-cb');
 var mkpath = require('mkpath');
 var resolveVersions = require('node-resolve-versions');
 var installVersion = require('./installVersion');
-var NIR_DIR = path.join(require('osenv').home(), '.nir');
+var NIR_DIR = path.join(require('homedir-polyfill')(), '.nir');
 var DEFAULT_OPTIONS = {
     cacheDirectory: path.join(NIR_DIR, 'cache'),
     buildDirectory: path.join(NIR_DIR, 'build'),
