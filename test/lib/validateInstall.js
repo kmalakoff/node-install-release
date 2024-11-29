@@ -40,7 +40,8 @@ module.exports = function validateInstall(version, installPath, options, done) {
   if (platform !== process.platform) return done();
 
   versionUtils.spawn(installPath, NODE, ['--version'], { encoding: 'utf8', env: {} }, (err, res) => {
-    assert.ok(!err);
+    assert.ok(!err, err ? err.message : '');
+    const _stdout = res.stdout || err.stdout;
     const lines = cr(res.stdout).split('\n');
     const spawnVersion = lines.slice(-2, -1)[0];
     assert.ok(isVersion(spawnVersion, 'v'));
