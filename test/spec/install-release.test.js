@@ -4,7 +4,7 @@ delete process.env.NODE_OPTIONS;
 
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const resolveVersions = require('node-resolve-versions');
 
 const installRelease = require('node-install-release');
@@ -60,8 +60,8 @@ function addTests(version, target) {
 
 describe('install-release', () => {
   before((callback) => {
-    rimraf(INSTALLED_DIR, () => {
-      rimraf(TMP_DIR, callback.bind(null, null));
+    rimraf2(INSTALLED_DIR, { disableGlob: true }, () => {
+      rimraf2(TMP_DIR, { disableGlob: true }, callback.bind(null, null));
     });
   });
 

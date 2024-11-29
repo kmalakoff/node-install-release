@@ -1,6 +1,6 @@
 const path = require('path');
 const access = require('fs-access-compat');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 
 const conditionalCache = require('../conditionalCache');
 const conditionalExtract = require('../conditionalExtract');
@@ -22,7 +22,7 @@ module.exports = function installCompressed(relativePath, dest, _record, options
         const platform = options.platform || process.platform;
         const libPath = platform === 'win32' ? dest : path.join(dest, 'lib');
         const installPath = path.join(libPath, 'node_modules', 'npm');
-        rimraf(installPath, () => {
+        rimraf2(installPath, { disableGlob: true }, () => {
           callback(err);
         });
       });
