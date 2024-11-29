@@ -39,8 +39,8 @@
     "exit": "^0.1.2",
     "fast-extract": "^1.2.1",
     "fs-access-compat": "^1.0.3",
-    "function-exec-sync": "^0.2.11",
-    "get-remote": "^1.0.0",
+    "function-exec-sync": "^1.0.0",
+    "get-remote": "^1.0.1",
     "getopts-compat": "^2.2.5",
     "isarray": "^2.0.5",
     "lodash.find": "^4.6.0",
@@ -63,7 +63,7 @@
     "fs-access-sync-compat": "^1.0.2",
     "is-version": "^0.2.1",
     "node-version-utils": "^0.5.6",
-    "ts-dev-stack": "^0.16.2"
+    "ts-dev-stack": "^0.16.3"
   },
   "engines": {
     "node": ">=0.8"
