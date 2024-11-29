@@ -1,11 +1,11 @@
 "use strict";
-var path = require("path");
-var get = require("get-remote");
-var access = require("fs-access-compat");
-var progress = require("./progress");
-var ensureDestinationParent = require("./ensureDestinationParent");
+var path = require('path');
+var get = require('get-remote');
+var access = require('fs-access-compat');
+var progress = require('./progress');
+var ensureDestinationParent = require('./ensureDestinationParent');
 module.exports = function conditionalCache(endpoint, dest, options, callback) {
-    if (typeof options === "function") {
+    if (typeof options === 'function') {
         callback = options;
         options = null;
     }
@@ -20,7 +20,7 @@ module.exports = function conditionalCache(endpoint, dest, options, callback) {
                 progress: progress,
                 time: 1000
             }, options)).file(path.dirname(dest), function(err) {
-                console.log("");
+                console.log('');
                 callback(err);
             });
         });

@@ -1,5 +1,5 @@
 const fs = require('fs');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const pump = require('pump');
 const Queue = require('queue-cb');
 
@@ -19,7 +19,7 @@ module.exports = function safeCopyFile(src, dest, callback) {
 
   queue.defer(ensureDestinationParent.bind(null, dest));
   queue.defer((callback) => {
-    rimraf(dest, (err) => {
+    rimraf2(dest, { disableGlob: true }, (err) => {
       err && err.code !== 'EEXIST' ? callback(err) : callback();
     });
   });

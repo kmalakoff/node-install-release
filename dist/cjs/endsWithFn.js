@@ -1,6 +1,6 @@
 "use strict";
-var isArray = require("isarray");
-var endsWith = require("end-with");
+var isArray = require('isarray');
+var endsWith = require('end-with');
 module.exports = function endsWithFn(endings) {
     if (!isArray(endings)) endings = [
         endings

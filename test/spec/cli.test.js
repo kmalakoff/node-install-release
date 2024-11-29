@@ -4,7 +4,7 @@ delete process.env.NODE_OPTIONS;
 
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const rimraf2 = require('rimraf2');
 const crossSpawn = require('cross-spawn-cb');
 
 const validateInstall = require('../lib/validateInstall');
@@ -38,8 +38,8 @@ function addTests(version, target) {
 
 describe('cli', () => {
   before((callback) => {
-    rimraf(INSTALLED_DIR, () => {
-      rimraf(TMP_DIR, callback.bind(null, null));
+    rimraf2(INSTALLED_DIR, { disableGlob: true }, () => {
+      rimraf2(TMP_DIR, callback.bind(null, null));
     });
   });
 

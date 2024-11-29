@@ -14,14 +14,14 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-require("./polyfills");
+require('./polyfills');
 function installRelease(versionDetails, dest, options, callback) {
-    if (typeof options === "function") {
+    if (typeof options === 'function') {
         callback = options;
         options = null;
     }
     options = options || {};
-    if (typeof callback === "function") return (0, _install.default)(versionDetails, dest, options, callback);
+    if (typeof callback === 'function') return (0, _install.default)(versionDetails, dest, options, callback);
     return new Promise(function(resolve, reject) {
         installRelease(versionDetails, dest, options, function installCallback(err, result) {
             err ? reject(err) : resolve(result);
