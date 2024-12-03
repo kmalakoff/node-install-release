@@ -5,7 +5,7 @@ const versionUtils = require('node-version-utils');
 const cr = require('cr');
 const isVersion = require('is-version');
 
-const NODE = process.platform === 'win32' ? 'node.exe' : 'node';
+const NODE = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE) ? 'node.exe' : 'node';
 
 module.exports = function validateInstall(version, installPath, options, done) {
   options = options || {};
@@ -47,7 +47,7 @@ module.exports = function validateInstall(version, installPath, options, done) {
     assert.ok(spawnVersion.indexOf(version) === 0);
 
     versionUtils.spawn(installPath, 'npm', ['--version'], { encoding: 'utf8' }, (err, res) => {
-      const _stdout = err ? err.stdout : res.stdout;
+      assert.ok(!err, err ? err.message : '');
       const lines = cr(res.stdout).split('\n');
       const spawnVersionNPM = lines.slice(-2, -1)[0];
       assert.ok(isVersion(spawnVersionNPM));
