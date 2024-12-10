@@ -3,6 +3,7 @@
 var cp = require('child_process');
 var fs = require('fs');
 var path = require('path');
+var isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
 /**
  * Returns the operating system's CPU architecture. This is different than
  * `process.arch` or `os.arch()` which returns the architecture the Node.js (or
@@ -23,7 +24,7 @@ var path = require('path');
    * On Windows, the most reliable way to detect a 64-bit OS from within a 32-bit
    * app is based on the presence of a WOW64 file: %SystemRoot%\SysNative.
    * See: https://twitter.com/feross/status/776949077208510464
-   */ if (process.platform === 'win32') {
+   */ if (isWindows) {
         var useEnv = false;
         try {
             useEnv = !!(process.env.SYSTEMROOT && fs.statSync(process.env.SYSTEMROOT));
@@ -59,4 +60,4 @@ var path = require('path');
    * If none of the above, assume the architecture is 32-bit.
    */ return 'x86';
 };
-/* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }
+/* CJS INTEROP */ if (exports.__esModule && exports.default) { try { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) { exports.default[key] = exports[key]; } } catch (_) {}; module.exports = exports.default; }
