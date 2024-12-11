@@ -4,6 +4,7 @@
 const cp = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
 
 /**
  * Returns the operating system's CPU architecture. This is different than
@@ -28,7 +29,7 @@ module.exports = function arch() {
    * app is based on the presence of a WOW64 file: %SystemRoot%\SysNative.
    * See: https://twitter.com/feross/status/776949077208510464
    */
-  if (process.platform === 'win32') {
+  if (isWindows) {
     let useEnv = false;
     try {
       useEnv = !!(process.env.SYSTEMROOT && fs.statSync(process.env.SYSTEMROOT));
