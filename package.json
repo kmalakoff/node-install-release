@@ -37,7 +37,7 @@
     "cross-spawn-cb": "^1.1.2",
     "end-with": "^1.0.2",
     "exit": "^0.1.2",
-    "fast-extract": "^1.2.4",
+    "fast-extract": "^1.2.5",
     "fs-access-compat": "^1.0.3",
     "function-exec-sync": "^1.0.1",
     "get-remote": "^1.0.1",
@@ -50,7 +50,7 @@
     "node-filename-to-dist-paths": "^0.2.5",
     "node-resolve-versions": "^1.0.0",
     "pump": "^3.0.2",
-    "queue-cb": "^1.4.1",
+    "queue-cb": "^1.4.2",
     "rimraf2": "^2.8.2",
     "single-line-log2": "^1.1.3"
   },
