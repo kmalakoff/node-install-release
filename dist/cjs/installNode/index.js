@@ -23,4 +23,4 @@ module.exports = function install(version, dest, options, callback) {
     if (record && record.relativePaths.length) return installSource(record.relativePaths[0], dest, record, options, callback);
     callback(new Error("Unable to install ".concat(version)));
 };
-/* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }
+/* CJS INTEROP */ if (exports.__esModule && exports.default) { try { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) { exports.default[key] = exports[key]; } } catch (_) {}; module.exports = exports.default; }
