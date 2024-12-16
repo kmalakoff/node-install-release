@@ -39,7 +39,7 @@ function addTests(version, target) {
 describe('cli', () => {
   before((callback) => {
     rimraf2(INSTALLED_DIR, { disableGlob: true }, () => {
-      rimraf2(TMP_DIR, callback.bind(null, null));
+      rimraf2(TMP_DIR, { disableGlob: true }, callback.bind(null, null));
     });
   });
 
