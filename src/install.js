@@ -1,6 +1,6 @@
 const path = require('path');
 const Queue = require('queue-cb');
-const mkpath = require('mkpath');
+const mkdirp = require('mkdirp-classic');
 
 const resolveVersions = require('node-resolve-versions');
 
@@ -24,7 +24,7 @@ module.exports = function install(versionDetails, dest, options, callback) {
     const results = [];
     const queue = new Queue(1);
     queue.defer((callback) => {
-      mkpath(options.cacheDirectory, callback.bind(null, null));
+      mkdirp(options.cacheDirectory, callback.bind(null, null));
     });
     for (let index = 0; index < versions.length; index++) {
       ((version) => {

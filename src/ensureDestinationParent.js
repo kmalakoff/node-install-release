@@ -1,10 +1,10 @@
 const path = require('path');
-const mkpath = require('mkpath');
+const mkdirp = require('mkdirp-classic');
 
 module.exports = function ensureDestinationParent(dest, callback) {
   const parent = path.dirname(dest);
   if (parent === '.' || parent === '/') return callback();
-  mkpath(parent, (err) => {
+  mkdirp(parent, (err) => {
     callback(err);
   });
 };
