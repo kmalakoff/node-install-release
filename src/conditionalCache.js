@@ -18,8 +18,7 @@ module.exports = function conditionalCache(endpoint, dest, options, callback) {
     ensureDestinationParent(dest, (err) => {
       if (err) return callback(err);
 
-      // TODO: do I need assign?
-      get(endpoint, Object.assign({ filename: path.basename(dest), progress: progress, time: 1000 }, options)).file(path.dirname(dest), (err) => {
+      get(endpoint, { filename: path.basename(dest), progress: progress, time: 1000, ...options }).file(path.dirname(dest), (err) => {
         console.log('');
         callback(err);
       });

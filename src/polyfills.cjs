@@ -1,6 +1,3 @@
-require('core-js/actual/object/assign');
-require('core-js/actual/promise');
-
 const cp = require('child_process');
 if (!cp.execSync) {
   const path = require('path');
@@ -9,7 +6,6 @@ if (!cp.execSync) {
   let functionExec = null; // break dependencies
   cp.execSync = function execSyncPolyfill(cmd, options) {
     if (!functionExec) functionExec = require('function-exec-sync');
-
-    return functionExec({ callbacks: true }, execCallback, cmd, options || {});
+    return functionExec()({ callbacks: true }, execCallback, cmd, options || {});
   };
 }

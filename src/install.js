@@ -16,7 +16,7 @@ const DEFAULT_OPTIONS = {
 };
 
 module.exports = function install(versionDetails, dest, options, callback) {
-  options = Object.assign({}, DEFAULT_OPTIONS, options, { path: 'raw' });
+  options = { ...DEFAULT_OPTIONS, ...options, path: 'raw' };
   resolveVersions(versionDetails, options, (err, versions) => {
     if (err) return callback(err);
     if (!versions.length) return callback(new Error(`Could not resolve versions for: ${JSON.stringify(versionDetails)}`));

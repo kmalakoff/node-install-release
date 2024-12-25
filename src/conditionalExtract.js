@@ -16,9 +16,7 @@ module.exports = function conditionalExtract(src, dest, options, callback) {
     if (!err) return callback(); // already exists
 
     mkdirp(path.dirname(dest), () => {
-      const extractOptions = Object.assign({ strip: 1, progress: progress, time: 1000 }, options);
-
-      extract(src, dest, extractOptions, (err) => {
+      extract(src, dest, { strip: 1, progress: progress, time: 1000, ...options }, (err) => {
         console.log('');
         callback(err);
       });
