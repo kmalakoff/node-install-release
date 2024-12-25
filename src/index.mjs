@@ -1,4 +1,5 @@
-require('./polyfills');
+import './polyfills.cjs';
+import Promise from 'pinkie-promise';
 import install from './install';
 
 export default function installRelease(versionDetails, dest, options, callback) {

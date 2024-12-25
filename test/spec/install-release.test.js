@@ -33,7 +33,7 @@ function addTests(version, target) {
   describe(`${version} (${platform},${arch})`, () => {
     it('dist', (done) => {
       const installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}`);
-      installRelease(version, installPath, Object.assign({}, target, OPTIONS), (err) => {
+      installRelease(version, installPath, { ...target, ...OPTIONS }, (err) => {
         assert.ok(!err, err ? err.message : '');
         validateInstall(version, installPath, target, done);
       });
@@ -41,7 +41,7 @@ function addTests(version, target) {
 
     it('promise', (done) => {
       const installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}-promise`);
-      installRelease(version, installPath, Object.assign({}, target, OPTIONS))
+      installRelease(version, installPath, { ...target, ...OPTIONS })
         .then((_res) => {
           validateInstall(version, installPath, target, done);
         })
@@ -50,7 +50,7 @@ function addTests(version, target) {
 
     it.skip('source', (done) => {
       const installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}-src`);
-      installRelease(version, installPath, Object.assign({ filename: 'src' }, OPTIONS), (err, _res) => {
+      installRelease(version, installPath, { filename: 'src', ...OPTIONS }, (err, _res) => {
         assert.ok(!err, err ? err.message : '');
         validateInstall(version, installPath, done);
       });
