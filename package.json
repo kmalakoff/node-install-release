@@ -47,7 +47,7 @@
     "lodash.keys": "^4.2.0",
     "mkdirp-classic": "^0.5.3",
     "node-filename-to-dist-paths": "^0.2.5",
-    "node-resolve-versions": "^1.0.0",
+    "node-resolve-versions": "^1.0.1",
     "pinkie-promise": "^2.0.1",
     "pump": "^3.0.2",
     "queue-cb": "^1.4.4",
@@ -62,7 +62,7 @@
     "depcheck": "^1.4.7",
     "fs-access-sync-compat": "^1.0.2",
     "is-version": "^0.2.1",
-    "node-version-utils": "^1.0.2",
+    "node-version-utils": "^1.0.3",
     "ts-dev-stack": "^1.5.3"
   },
   "packageManager": "npm@11.0.0+sha512.11dff29565d2297c74e7c594a9762581bde969f0aa5cbe6f5b3644bf008a16c065ece61094d9ffbb81125be38df8e1ba43eb8244b3d30c61eb797e9a2440e3ec",
