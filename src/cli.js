@@ -20,7 +20,7 @@ export default (argv) => {
   }
 
   const installPath = args.length > 1 ? args[1] : null;
-  nir(args[0], installPath, Object.assign({ stdio: 'inherit' }, options), (err, results) => {
+  nir(args[0], installPath, { stdio: 'inherit', ...options }, (err, results) => {
     if (err) {
       console.log(err.message);
       return exit(err.code || -1);

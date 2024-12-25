@@ -1,4 +1,6 @@
-require('./polyfills');
+// biome-ignore lint/suspicious/noShadowRestrictedNames: <explanation>
+import Promise from 'pinkie-promise';
+import './polyfills.cjs';
 import install from './install';
 
 export default function installRelease(versionDetails, dest, options, callback) {

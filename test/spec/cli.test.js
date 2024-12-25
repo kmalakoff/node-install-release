@@ -1,5 +1,4 @@
 // remove NODE_OPTIONS from ts-dev-stack
-// biome-ignore lint/performance/noDelete: <explanation>
 delete process.env.NODE_OPTIONS;
 
 const assert = require('assert');
@@ -37,9 +36,9 @@ function addTests(version, target) {
 }
 
 describe('cli', () => {
-  before((callback) => {
+  before((cb) => {
     rimraf2(INSTALLED_DIR, { disableGlob: true }, () => {
-      rimraf2(TMP_DIR, { disableGlob: true }, callback.bind(null, null));
+      rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null));
     });
   });
 

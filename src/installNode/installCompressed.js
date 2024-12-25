@@ -14,7 +14,7 @@ module.exports = function installCompressed(relativePath, dest, _record, options
     if (err) return callback(err);
     access(dest, (err) => {
       if (!err) return callback(); // already exists
-      conditionalExtract(cachePath, dest, Object.assign({ strip: 1, progress: progress, time: 1000 }, options), (err) => {
+      conditionalExtract(cachePath, dest, { strip: 1, progress: progress, time: 1000, ...options }, (err) => {
         console.log('');
         if (err) return callback(err);
 
