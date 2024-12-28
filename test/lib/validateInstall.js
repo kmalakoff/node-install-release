@@ -1,6 +1,6 @@
 const assert = require('assert');
 const path = require('path');
-const accessSync = require('fs-access-sync-compat');
+const existsSync = require('fs-exists-sync');
 const versionUtils = require('node-version-utils');
 const cr = require('cr');
 const isVersion = require('is-version');
@@ -12,28 +12,18 @@ module.exports = function validateInstall(version, installPath, options, done) {
   const platform = options.platform || process.platform;
 
   if (platform === 'win32') {
-    try {
-      accessSync(path.join(installPath, 'node.exe'));
-      accessSync(path.join(installPath, 'npm'));
-      accessSync(path.join(installPath, 'npm.cmd'));
-      // accessSync(path.join(installPath, 'npx'));
-      // accessSync(path.join(installPath, 'npx.cmd'));
-      accessSync(path.join(installPath, 'node_modules', 'npm'));
-    } catch (err) {
-      assert(!err, err.message);
-      return done(err);
-    }
+    assert(existsSync(path.join(installPath, 'node.exe')), true);
+    assert(existsSync(path.join(installPath, 'npm')), true);
+    assert(existsSync(path.join(installPath, 'npm.cmd')), true);
+    // existsSync(path.join(installPath, 'npx'));
+    // existsSync(path.join(installPath, 'npx.cmd'));
+    assert(existsSync(path.join(installPath, 'node_modules', 'npm')), true);
   } else {
-    try {
-      accessSync(path.join(installPath, 'bin', 'node'));
-      accessSync(path.join(installPath, 'bin', 'npm'));
-      // accessSync(path.join(installPath, 'bin', 'npx'));
-      // accessSync(path.join(installPath, 'bin', 'node-waf'));
-      accessSync(path.join(installPath, 'lib', 'node_modules', 'npm'));
-    } catch (err) {
-      assert(!err, err.message);
-      return done(err);
-    }
+    assert(existsSync(path.join(installPath, 'bin', 'node')), true);
+    assert(existsSync(path.join(installPath, 'bin', 'npm')), true);
+    // existsSync(path.join(installPath, 'bin', 'npx'));
+    // existsSync(path.join(installPath, 'bin', 'node-waf'));
+    assert(existsSync(path.join(installPath, 'lib', 'node_modules', 'npm')), true);
   }
 
   // if not the native platform, do not try running
