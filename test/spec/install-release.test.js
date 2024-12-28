@@ -4,7 +4,6 @@ delete process.env.NODE_OPTIONS;
 const assert = require('assert');
 const path = require('path');
 const rimraf2 = require('rimraf2');
-const resolveVersions = require('node-resolve-versions');
 
 const installRelease = require('node-install-release');
 const validateInstall = require('../lib/validateInstall');
@@ -15,10 +14,10 @@ const OPTIONS = {
   cacheDirectory: path.join(TMP_DIR, 'cache'),
   buildDirectory: path.join(TMP_DIR, 'build'),
 };
-const VERSIONS = resolveVersions.sync('>=0.8', { range: 'major,even' });
-// VERSIONS = ['v4'];
-// VERSIONS = ['v6'];
-// VERSIONS = ['v16'];
+// const VERSIONS = resolveVersions.sync('>=0.8', { range: 'major,even' });
+const VERSIONS = ['v4'];
+// const VERSIONS = ['v6'];
+// const VERSIONS = ['v16'];
 
 let TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
 // TARGETS = [{}];
@@ -30,6 +29,18 @@ function addTests(version, target) {
   const arch = target.arch || 'local';
 
   describe(`${version} (${platform},${arch})`, () => {
+    (() => {
+      // patch and restore promise
+      let rootPromise;
+      before(() => {
+        rootPromise = global.Promise;
+        global.Promise = require('pinkie-promise');
+      });
+      after(() => {
+        global.Promise = rootPromise;
+      });
+    })();
+
     it('dist', (done) => {
       const installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}`);
       installRelease(version, installPath, { ...target, ...OPTIONS }, (err) => {
