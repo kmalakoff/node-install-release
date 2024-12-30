@@ -27,7 +27,7 @@ module.exports = function installLib(version, dest, options, callback) {
       const distTags = res2.body;
       const installVersion = distTags[`latest-${npmMajor}`] || distTags[`next-${npmMajor}`] || distTags.latest;
       const downloadPath = `${NPM_DIST_URL}/-/npm-${installVersion}.tgz`;
-      const cachePath = path.join(options.cachePath, path.basename(downloadPath));
+      const cachePath = path.join(options.cacheDirectory, path.basename(downloadPath));
       conditionalCache(downloadPath, cachePath, (err) => {
         if (err) return callback(err);
         conditionalExtract(cachePath, installPath, callback);
