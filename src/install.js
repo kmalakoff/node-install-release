@@ -6,10 +6,10 @@ const resolveVersions = require('node-resolve-versions');
 
 const installVersion = require('./installVersion');
 
-const NIR_DIR = path.join(require('homedir-polyfill')(), '.nir');
+const DEFAULT_INSTALL_PATH = path.join(require('homedir-polyfill')(), '.nir');
 const DEFAULT_OPTIONS = {
-  cachePath: path.join(NIR_DIR, 'cache'),
-  buildCache: path.join(NIR_DIR, 'build'),
+  cachePath: path.join(DEFAULT_INSTALL_PATH, 'cache'),
+  buildPath: path.join(DEFAULT_INSTALL_PATH, 'build'),
   downloadURL: function downloadURL(relativePath) {
     return `https://nodejs.org/dist/${relativePath}`;
   },
@@ -26,18 +26,16 @@ module.exports = function install(versionDetails, dest, options, callback) {
     queue.defer((callback) => {
       mkdirp(options.cachePath, callback.bind(null, null));
     });
-    for (let index = 0; index < versions.length; index++) {
-      ((version) => {
-        queue.defer((callback) => {
-          const installPath = dest && versions.length > 1 ? path.join(dest, version.version) : dest;
-          installVersion(version, installPath, options, (error) => {
-            if (err) return callback(err);
-            results.push({ version: version.version, error, installPath });
-            callback();
-          });
+    versions.forEach((version) => {
+      queue.defer((cb) => {
+        const installPath = dest && versions.length > 1 ? path.join(dest, version.version) : dest;
+        installVersion(version, installPath, options, (error) => {
+          if (err) return cb(err);
+          results.push({ version: version.version, error, installPath });
+          cb();
         });
-      })(versions[index]);
-    }
+      });
+    });
     queue.await((err) => {
       err ? callback(err) : callback(null, results);
     });

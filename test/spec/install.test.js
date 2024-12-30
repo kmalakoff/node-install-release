@@ -22,7 +22,7 @@ const VERSIONS = ['v20'];
 let TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
 // TARGETS = [{}];
 // TARGETS = [{ platform: 'win32', arch: 'x64' }];
-TARGETS = [{ platform: 'darwin', arch: 'x64' }];
+TARGETS = [{ platform: 'darwin' }, { platform: 'darwin', arch: 'x64' }, { platform: 'darwin', arch: 'arm64' }];
 
 function addTests(version, target) {
   const platform = target.platform || 'local';

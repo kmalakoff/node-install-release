@@ -4,8 +4,8 @@ if (!cp.execSync) {
   const execCallback = path.join(__dirname, 'workers', 'execCallback.js');
 
   let functionExec = null; // break dependencies
-  cp.execSync = function execSyncPolyfill(cmd, options) {
+  cp.execSync = function execSyncPolyfill(cmd, options = {}) {
     if (!functionExec) functionExec = require('function-exec-sync');
-    return functionExec()({ callbacks: true }, execCallback, cmd, options || {});
+    return functionExec({ callbacks: true }, execCallback, cmd, options);
   };
 }
