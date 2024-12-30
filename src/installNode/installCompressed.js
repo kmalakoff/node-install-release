@@ -8,7 +8,7 @@ const progress = require('../progress');
 
 module.exports = function installCompressed(relativePath, dest, _record, options, callback) {
   const downloadPath = options.downloadURL(relativePath);
-  const cachePath = path.join(options.cachePath, path.basename(downloadPath));
+  const cachePath = path.join(options.cacheDirectory, path.basename(downloadPath));
 
   conditionalCache(downloadPath, cachePath, (err) => {
     if (err) return callback(err);
