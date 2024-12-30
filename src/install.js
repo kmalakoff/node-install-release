@@ -8,8 +8,8 @@ const installVersion = require('./installVersion');
 
 const NIR_DIR = path.join(require('homedir-polyfill')(), '.nir');
 const DEFAULT_OPTIONS = {
-  cacheDirectory: path.join(NIR_DIR, 'cache'),
-  buildDirectory: path.join(NIR_DIR, 'build'),
+  cachePath: path.join(NIR_DIR, 'cache'),
+  buildCache: path.join(NIR_DIR, 'build'),
   downloadURL: function downloadURL(relativePath) {
     return `https://nodejs.org/dist/${relativePath}`;
   },
@@ -24,15 +24,15 @@ module.exports = function install(versionDetails, dest, options, callback) {
     const results = [];
     const queue = new Queue(1);
     queue.defer((callback) => {
-      mkdirp(options.cacheDirectory, callback.bind(null, null));
+      mkdirp(options.cachePath, callback.bind(null, null));
     });
     for (let index = 0; index < versions.length; index++) {
       ((version) => {
         queue.defer((callback) => {
-          const installDirectory = dest && versions.length > 1 ? path.join(dest, version.version) : dest;
-          installVersion(version, installDirectory, options, (err, fullPath) => {
+          const installPath = dest && versions.length > 1 ? path.join(dest, version.version) : dest;
+          installVersion(version, installPath, options, (error) => {
             if (err) return callback(err);
-            results.push({ version: version.version, error: err, fullPath: fullPath });
+            results.push({ version: version.version, error, installPath });
             callback();
           });
         });
