@@ -1,5 +1,5 @@
+const machineArch = require('../archPatched.js');
 const osArch = require('os').arch;
-const machineArch = require('arch');
 
 const PLATFORM_OS = {
   win32: 'win',

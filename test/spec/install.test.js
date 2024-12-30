@@ -15,7 +15,7 @@ const OPTIONS = {
   buildPath: path.join(TMP_DIR, 'build'),
 };
 // const VERSIONS = resolveVersions.sync('>=0.8', { range: 'major,even' });
-const VERSIONS = ['v4'];
+const VERSIONS = ['v20'];
 // const VERSIONS = ['v6'];
 // const VERSIONS = ['v16'];
 
