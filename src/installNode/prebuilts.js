@@ -1,4 +1,4 @@
-const archMachine = require('../arch');
+const arch = require('../arch');
 const archOS = require('os').arch;
 
 const PLATFORM_OS = {
@@ -10,17 +10,17 @@ const PLATFORM_FILES = {
   win32: ['zip', 'exe'],
   darwin: ['tar'],
 };
-let machine = null;
+let machineArch = null;
 
-module.exports = function prebuiltFilenames(options) {
-  if (!machine) machine = archMachine();
+module.exports = function prebuilts(options) {
+  if (!machineArch) machineArch = arch();
   const platform = options.platform || process.platform;
   const os = PLATFORM_OS[platform] || platform;
   const archs = [];
   if (options.arch) archs.push(options.arch);
-  archs.push(machine);
+  archs.push(machineArch);
   if (archOS) archs.push(archOS());
-  if (platform === 'darwin' && machine === 'arm64') archs.push('x64'); // fallback
+  if (platform === 'darwin' && machineArch === 'arm64') archs.push('x64'); // fallback
 
   const files = PLATFORM_FILES[platform];
   const results = [];
