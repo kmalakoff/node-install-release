@@ -12,8 +12,8 @@ const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.js');
 const TMP_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp'));
 const INSTALLED_DIR = path.join(TMP_DIR, 'installed');
 const OPTIONS = {
-  cacheDirectory: path.join(TMP_DIR, 'cache'),
-  buildDirectory: path.join(TMP_DIR, 'build'),
+  cachePath: path.join(TMP_DIR, 'cache'),
+  buildPath: path.join(TMP_DIR, 'build'),
 };
 const VERSIONS = ['v12'];
 const TARGETS = [{}];
@@ -24,7 +24,7 @@ function addTests(version, target) {
 
   it(`${version} (${platform},${arch})`, (done) => {
     const installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}`);
-    let args = [version, installPath, '--cacheDirectory', OPTIONS.cacheDirectory, '--silent'];
+    let args = [version, installPath, '--cachePath', OPTIONS.cachePath, '--silent'];
     if (platform !== 'local') args = args.concat(['--platform', platform]);
     if (arch !== 'local') args = args.concat(['--arch', arch]);
 
@@ -36,11 +36,7 @@ function addTests(version, target) {
 }
 
 describe('cli', () => {
-  before((cb) => {
-    rimraf2(INSTALLED_DIR, { disableGlob: true }, () => {
-      rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null));
-    });
-  });
+  before((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
 
   describe('happy path', () => {
     for (let i = 0; i < VERSIONS.length; i++) {

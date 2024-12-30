@@ -12,18 +12,18 @@ module.exports = function validateInstall(version, installPath, options, done) {
   const platform = options.platform || process.platform;
 
   if (platform === 'win32') {
-    assert(existsSync(path.join(installPath, 'node.exe')), true);
-    assert(existsSync(path.join(installPath, 'npm')), true);
-    assert(existsSync(path.join(installPath, 'npm.cmd')), true);
+    assert.ok(existsSync(path.join(installPath, 'node.exe')));
+    assert.ok(existsSync(path.join(installPath, 'npm')));
+    assert.ok(existsSync(path.join(installPath, 'npm.cmd')));
     // existsSync(path.join(installPath, 'npx'));
     // existsSync(path.join(installPath, 'npx.cmd'));
-    assert(existsSync(path.join(installPath, 'node_modules', 'npm')), true);
+    assert.ok(existsSync(path.join(installPath, 'node_modules', 'npm')));
   } else {
-    assert(existsSync(path.join(installPath, 'bin', 'node')), true);
-    assert(existsSync(path.join(installPath, 'bin', 'npm')), true);
+    assert.ok(existsSync(path.join(installPath, 'bin', 'node')));
+    assert.ok(existsSync(path.join(installPath, 'bin', 'npm')));
     // existsSync(path.join(installPath, 'bin', 'npx'));
     // existsSync(path.join(installPath, 'bin', 'node-waf'));
-    assert(existsSync(path.join(installPath, 'lib', 'node_modules', 'npm')), true);
+    assert.ok(existsSync(path.join(installPath, 'lib', 'node_modules', 'npm')));
   }
 
   // if not the native platform, do not try running

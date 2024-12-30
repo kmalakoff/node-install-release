@@ -4,14 +4,14 @@ import nir from './index.js';
 
 export default (argv) => {
   const options = getopts(argv.slice(1), {
-    alias: { platform: 'p', arch: 'a', filename: 'f', cacheDirectory: 'c', silent: 's' },
+    alias: { platform: 'p', arch: 'a', filename: 'f', cachePath: 'c', silent: 's' },
     boolean: ['silent'],
   });
 
   // define.option('-p, --platform [platform]', 'Platform like darwin');
   // define.option('-a, --arch [arch]', 'Architecure x64, x86, arm-pi');
   // define.option('-f, --filename [filename]', 'Distribution filename from https://nodejs.org/dist/index.json');
-  // define.option('-c, --cacheDirectory [cacheDirectory]', 'Cache directory');
+  // define.option('-c, --cachePath [cachePath]', 'Cache directory');
 
   const args = argv.slice(0, 1).concat(options._);
   if (args.length < 1) {
