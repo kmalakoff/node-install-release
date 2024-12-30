@@ -33,7 +33,6 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "arch": "^3.0.0",
     "cross-spawn-cb": "^1.5.7",
     "end-with": "^1.0.2",
     "exit": "^0.1.2",
