@@ -11,8 +11,8 @@ const validateInstall = require('../lib/validateInstall');
 const TMP_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp'));
 const INSTALLED_DIR = path.join(TMP_DIR, 'installed');
 const OPTIONS = {
-  cacheDirectory: path.join(TMP_DIR, 'cache'),
-  buildDirectory: path.join(TMP_DIR, 'build'),
+  cachePath: path.join(TMP_DIR, 'cache'),
+  buildPath: path.join(TMP_DIR, 'build'),
 };
 // const VERSIONS = resolveVersions.sync('>=0.8', { range: 'major,even' });
 const VERSIONS = ['v4'];
@@ -69,11 +69,7 @@ function addTests(version, target) {
 }
 
 describe('install-release', () => {
-  before((cb) => {
-    rimraf2(INSTALLED_DIR, { disableGlob: true }, () => {
-      rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null));
-    });
-  });
+  before((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
 
   for (let i = 0; i < VERSIONS.length; i++) {
     for (let j = 0; j < TARGETS.length; j++) {
