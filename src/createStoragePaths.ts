@@ -6,6 +6,6 @@ export default function createStoragePaths(storagePath: string): StorageLocation
   return {
     cachePath: path.join(storagePath, 'cache'),
     buildPath: path.join(storagePath, 'build'),
-    installPath: path.join(storagePath, 'build'),
+    installPath: path.join(storagePath, 'installed'),
   };
 }
