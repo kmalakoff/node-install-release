@@ -1,6 +1,6 @@
 import exit from 'exit';
 import getopts from 'getopts-compat';
-import nir from './index.js';
+import nir from './index';
 
 export default (argv) => {
   const options = getopts(argv.slice(1), {
@@ -19,24 +19,14 @@ export default (argv) => {
     return exit(-1);
   }
 
-  const installPath = args.length > 1 ? args[1] : null;
-  nir(args[0], installPath, { stdio: 'inherit', ...options }, (err, results) => {
-    if (err) {
-      console.log(err.message);
-      return exit(err.code || -1);
-    }
-    const errors = results.filter((result) => !!result.error);
-
+  const installPath = args.length > 1 ? args[1] : process.cwd();
+  nir(args[0], installPath, { addVersion: true }, (err, result) => {
     if (!options.silent) {
       console.log('\n======================');
-      for (let index = 0; index < results.length; index++) {
-        const result = results[index];
-        if (result.error) console.log(`${result.version} not installed. Error: ${result.error.message}`);
-        else console.log(`${result.version} installed in: ${result.fullPath}`);
-      }
+      if (err) console.log(`${args[0]} not installed. Error: ${err.message}`);
+      else console.log(`${result.version} installed in: ${installPath}`);
       console.log('======================');
     }
-
-    exit(errors.length ? -1 : 0);
+    exit(err ? -1 : 0);
   });
 };

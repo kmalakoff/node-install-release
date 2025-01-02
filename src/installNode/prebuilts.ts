@@ -1,5 +1,5 @@
-const arch = require('../arch');
-const archOS = require('os').arch;
+import os from 'os';
+import arch from '../lib/arch.cjs';
 
 const PLATFORM_OS = {
   win32: 'win',
@@ -12,14 +12,14 @@ const PLATFORM_FILES = {
 };
 let machineArch = null;
 
-module.exports = function prebuilts(options) {
+export default function prebuilts(options) {
   if (!machineArch) machineArch = arch();
   const platform = options.platform || process.platform;
   const os = PLATFORM_OS[platform] || platform;
   const archs = [];
   if (options.arch) archs.push(options.arch);
   archs.push(machineArch);
-  if (archOS) archs.push(archOS());
+  if (os.arch) archs.push(os.arch());
   if (platform === 'darwin' && machineArch === 'arm64') archs.push('x64'); // fallback
 
   const files = PLATFORM_FILES[platform];
@@ -34,4 +34,4 @@ module.exports = function prebuilts(options) {
     }
   }
   return results;
-};
+}

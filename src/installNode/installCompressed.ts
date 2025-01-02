@@ -1,12 +1,12 @@
-const path = require('path');
-const access = require('fs-access-compat');
-const rimraf2 = require('rimraf2');
+import path from 'path';
+import access from 'fs-access-compat';
+import rimraf2 from 'rimraf2';
 
-const conditionalCache = require('../conditionalCache');
-const conditionalExtract = require('../conditionalExtract');
-const progress = require('../progress');
+import conditionalCache from '../lib/conditionalCache';
+import conditionalExtract from '../lib/conditionalExtract';
+import progress from '../lib/progress.js';
 
-module.exports = function installCompressed(relativePath, dest, _record, options, callback) {
+export default function installCompressed(relativePath, dest, _record, options, callback) {
   const downloadPath = options.downloadURL(relativePath);
   const cachePath = path.join(options.cachePath, path.basename(downloadPath));
 
@@ -28,4 +28,4 @@ module.exports = function installCompressed(relativePath, dest, _record, options
       });
     });
   });
-};
+}

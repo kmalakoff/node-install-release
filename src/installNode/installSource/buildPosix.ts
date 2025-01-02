@@ -1,9 +1,9 @@
-const path = require('path');
-const spawn = require('cross-spawn-cb');
-const Queue = require('queue-cb');
-const access = require('fs-access-compat');
+import path from 'path';
+import spawn from 'cross-spawn-cb';
+import access from 'fs-access-compat';
+import Queue from 'queue-cb';
 
-module.exports = function installDefault(buildPath, dest, _options, callback) {
+export default function installDefault(buildPath, dest, _options, callback) {
   const buildTarget = path.join(dest, 'node');
 
   access(buildTarget, (err) => {
@@ -18,4 +18,4 @@ module.exports = function installDefault(buildPath, dest, _options, callback) {
     });
     queue.await(callback);
   });
-};
+}

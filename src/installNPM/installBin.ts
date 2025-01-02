@@ -1,6 +1,6 @@
-const path = require('path');
-const Queue = require('queue-cb');
-const conditionalCopy = require('../conditionalCopy');
+import path from 'path';
+import Queue from 'queue-cb';
+import conditionalCopy from '../lib/conditionalCopy';
 
 const PLATFORM_FILES = {
   win32: [
@@ -15,7 +15,7 @@ const PLATFORM_FILES = {
   ],
 };
 
-module.exports = function installBin(_version, dest, options, callback) {
+export default function installBin(_version, dest, options, callback) {
   const platform = options.platform || process.platform;
   const libPath = platform === 'win32' ? dest : path.join(dest, 'lib');
   const binPath = platform === 'win32' ? dest : path.join(dest, 'bin');
@@ -28,4 +28,4 @@ module.exports = function installBin(_version, dest, options, callback) {
   }
 
   queue.await(callback);
-};
+}

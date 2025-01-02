@@ -1,12 +1,12 @@
-const find = require('lodash.find');
+import find from 'lodash.find';
 
-const endsWithFn = require('../endsWithFn');
-const findDistPaths = require('./findDistPaths');
-const installCompressed = require('./installCompressed');
-const installExe = require('./installExe');
-const installSource = require('./installSource');
+import endsWithFn from '../lib/endsWithFn';
+import findDistPaths from './findDistPaths';
+import installCompressed from './installCompressed';
+import installExe from './installExe';
+import installSource from './installSource/index';
 
-module.exports = function install(version, dest, options, callback) {
+export default function install(version, dest, options, callback) {
   let record = findDistPaths(version, options);
   if (record) {
     if (record.filename === 'src') return installSource(record.relativePaths[0], dest, record, options, callback);
@@ -21,4 +21,4 @@ module.exports = function install(version, dest, options, callback) {
   record = findDistPaths(version, { filename: 'src' });
   if (record && record.relativePaths.length) return installSource(record.relativePaths[0], dest, record, options, callback);
   callback(new Error(`Unable to install ${version}`));
-};
+}

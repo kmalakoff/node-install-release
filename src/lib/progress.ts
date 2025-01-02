@@ -1,7 +1,7 @@
-const log = require('single-line-log2').stdout;
+import sll from 'single-line-log2';
 
-module.exports = function progress(entry) {
+export default function progress(entry) {
   let message = `${entry.progress} ${entry.basename}`;
   if (entry.percentage) message += ` - ${entry.percentage.toFixed(0)}%`;
-  log(message);
-};
+  sll.stdout(message);
+}
