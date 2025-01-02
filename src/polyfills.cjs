@@ -1,7 +1,7 @@
 const cp = require('child_process');
 if (!cp.execSync) {
   const path = require('path');
-  const execCallback = path.join(__dirname, 'workers', 'execCallback.js');
+  const execCallback = path.join(__dirname, 'polyfills', 'execCallback.cjs');
 
   let functionExec = null; // break dependencies
   cp.execSync = function execSyncPolyfill(cmd, options = {}) {

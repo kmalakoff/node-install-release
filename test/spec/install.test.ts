@@ -1,28 +1,26 @@
 // remove NODE_OPTIONS from ts-dev-stack
 delete process.env.NODE_OPTIONS;
+import Pinkie from 'pinkie-promise';
 
-const assert = require('assert');
-const path = require('path');
-const rimraf2 = require('rimraf2');
+import assert from 'assert';
+import path from 'path';
+import url from 'url';
+import rimraf2 from 'rimraf2';
 
-const installRelease = require('node-install-release');
-const validateInstall = require('../lib/validateInstall');
+// @ts-ignore
+import installRelease from 'node-install-release';
+import validateInstall from '../lib/validateInstall';
 
+const __dirname = path.dirname(typeof __filename === 'undefined' ? url.fileURLToPath(import.meta.url) : __filename);
 const TMP_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp'));
 const INSTALLED_DIR = path.join(TMP_DIR, 'installed');
 const OPTIONS = {
   cachePath: path.join(TMP_DIR, 'cache'),
   buildPath: path.join(TMP_DIR, 'build'),
 };
-// const VERSIONS = resolveVersions.sync('>=0.8', { range: 'major,even' });
 const VERSIONS = ['v20'];
-// const VERSIONS = ['v6'];
-// const VERSIONS = ['v16'];
-
-let TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
-// TARGETS = [{}];
-// TARGETS = [{ platform: 'win32', arch: 'x64' }];
-TARGETS = [{ platform: 'darwin' }, { platform: 'darwin', arch: 'x64' }, { platform: 'darwin', arch: 'arm64' }];
+// let TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
+const TARGETS = [{ platform: 'darwin' }, { platform: 'darwin', arch: 'x64' }, { platform: 'darwin', arch: 'arm64' }];
 
 function addTests(version, target) {
   const platform = target.platform || 'local';
@@ -31,10 +29,11 @@ function addTests(version, target) {
   describe(`${version} (${platform},${arch})`, () => {
     (() => {
       // patch and restore promise
-      let rootPromise;
+      // @ts-ignore
+      let rootPromise: Promise;
       before(() => {
         rootPromise = global.Promise;
-        global.Promise = require('pinkie-promise');
+        global.Promise = Pinkie;
       });
       after(() => {
         global.Promise = rootPromise;
@@ -70,6 +69,7 @@ function addTests(version, target) {
 
 describe('install-release', () => {
   before((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
+  after((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
 
   for (let i = 0; i < VERSIONS.length; i++) {
     for (let j = 0; j < TARGETS.length; j++) {

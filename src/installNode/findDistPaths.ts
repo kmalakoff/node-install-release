@@ -1,7 +1,7 @@
-const distPaths = require('node-filename-to-dist-paths');
-const prebuilts = require('./prebuilts');
+import distPaths from 'node-filename-to-dist-paths';
+import prebuilts from './prebuilts';
 
-module.exports = function findDistPaths(version, options) {
+export default function findDistPaths(version, options) {
   const filenames = options.filename ? [options.filename] : prebuilts(options);
   for (let index = 0; index < filenames.length; index++) {
     const filename = filenames[index];
@@ -10,4 +10,4 @@ module.exports = function findDistPaths(version, options) {
     if (relativePaths && relativePaths.length) return { version: version.version, filename: filename, relativePaths: relativePaths };
   }
   return null;
-};
+}

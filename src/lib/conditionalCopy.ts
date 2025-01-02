@@ -1,9 +1,9 @@
-const access = require('fs-access-compat');
+import access from 'fs-access-compat';
 
-const copyFile = require('./copyFile');
-const ensureDestinationParent = require('./ensureDestinationParent');
+import copyFile from './copyFile';
+import ensureDestinationParent from './ensureDestinationParent';
 
-module.exports = function conditionalCopy(src, dest, optional, callback) {
+export default function conditionalCopy(src, dest, optional, callback) {
   if (typeof optional === 'function') {
     callback = optional;
     optional = false;
@@ -22,4 +22,4 @@ module.exports = function conditionalCopy(src, dest, optional, callback) {
       });
     });
   });
-};
+}

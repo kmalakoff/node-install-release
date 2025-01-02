@@ -1,11 +1,11 @@
-const path = require('path');
-const get = require('get-remote');
-const access = require('fs-access-compat');
+import path from 'path';
+import access from 'fs-access-compat';
+import get from 'get-remote';
 
-const progress = require('./progress');
-const ensureDestinationParent = require('./ensureDestinationParent');
+import ensureDestinationParent from './ensureDestinationParent';
+import progress from './progress';
 
-module.exports = function conditionalCache(endpoint, dest, options, callback) {
+export default function conditionalCache(endpoint, dest, options, callback?) {
   if (typeof options === 'function') {
     callback = options;
     options = null;
@@ -24,4 +24,4 @@ module.exports = function conditionalCache(endpoint, dest, options, callback) {
       });
     });
   });
-};
+}
