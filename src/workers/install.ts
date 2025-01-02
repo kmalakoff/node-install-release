@@ -1,8 +1,12 @@
 import path from 'path';
-import homedir from 'homedir-polyfill';
 import mkdirp from 'mkdirp-classic';
 import Queue from 'queue-cb';
 import { NODE, isWindows } from '../constants';
+
+import home from 'homedir-polyfill';
+import createStoragePaths from '../createStoragePaths';
+const DEFAULT_ROOT_PATH = path.join(home(), '.nir');
+const DEFAULT_STORAGE_PATHS = createStoragePaths(DEFAULT_ROOT_PATH);
 
 import resolveVersions from 'node-resolve-versions';
 
@@ -11,17 +15,17 @@ import installNode from '../installNode/index';
 import checkMissing from '../lib/checkMissing';
 import ensureDestinationParent from '../lib/ensureDestinationParent';
 
-const DEFAULT_INSTALL_PATH = path.join(homedir(), '.nir');
 const DEFAULT_OPTIONS = {
-  cachePath: path.join(DEFAULT_INSTALL_PATH, 'cache'),
-  buildPath: path.join(DEFAULT_INSTALL_PATH, 'build'),
   downloadURL: function downloadURL(relativePath) {
     return `https://nodejs.org/dist/${relativePath}`;
   },
 };
 
-export default function install(versionExpression, dest, options, callback) {
-  options = { ...DEFAULT_OPTIONS, ...options, path: 'raw' };
+export default function install(versionExpression, options, callback) {
+  const storagePaths = options.storagePath ? createStoragePaths(options.storagePath) : DEFAULT_STORAGE_PATHS;
+  const dest = options.installPath ? options.installPath : storagePaths.installPath;
+
+  options = { ...storagePaths, ...DEFAULT_OPTIONS, ...options, path: 'raw' };
   resolveVersions(versionExpression, options, (err, versions) => {
     if (err) return callback(err);
     if (!versions.length) return callback(new Error(`Could not resolve versions for: ${versionExpression}`));
@@ -31,11 +35,11 @@ export default function install(versionExpression, dest, options, callback) {
       if (err) return callback(err);
       const version = versions[0];
 
-      const installPath = dest && versions.length > 1 ? path.join(dest, version.version) : dest;
+      let installPath = dest;
+      if (options.name) installPath = path.join(installPath, options.name);
+      else if (!options.installPath) installPath = path.join(installPath, version.version);
       const binRoot = isWindows ? installPath : path.join(installPath, 'bin');
       const execPath = path.join(binRoot, NODE);
-
-      if (options.addVersion) dest = path.join(dest, version.version);
 
       checkMissing(dest, options, (err, missing) => {
         if (err || !missing.length) return callback(err, dest);

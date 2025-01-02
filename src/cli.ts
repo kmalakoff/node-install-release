@@ -1,10 +1,10 @@
 import exit from 'exit';
 import getopts from 'getopts-compat';
-import nir from './index';
+import nir, { type InstallOptions } from './index';
 
 export default (argv) => {
   const options = getopts(argv.slice(1), {
-    alias: { platform: 'p', arch: 'a', filename: 'f', cachePath: 'c', silent: 's' },
+    alias: { platform: 'p', arch: 'a', filename: 'f', installPath: 'i', storagePath: 'c', silent: 's' },
     boolean: ['silent'],
   });
 
@@ -18,13 +18,11 @@ export default (argv) => {
     console.log('Missing command. Example usage: nir version [directory]');
     return exit(-1);
   }
-
-  const installPath = args.length > 1 ? args[1] : process.cwd();
-  nir(args[0], installPath, { addVersion: true }, (err, result) => {
+  nir(args[0], options as InstallOptions, (err, result) => {
     if (!options.silent) {
       console.log('\n======================');
       if (err) console.log(`${args[0]} not installed. Error: ${err.message}`);
-      else console.log(`${result.version} installed in: ${installPath}`);
+      else console.log(`${result.version} installed in: ${result.installPath}`);
       console.log('======================');
     }
     exit(err ? -1 : 0);

@@ -15,8 +15,7 @@ const __dirname = path.dirname(typeof __filename === 'undefined' ? url.fileURLTo
 const TMP_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp'));
 const INSTALLED_DIR = path.join(TMP_DIR, 'installed');
 const OPTIONS = {
-  cachePath: path.join(TMP_DIR, 'cache'),
-  buildPath: path.join(TMP_DIR, 'build'),
+  storagePath: TMP_DIR,
 };
 const VERSIONS = ['v20'];
 // let TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
@@ -42,26 +41,26 @@ function addTests(version, target) {
 
     it('dist', (done) => {
       const installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}`);
-      installRelease(version, installPath, { ...target, ...OPTIONS }, (err) => {
+      installRelease(version, { installPath, ...target, ...OPTIONS }, (err, result) => {
         assert.ok(!err, err ? err.message : '');
-        validateInstall(version, installPath, target, done);
+        validateInstall(result.version, result.installPath, target, done);
       });
     });
 
     it('promise', (done) => {
       const installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}-promise`);
-      installRelease(version, installPath, { ...target, ...OPTIONS })
-        .then((_res) => {
-          validateInstall(version, installPath, target, done);
+      installRelease(version, { installPath, ...target, ...OPTIONS })
+        .then((result) => {
+          validateInstall(result.version, result.installPath, target, done);
         })
         .catch(done);
     });
 
     it.skip('source', (done) => {
       const installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}-src`);
-      installRelease(version, installPath, { filename: 'src', ...OPTIONS }, (err, _res) => {
+      installRelease(version, { installPath, filename: 'src', ...OPTIONS }, (err, result) => {
         assert.ok(!err, err ? err.message : '');
-        validateInstall(version, installPath, done);
+        validateInstall(result.version, result.installPath, done);
       });
     });
   });

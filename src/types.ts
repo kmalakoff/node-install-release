@@ -1,4 +1,4 @@
-export type InstallPaths = {
+export type StorageLocations = {
   cachePath: string;
   buildPath: string;
   installPath: string;
@@ -11,7 +11,10 @@ export type InstallResult = {
 };
 
 export interface InstallOptions {
-  addVersion?: boolean;
+  installPath?: string;
+  name?: string;
+  storagePath?: string;
+  filename?: string;
 }
 
 export type InstallCallback = (err?: Error, result?: InstallResult) => void;
