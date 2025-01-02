@@ -14,8 +14,7 @@ const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.cjs');
 const TMP_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp'));
 const INSTALLED_DIR = path.join(TMP_DIR, 'installed');
 const OPTIONS = {
-  cachePath: path.join(TMP_DIR, 'cache'),
-  buildPath: path.join(TMP_DIR, 'build'),
+  storagePath: TMP_DIR,
 };
 const VERSIONS = ['v12.22.12'];
 const TARGETS = [{}];
@@ -26,13 +25,13 @@ function addTests(version, target) {
 
   it(`${version} (${platform},${arch})`, (done) => {
     const installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}`);
-    let args = [version, installPath, '--cachePath', OPTIONS.cachePath, '--silent'];
+    let args = [version, '--installPath', installPath, '--storagePath', OPTIONS.storagePath, '--silent'];
     if (platform !== 'local') args = args.concat(['--platform', platform]);
     if (arch !== 'local') args = args.concat(['--arch', arch]);
 
     crossSpawn(CLI, args, { stdio: 'inherit' }, (err) => {
       assert.ok(!err, err ? err.message : '');
-      validateInstall(version, path.join(installPath, version), target, done);
+      validateInstall(version, installPath, target, done);
     });
   });
 }
