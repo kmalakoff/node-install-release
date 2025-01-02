@@ -14,4 +14,5 @@ export default function install(versionExpression: string, options?: InstallOpti
   if (typeof callback === 'function') return worker(versionExpression, options, callback) as undefined;
   return new Promise((resolve, reject) => worker(versionExpression, options, (err, result) => (err ? reject(err) : resolve(result))));
 }
+export { default as createResult } from './createResult';
 export { default as createStoragePaths } from './createStoragePaths';
