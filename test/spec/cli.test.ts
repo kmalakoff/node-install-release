@@ -1,21 +1,23 @@
 // remove NODE_OPTIONS from ts-dev-stack
 delete process.env.NODE_OPTIONS;
 
-const assert = require('assert');
-const path = require('path');
-const rimraf2 = require('rimraf2');
-const crossSpawn = require('cross-spawn-cb');
+import assert from 'assert';
+import path from 'path';
+import url from 'url';
+import crossSpawn from 'cross-spawn-cb';
+import rimraf2 from 'rimraf2';
 
-const validateInstall = require('../lib/validateInstall');
+import validateInstall from '../lib/validateInstall';
 
-const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.js');
+const __dirname = path.dirname(typeof __filename === 'undefined' ? url.fileURLToPath(import.meta.url) : __filename);
+const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.cjs');
 const TMP_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp'));
 const INSTALLED_DIR = path.join(TMP_DIR, 'installed');
 const OPTIONS = {
   cachePath: path.join(TMP_DIR, 'cache'),
   buildPath: path.join(TMP_DIR, 'build'),
 };
-const VERSIONS = ['v12'];
+const VERSIONS = ['v12.22.12'];
 const TARGETS = [{}];
 
 function addTests(version, target) {
@@ -28,15 +30,16 @@ function addTests(version, target) {
     if (platform !== 'local') args = args.concat(['--platform', platform]);
     if (arch !== 'local') args = args.concat(['--arch', arch]);
 
-    crossSpawn(CLI, args, { stdio: 'inherit' }, (err, _res) => {
+    crossSpawn(CLI, args, { stdio: 'inherit' }, (err) => {
       assert.ok(!err, err ? err.message : '');
-      validateInstall(version, installPath, target, done);
+      validateInstall(version, path.join(installPath, version), target, done);
     });
   });
 }
 
 describe('cli', () => {
   before((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
+  after((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
 
   describe('happy path', () => {
     for (let i = 0; i < VERSIONS.length; i++) {

@@ -1,11 +1,11 @@
-const path = require('path');
-const extract = require('fast-extract').default;
-const mkdirp = require('mkdirp-classic');
-const access = require('fs-access-compat');
+import path from 'path';
+import extract from 'fast-extract';
+import access from 'fs-access-compat';
+import mkdirp from 'mkdirp-classic';
 
-const progress = require('./progress');
+import progress from './progress.js';
 
-module.exports = function conditionalExtract(src, dest, options, callback) {
+export default function conditionalExtract(src, dest, options, callback?) {
   if (typeof options === 'function') {
     callback = options;
     options = null;
@@ -22,4 +22,4 @@ module.exports = function conditionalExtract(src, dest, options, callback) {
       });
     });
   });
-};
+}

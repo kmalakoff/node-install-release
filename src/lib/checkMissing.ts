@@ -1,6 +1,6 @@
-const path = require('path');
-const fs = require('fs');
-const keys = require('lodash.keys');
+import fs from 'fs';
+import path from 'path';
+import keys from 'lodash.keys';
 
 const PLATFORM_FILES = {
   win32: {
@@ -13,7 +13,7 @@ const PLATFORM_FILES = {
   },
 };
 
-module.exports = function checkMissing(dest, options, callback) {
+export default function checkMissing(dest, options, callback) {
   const platform = options.platform || process.platform;
   const files = PLATFORM_FILES[platform] || PLATFORM_FILES.posix;
   const binPath = platform === 'win32' ? dest : path.join(dest, 'bin');
@@ -33,4 +33,4 @@ module.exports = function checkMissing(dest, options, callback) {
     }
     return callback(null, missing);
   });
-};
+}

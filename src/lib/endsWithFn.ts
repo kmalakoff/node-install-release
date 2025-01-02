@@ -1,7 +1,7 @@
-const isArray = require('isarray');
-const endsWith = require('end-with');
+import endsWith from 'end-with';
+import isArray from 'isarray';
 
-module.exports = function endsWithFn(endings) {
+export default function endsWithFn(endings) {
   if (!isArray(endings)) endings = [endings];
   return (string) => {
     for (let index = 0; index < endings.length; index++) {
@@ -9,4 +9,4 @@ module.exports = function endsWithFn(endings) {
     }
     return false;
   };
-};
+}

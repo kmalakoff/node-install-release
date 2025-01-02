@@ -1,12 +1,12 @@
-const path = require('path');
-const Queue = require('queue-cb');
+import path from 'path';
+import Queue from 'queue-cb';
 
-const conditionalCache = require('../../conditionalCache');
-const conditionalExtract = require('../../conditionalExtract');
-const buildPosix = require('./buildPosix');
-const buildWin32 = require('./buildWin32');
+import conditionalCache from '../../lib/conditionalCache';
+import conditionalExtract from '../../lib/conditionalExtract';
+import buildPosix from './buildPosix';
+import buildWin32 from './buildWin32';
 
-module.exports = function InstallSource(relativePath, dest, _record, options, callback) {
+export default function InstallSource(relativePath, dest, _record, options, callback) {
   const platform = options.platform || process.platform;
   const build = platform === 'win32' ? buildWin32 : buildPosix;
   const downloadPath = options.downloadURL(relativePath);
@@ -18,4 +18,4 @@ module.exports = function InstallSource(relativePath, dest, _record, options, ca
   queue.defer(conditionalExtract.bind(null, cachePath, buildPath, { strip: 1 }));
   queue.defer(build.bind(null, buildPath, dest, options));
   queue.await(callback);
-};
+}

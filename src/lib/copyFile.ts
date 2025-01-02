@@ -1,9 +1,9 @@
-const fs = require('fs');
-const rimraf2 = require('rimraf2');
-const pump = require('pump');
-const Queue = require('queue-cb');
+import fs from 'fs';
+import pump from 'pump';
+import Queue from 'queue-cb';
+import rimraf2 from 'rimraf2';
 
-const ensureDestinationParent = require('./ensureDestinationParent');
+import ensureDestinationParent from './ensureDestinationParent';
 
 function streamCopyFile(src, dest, callback) {
   fs.stat(src, (err) => {
@@ -14,7 +14,7 @@ function streamCopyFile(src, dest, callback) {
 
 const copyFile = fs.copyFile || streamCopyFile;
 
-module.exports = function safeCopyFile(src, dest, callback) {
+export default function safeCopyFile(src, dest, callback) {
   const queue = new Queue(1);
 
   queue.defer(ensureDestinationParent.bind(null, dest));
@@ -25,4 +25,4 @@ module.exports = function safeCopyFile(src, dest, callback) {
   });
   queue.defer(copyFile.bind(null, src, dest));
   queue.await(callback);
-};
+}
