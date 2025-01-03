@@ -15,7 +15,6 @@ export default function installExe(distPath, dest, options, callback) {
   access(destPath, (err) => {
     if (!err) return callback(); // already exists
 
-    console.log(1);
     const queue = new Queue(1);
     queue.defer(conditionalCache.bind(null, downloadPath, cachePath));
     queue.defer(validateDownload.bind(null, distPath, cachePath));

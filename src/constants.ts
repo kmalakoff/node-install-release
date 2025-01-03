@@ -1,6 +1,10 @@
 import path from 'path';
 import home from 'homedir-polyfill';
+// @ts-ignore
+import files from '../../assets/files.cjs';
 import createStoragePaths from './createStoragePaths';
+
+export const FILES = files;
 
 export const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
 export const NODE = isWindows ? 'node.exe' : 'node';

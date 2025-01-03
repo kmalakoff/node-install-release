@@ -6,7 +6,6 @@ import rimraf2 from 'rimraf2';
 import { NODE_DIST_BASE_URL } from '../constants';
 import conditionalCache from '../lib/conditionalCache';
 import conditionalExtract from '../lib/conditionalExtract';
-import progress from '../lib/progress.js';
 import validateDownload from './validateDownload';
 
 export default function installCompressed(distPath, dest, options, callback) {
@@ -19,7 +18,7 @@ export default function installCompressed(distPath, dest, options, callback) {
     const queue = new Queue(1);
     queue.defer(conditionalCache.bind(null, downloadPath, cachePath));
     queue.defer(validateDownload.bind(null, distPath, cachePath));
-    queue.defer(conditionalExtract.bind(null, cachePath, dest, { strip: 1, progress: progress, time: 1000, ...options }));
+    queue.defer(conditionalExtract.bind(null, cachePath, dest, { strip: 1, time: 1000, ...options }));
     queue.await((err) => {
       // some compressed versions of node come with npm pre-installed, but we want to override with a specific version
       const platform = options.platform || process.platform;

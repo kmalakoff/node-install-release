@@ -1,5 +1,8 @@
+import sll from 'single-line-log2';
 import realArch from '../machine/arch.cjs';
 import installFilename from './installFilename';
+
+import { FILES } from '../constants';
 
 const PLATFORM_MAP = {
   win32: 'win',
@@ -16,16 +19,20 @@ export default function install(version, dest, options, callback) {
   if (options.type) parts.push(options.type);
   if (options.compression) parts.push(options.compression);
 
-  const archs = [arch];
-  if (archs.indexOf('x64') < 0) archs.push('x64');
-  if (arch !== process.arch && archs.indexOf(process.arch) < 0) archs.push(process.arch);
-  const filenames = archs.map((a) => [platform, a].concat(parts.slice(2)).join('-'));
-  if (platform === 'win') filenames.push('win-x64-exe', 'win-x86-exe');
+  // generate the files in search order
+  const archs = [arch, process.arch];
+  let filenames = archs.map((a) => [platform, a].concat(parts.slice(2)).join('-'));
+  (FILES[platform] || []).forEach((x) => filenames.push(x.filename));
   filenames.push('src');
+  filenames = filenames.filter((filename, i) => filenames.indexOf(filename) === i);
 
   const tryNext = (cb) => {
     if (filenames.length === 0) return cb(new Error(`Failed to find installable for ${version}`));
     installFilename(filenames.shift(), version, dest, options, (err) => (err ? tryNext(cb) : cb()));
   };
-  tryNext(callback);
+  tryNext((err) => {
+    sll.stdout('');
+    console.log(`node ${version.slice(1)} ${!err ? 'installed' : `install failed. Error: ${err.message}`}`);
+    callback(err);
+  });
 }

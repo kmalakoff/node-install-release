@@ -32,7 +32,8 @@
     "nir": "./bin/cli.cjs"
   },
   "files": [
-    "dist"
+    "dist",
+    "assets"
   ],
   "scripts": {
     "build": "tsds build",
@@ -68,6 +69,7 @@
     "@types/node": "^22.10.5",
     "cr": "^0.1.0",
     "fs-exists-sync": "^0.1.0",
+    "node-version-compare": "^1.0.3",
     "node-version-utils": "^1.2.1",
     "pinkie-promise": "^2.0.1"
   },
