@@ -1,3 +1,4 @@
+import isVersion from 'is-version';
 import mkdirp from 'mkdirp-classic';
 import Queue from 'queue-cb';
 import { DEFAULT_STORAGE_PATHS } from '../constants';
@@ -12,11 +13,16 @@ import installNode from '../installNode/index';
 import checkMissing from '../lib/checkMissing';
 import ensureDestinationParent from '../lib/ensureDestinationParent';
 
+// short circuit
+function getVersions(versionExpression, options, callback) {
+  isVersion(versionExpression) ? callback(null, [versionExpression]) : resolveVersions(versionExpression, options, callback);
+}
+
 export default function install(versionExpression, options, callback) {
   const storagePaths = options.storagePath ? createStoragePaths(options.storagePath) : DEFAULT_STORAGE_PATHS;
 
   options = { ...storagePaths, ...options };
-  resolveVersions(versionExpression, options, (err, versions) => {
+  getVersions(versionExpression, options, (err, versions) => {
     if (err) return callback(err);
     if (!versions.length) return callback(new Error(`Could not resolve versions for: ${versionExpression}`));
     if (versions.length !== 1) return callback(new Error(`Version ${versionExpression} resolved to multiple versions: ${versions.map((x) => x.version)}. Expecting one.`));
