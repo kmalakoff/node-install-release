@@ -1,6 +1,7 @@
 import path from 'path';
 import get from 'get-remote';
 import { getDist } from 'node-filename-to-dist-paths';
+import Queue from 'queue-cb';
 
 import conditionalCache from '../lib/conditionalCache';
 import conditionalExtract from '../lib/conditionalExtract';
@@ -23,12 +24,15 @@ export default function installLib(version, dest, options, callback) {
   get(NPM_DIST_TAGS_URL).json((err, res) => {
     if (err) return callback(err);
     const distTags = res.body as DistRecord;
-    const installVersion = distTags[`latest-${npmMajor}`] || distTags[`next-${npmMajor}`] || distTags.latest;
-    const downloadPath = `${NPM_DIST_URL}/-/npm-${installVersion}.tgz`;
+    const npmVersion = distTags[`latest-${npmMajor}`] || distTags[`next-${npmMajor}`] || distTags.latest;
+    const downloadPath = `${NPM_DIST_URL}/-/npm-${npmVersion}.tgz`;
     const cachePath = path.join(options.cachePath, path.basename(downloadPath));
-    conditionalCache(downloadPath, cachePath, (err) => {
-      if (err) return callback(err);
-      conditionalExtract(cachePath, installPath, callback);
+
+    const queue = new Queue(1);
+    queue.defer(conditionalCache.bind(null, downloadPath, cachePath));
+    queue.defer(conditionalExtract.bind(null, cachePath, installPath));
+    queue.await((err) => {
+      err ? callback(err) : callback(null, npmVersion);
     });
   });
 }

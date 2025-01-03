@@ -14,7 +14,7 @@ export default function installWin32(buildPath, dest, _options, callback) {
 
     const queue = new Queue(1);
     queue.defer(access.bind(null, buildSource, (err) => (!err ? callback() : spawn('./vcbuild', [], { stdio: 'inherit', cwd: buildPath }))));
-    queue.defer(conditionalCopy.bind(null, buildSource, buildTarget));
+    queue.defer(conditionalCopy.bind(null, buildSource, buildTarget, {}));
     queue.await(callback);
   });
 }
