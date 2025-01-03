@@ -13,7 +13,7 @@ export default function installBin(_version, dest, options, callback) {
   const files = NPM_PLATFORM_FILES[platform] || NPM_PLATFORM_FILES.posix;
   for (let index = 0; index < files.length; index++) {
     const file = files[index];
-    queue.defer(conditionalCopy.bind(null, path.join(libPath, file.src), path.join(binPath, file.dest), file.optional));
+    queue.defer(conditionalCopy.bind(null, path.join(libPath, file.src), path.join(binPath, file.dest), file));
   }
 
   queue.await(callback);

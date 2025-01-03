@@ -16,9 +16,7 @@ export default function validateDownload(distPath, installPath, callback) {
     input.on('data', (data) => hash.update(data));
     eos(input, (err) => {
       if (err) return callback(err);
-      const digest = hash.digest('hex');
-      console.log(`hash ${digest === expected ? 'matches' : 'different'} for ${filename}`);
-      digest !== expected ? callback(new Error(`SHASUMS256 failed for ${filename}`)) : callback();
+      hash.digest('hex') !== expected ? callback(new Error(`${filename} checksum failed`)) : callback();
     });
   });
 }
