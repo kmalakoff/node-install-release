@@ -1,6 +1,7 @@
 // <<<<****************************>>>>
 // Inline until merged: https://github.com/jakejarvis/arch/blob/detect-arm/index.js
 // <<<<****************************>>>>
+require('./execSync/polyfill.cjs');
 
 /*! arch. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
 const cp = require('child_process');

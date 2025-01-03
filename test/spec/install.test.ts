@@ -19,6 +19,7 @@ const OPTIONS = {
 };
 const VERSIONS = ['v20'];
 // let TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
+// const TARGETS = [{ platform: 'darwin' }];
 const TARGETS = [{ platform: 'darwin' }, { platform: 'darwin', arch: 'x64' }, { platform: 'darwin', arch: 'arm64' }];
 
 function addTests(version, target) {
@@ -68,7 +69,7 @@ function addTests(version, target) {
 
 describe('install-release', () => {
   before((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
-  after((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
+  // after((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
 
   for (let i = 0; i < VERSIONS.length; i++) {
     for (let j = 0; j < TARGETS.length; j++) {

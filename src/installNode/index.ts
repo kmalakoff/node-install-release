@@ -1,24 +1,30 @@
-import find from 'lodash.find';
+import realArch from '../machine/arch.cjs';
+import installFilename from './installFilename';
 
-import endsWithFn from '../lib/endsWithFn';
-import findDistPaths from './findDistPaths';
-import installCompressed from './installCompressed';
-import installExe from './installExe';
-import installSource from './installSource/index';
+const PLATFORM_MAP = {
+  win32: 'win',
+  darwin: 'osx',
+};
 
+let archMachine: NodeJS.Architecture;
 export default function install(version, dest, options, callback) {
-  let record = findDistPaths(version, options);
-  if (record) {
-    if (record.filename === 'src') return installSource(record.relativePaths[0], dest, record, options, callback);
+  if (!archMachine) archMachine = realArch() as NodeJS.Architecture;
+  let platform = options.platform || process.platform;
+  platform = PLATFORM_MAP[platform] || platform;
+  const arch = options.arch || archMachine || process.arch;
+  const parts = [platform, arch];
+  if (options.type) parts.push(options.type);
+  if (options.compression) parts.push(options.compression);
 
-    let relativePath = find(record.relativePaths, endsWithFn(['.tar.gz', '.zip']));
-    if (relativePath) return installCompressed(relativePath, dest, record, options, callback);
+  const archs = [arch];
+  if (archs.indexOf('x64') < 0) archs.push('x64');
+  if (arch !== process.arch && archs.indexOf(process.arch) < 0) archs.push(process.arch);
+  const filenames = archs.map((a) => [platform, a].concat(parts.slice(2)).join('-'));
+  filenames.push('src');
 
-    relativePath = find(record.relativePaths, endsWithFn('.exe'));
-    if (relativePath) return installExe(relativePath, dest, record, options, callback);
-  }
-
-  record = findDistPaths(version, { filename: 'src' });
-  if (record && record.relativePaths.length) return installSource(record.relativePaths[0], dest, record, options, callback);
-  callback(new Error(`Unable to install ${version}`));
+  const tryNext = (cb) => {
+    if (filenames.length === 0) return cb(new Error(`Failed to find installable for ${version}`));
+    installFilename(filenames.shift(), version, dest, options, (err) => (err ? tryNext(cb) : cb()));
+  };
+  tryNext(callback);
 }

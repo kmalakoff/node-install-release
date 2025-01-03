@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import keys from 'lodash.keys';
 
-const PLATFORM_FILES = {
+export const PLATFORM_FILES = {
   win32: {
     node: ['node.exe'],
     npm: ['npm', 'npm.cmd'],

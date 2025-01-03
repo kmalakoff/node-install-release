@@ -12,16 +12,10 @@ import installNode from '../installNode/index';
 import checkMissing from '../lib/checkMissing';
 import ensureDestinationParent from '../lib/ensureDestinationParent';
 
-const DEFAULT_OPTIONS = {
-  downloadURL: function downloadURL(relativePath) {
-    return `https://nodejs.org/dist/${relativePath}`;
-  },
-};
-
 export default function install(versionExpression, options, callback) {
   const storagePaths = options.storagePath ? createStoragePaths(options.storagePath) : DEFAULT_STORAGE_PATHS;
 
-  options = { ...storagePaths, ...DEFAULT_OPTIONS, ...options, path: 'raw' };
+  options = { ...storagePaths, ...options };
   resolveVersions(versionExpression, options, (err, versions) => {
     if (err) return callback(err);
     if (!versions.length) return callback(new Error(`Could not resolve versions for: ${versionExpression}`));
@@ -30,7 +24,7 @@ export default function install(versionExpression, options, callback) {
     mkdirp(options.cachePath, (err) => {
       if (err) return callback(err);
       const version = versions[0];
-      const result = createResult(options, version.version);
+      const result = createResult(options, version);
 
       checkMissing(result.installPath, options, (err, missing) => {
         if (err || !missing.length) return callback(err, result);

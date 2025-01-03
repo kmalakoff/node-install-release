@@ -1,4 +1,3 @@
-import './polyfills.cjs';
 import worker from './workers/install';
 
 import type { InstallCallback, InstallOptions, InstallResult } from './types';
