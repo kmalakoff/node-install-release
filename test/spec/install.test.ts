@@ -17,10 +17,10 @@ const INSTALLED_DIR = path.join(TMP_DIR, 'installed');
 const OPTIONS = {
   storagePath: TMP_DIR,
 };
-const VERSIONS = ['v20'];
+const VERSIONS = ['v20', 'v0.8'];
 // let TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
 // const TARGETS = [{ platform: 'darwin' }];
-const TARGETS = [{ platform: 'darwin' }, { platform: 'darwin', arch: 'x64' }, { platform: 'darwin', arch: 'arm64' }];
+const TARGETS = [{ platform: 'darwin' }, { platform: 'win32', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'darwin', arch: 'arm64' }];
 
 function addTests(version, target) {
   const platform = target.platform || 'local';
