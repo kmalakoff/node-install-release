@@ -20,6 +20,7 @@ export default function install(version, dest, options, callback) {
   if (archs.indexOf('x64') < 0) archs.push('x64');
   if (arch !== process.arch && archs.indexOf(process.arch) < 0) archs.push(process.arch);
   const filenames = archs.map((a) => [platform, a].concat(parts.slice(2)).join('-'));
+  if (platform === 'win') filenames.push('win-x64-exe', 'win-x86-exe');
   filenames.push('src');
 
   const tryNext = (cb) => {
