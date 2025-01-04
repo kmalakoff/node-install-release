@@ -11,7 +11,7 @@ import validateInstall from '../lib/validateInstall';
 
 const __dirname = path.dirname(typeof __filename === 'undefined' ? url.fileURLToPath(import.meta.url) : __filename);
 const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.cjs');
-const TMP_DIR = path.resolve(path.join(__dirname, '..', '..', '.tmp'));
+const TMP_DIR = path.join(path.join(__dirname, '..', '..', '.tmp'));
 const INSTALLED_DIR = path.join(TMP_DIR, 'installed');
 const OPTIONS = {
   storagePath: TMP_DIR,
