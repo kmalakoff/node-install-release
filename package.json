@@ -60,7 +60,7 @@
     "node-filename-to-dist-paths": "^1.1.8",
     "node-resolve-versions": "^1.0.10",
     "pump": "^3.0.2",
-    "queue-cb": "^1.4.9",
+    "queue-cb": "^1.4.10",
     "rimraf2": "^2.8.2",
     "single-line-log2": "^1.1.3"
   },
@@ -71,7 +71,7 @@
     "cr": "^0.1.0",
     "fs-exists-sync": "^0.1.0",
     "node-version-compare": "^1.0.3",
-    "node-version-utils": "^1.2.1",
+    "node-version-utils": "^1.2.4",
     "pinkie-promise": "^2.0.1"
   },
   "engines": {
