@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:kmalakoff/node-install-release.git"
+    "url": "git+ssh://git@github.com/kmalakoff/node-install-release.git"
   },
   "license": "MIT",
   "type": "module",
@@ -45,22 +45,22 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "cross-spawn-cb": "^2.0.6",
+    "cross-spawn-cb": "^2.0.9",
     "end-of-stream": "^1.4.4",
     "exit": "^0.1.2",
-    "fast-extract": "^1.3.3",
-    "fs-access-compat": "^1.1.3",
-    "function-exec-sync": "^1.1.8",
-    "get-remote": "^1.3.3",
+    "fast-extract": "^1.3.6",
+    "fs-access-compat": "^1.1.4",
+    "function-exec-sync": "^1.1.9",
+    "get-remote": "^1.3.5",
     "getopts-compat": "^2.2.5",
     "homedir-polyfill": "^1.0.3",
     "is-version": "^0.2.4",
     "lodash.keys": "^4.2.0",
     "mkdirp-classic": "^0.5.3",
-    "node-filename-to-dist-paths": "^1.1.4",
+    "node-filename-to-dist-paths": "^1.1.5",
     "node-resolve-versions": "^1.0.6",
     "pump": "^3.0.2",
-    "queue-cb": "^1.4.7",
+    "queue-cb": "^1.4.8",
     "rimraf2": "^2.8.2",
     "single-line-log2": "^1.1.3"
   },
