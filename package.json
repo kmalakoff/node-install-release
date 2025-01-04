@@ -58,7 +58,7 @@
     "lodash.keys": "^4.2.0",
     "mkdirp-classic": "^0.5.3",
     "node-filename-to-dist-paths": "^1.1.8",
-    "node-resolve-versions": "^1.0.9",
+    "node-resolve-versions": "^1.0.10",
     "pump": "^3.0.2",
     "queue-cb": "^1.4.9",
     "rimraf2": "^2.8.2",
