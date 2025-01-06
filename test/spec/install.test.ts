@@ -43,7 +43,7 @@ function addTests(version, target) {
     it('dist', (done) => {
       const installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}`);
       installRelease(version, { installPath, ...target, ...OPTIONS }, (err, result) => {
-        assert.ok(!err, err ? err.message : '');
+        if (err) return done(err);
         validateInstall(result.version, result.installPath, target, done);
       });
     });
@@ -60,7 +60,7 @@ function addTests(version, target) {
     it.skip('source', (done) => {
       const installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}-src`);
       installRelease(version, { installPath, filename: 'src', ...OPTIONS }, (err, result) => {
-        assert.ok(!err, err ? err.message : '');
+        if (err) return done(err);
         validateInstall(result.version, result.installPath, done);
       });
     });
