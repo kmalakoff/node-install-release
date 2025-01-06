@@ -20,7 +20,6 @@ var installPath = path.join(INSTALLED_DIR, 'v12-darwin-x64');
 
 // callback - choose the platform and arch
 installRelease('v12', installPath, { platform: 'darwin', arch: 'x64' }, function (err, res) {
-  assert.ok(!err, err ? err.message : '');
 });
 
 // promise - use the local system for platform and arch
