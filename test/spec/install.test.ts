@@ -19,7 +19,7 @@ const OPTIONS = {
 };
 const VERSIONS = ['v20', 'v0.8'];
 // const VERSIONS = ['v0.8'];
-const TARGETS = [{ platform: 'darwin' }, { platform: 'win32', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'darwin', arch: 'arm64' }];
+const TARGETS = [{}, { platform: 'win32', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'darwin', arch: 'arm64' }];
 // const TARGETS = [{ platform: 'win32', arch: 'x64' }];
 
 function addTests(version, target) {
