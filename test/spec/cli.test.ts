@@ -22,12 +22,13 @@ const TARGETS = [{}];
 function addTests(version, target) {
   const platform = target.platform || 'local';
   const arch = target.arch || 'local';
+  target = { platform, arch };
 
   it(`${version} (${platform},${arch})`, (done) => {
     const installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}`);
-    let args = [version, '--installPath', installPath, '--storagePath', OPTIONS.storagePath, '--silent'];
-    if (platform !== 'local') args = args.concat(['--platform', platform]);
-    if (arch !== 'local') args = args.concat(['--arch', arch]);
+    const args = [version, '--installPath', installPath, '--storagePath', OPTIONS.storagePath, '--silent'];
+    Array.prototype.push.apply(args, ['--platform', platform === 'local' ? process.platform : platform]);
+    Array.prototype.push.apply(args, ['--arch', arch === 'local' ? process.arch : arch]);
 
     crossSpawn(CLI, args, { stdio: 'inherit' }, (err) => {
       if (err) return done(err);
@@ -38,7 +39,7 @@ function addTests(version, target) {
 
 describe('cli', () => {
   before((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
-  after((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
+  // after((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
 
   describe('happy path', () => {
     for (let i = 0; i < VERSIONS.length; i++) {
