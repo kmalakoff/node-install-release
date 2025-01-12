@@ -1,6 +1,6 @@
 import exit from 'exit';
 import getopts from 'getopts-compat';
-import nir, { type InstallOptions } from './index';
+import install, { type InstallOptions } from './index';
 
 export default (argv) => {
   const options = getopts(argv.slice(1), {
@@ -8,17 +8,14 @@ export default (argv) => {
     boolean: ['silent'],
   });
 
-  // define.option('-p, --platform [platform]', 'Platform like darwin');
-  // define.option('-a, --arch [arch]', 'Architecure x64, x86, arm-pi');
-  // define.option('-f, --filename [filename]', 'Distribution filename from https://nodejs.org/dist/index.json');
-  // define.option('-c, --cachePath [cachePath]', 'Cache directory');
-
   const args = argv.slice(0, 1).concat(options._);
   if (args.length < 1) {
     console.log('Missing command. Example usage: nir version [directory]');
     return exit(-1);
   }
-  nir(args[0], options as InstallOptions, (err, result) => {
+  console.log('cli', args[0], JSON.stringify(options));
+  install(args[0], options as InstallOptions, (err, result) => {
+    console.log('cli res', args[0], JSON.stringify(options), err, JSON.stringify(result));
     if (!options.silent) {
       console.log('\n======================');
       if (err) console.log(`${args[0]} not installed. Error: ${err.message}`);
