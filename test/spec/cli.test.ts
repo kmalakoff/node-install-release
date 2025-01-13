@@ -16,8 +16,8 @@ const INSTALLED_DIR = path.join(TMP_DIR, 'installed');
 const OPTIONS = {
   storagePath: TMP_DIR,
 };
-const VERSIONS = ['v12.22.12'];
-const TARGETS = [{}];
+const VERSIONS = ['v22'];
+const TARGETS = [{ arch: 'x64' }];
 
 function addTests(version, target) {
   const platform = target.platform || 'local';
