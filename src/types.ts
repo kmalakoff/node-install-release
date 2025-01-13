@@ -15,6 +15,8 @@ export interface InstallOptions {
   name?: string;
   storagePath?: string;
   filename?: string;
+  platform?: NodeJS.Platform;
+  arch?: NodeJS.Architecture;
 }
 
 export type InstallCallback = (err?: Error, result?: InstallResult) => void;
