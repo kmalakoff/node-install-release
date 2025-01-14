@@ -81,6 +81,7 @@ function addTests(version, target) {
     if (platform !== process.platform || arch !== process.arch || specifier === 'src') return;
 
     it('npm --version', (done) => {
+      if (!installPath) return done(); // failed to install
       spawn('npm', ['--version'], spawnOptions(installPath, { silent: true, encoding: 'utf8' }), (err, res) => {
         if (err) return done(err);
         const lines = cr(res.stdout).split('\n');
@@ -91,6 +92,7 @@ function addTests(version, target) {
     });
 
     it('node --version', (done) => {
+      if (!installPath) return done(); // failed to install
       spawn(NODE, ['--version'], spawnOptions(installPath, { silent: true, encoding: 'utf8' }), (err, res) => {
         if (err) return done(err);
         const lines = cr(res.stdout).split('\n');
@@ -102,10 +104,10 @@ function addTests(version, target) {
 }
 
 describe('callback', () => {
+  before((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
   after((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
 
   describe('matrix', () => {
-    before((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
     VERSIONS.forEach((version) => {
       TARGETS.forEach((target) => addTests(version, target));
       dists
