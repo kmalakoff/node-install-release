@@ -14,17 +14,17 @@ Code:
 
 ```
 var assert = require('assert')
-var installRelease = require('node-install-release')
+var install = require('node-install-release')
 
 var installPath = path.join(INSTALLED_DIR, 'v12-darwin-x64');
 
 // callback - choose the platform and arch
-installRelease('v12', installPath, { platform: 'darwin', arch: 'x64' }, function (err, res) {
+install('v12', installPath, { platform: 'darwin', arch: 'x64' }, function (err, res) {
 });
 
 // promise - use the local system for platform and arch
-await installRelease('v12', installPath);
+await install('v12', installPath);
 
 // promise - from source (using https://nodejs.org/dist/index.json filename)
-await installRelease('v12', installPath, { filename: 'src' });
+await install('v12', installPath, { filename: 'src' });
 ```

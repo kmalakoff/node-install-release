@@ -14,13 +14,13 @@ dists.forEach(dist => {
 
 const groups = {}
 Object.keys(acc).forEach((filename) => {
-  const platform = filename.split('-')[0]
-  groups[platform] = groups[platform] || [];
-  groups[platform].push({ filename, starting: acc[filename] })
+  const filePlatform = filename.split('-')[0]
+  groups[filePlatform] = groups[filePlatform] || [];
+  groups[filePlatform].push({ filename, starting: acc[filename] })
 })
 
-Object.keys(groups).forEach((platform) => {
-  groups[platform] = groups[platform].sort((a, b) => compare(b.starting, a.starting))
+Object.keys(groups).forEach((filePlatform) => {
+  groups[filePlatform] = groups[filePlatform].sort((a, b) => compare(b.starting, a.starting))
 })
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));

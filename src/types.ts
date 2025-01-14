@@ -8,6 +8,7 @@ export type InstallResult = {
   version: string;
   installPath: string;
   execPath: string;
+  platform: NodeJS.Platform;
 };
 
 export interface InstallOptions {

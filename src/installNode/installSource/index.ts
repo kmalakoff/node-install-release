@@ -9,7 +9,7 @@ import buildPosix from './buildPosix';
 import buildWin32 from './buildWin32';
 
 export default function InstallSource(distPath, dest, options, callback) {
-  const platform = options.platform || process.platform;
+  const platform = options.platform;
   const build = platform === 'win32' ? buildWin32 : buildPosix;
   const downloadPath = `${NODE_DIST_BASE_URL}/${distPath}`;
   const buildPath = path.join(options.buildPath, path.basename(distPath));

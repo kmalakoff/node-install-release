@@ -1,36 +1,26 @@
 import fs from 'fs';
 import path from 'path';
-import keys from 'lodash.keys';
+import Queue from 'queue-cb';
 
-export const PLATFORM_FILES = {
-  win32: {
-    node: ['node.exe'],
-    npm: ['npm', 'npm.cmd'],
-  },
-  posix: {
-    node: ['node'],
-    npm: ['npm'],
-  },
-};
+import { NODE_FILE_PATHS, NPM_FILE_PATHS } from '../constants';
 
 export default function checkMissing(dest, options, callback) {
-  const platform = options.platform || process.platform;
-  const files = PLATFORM_FILES[platform] || PLATFORM_FILES.posix;
-  const binPath = platform === 'win32' ? dest : path.join(dest, 'bin');
+  const platform = options.platform;
+  const nodePath = NODE_FILE_PATHS[platform] || NODE_FILE_PATHS.posix;
+  const npmPaths = NPM_FILE_PATHS[platform] || NPM_FILE_PATHS.posix;
 
-  fs.readdir(binPath, (err, names) => {
-    if (err || !names.length) return callback(null, keys(files));
+  const missing = [];
+  function check(filePath, key, cb) {
+    fs.stat(path.join(dest, filePath), (err) => {
+      if (err && missing.indexOf(key) < 0) missing.push(key);
+      cb();
+    });
+  }
 
-    const missing = [];
-    for (const key in files) {
-      const needed = files[key];
-      for (let index = 0; index < needed.length; index++) {
-        if (!~names.indexOf(needed[index])) {
-          missing.push(key);
-          break;
-        }
-      }
-    }
-    return callback(null, missing);
-  });
+  const queue = new Queue();
+  queue.defer(check.bind(null, nodePath, 'node'));
+  for (const key in npmPaths) {
+    if (!npmPaths[key].optional) queue.defer(check.bind(null, npmPaths[key].dest, 'npm'));
+  }
+  queue.await(() => callback(null, missing));
 }
