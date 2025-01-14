@@ -1,6 +1,6 @@
 import path from 'path';
 import fromFilename from 'node-filename-to-dist-paths';
-import { EXTENSIONS_COMPRESSED } from '../constants';
+import { EXTENSIONS_COMPRESSED, FILE_PLATFORM_MAP } from '../constants';
 
 import installCompressed from './installCompressed';
 import installExe from './installExe';
@@ -11,8 +11,12 @@ export default function installFilename(filename, version, dest, options, callba
   if (!distPath) return callback(new Error('Not found'));
   const ext = path.extname(distPath);
 
-  if (ext === '.exe') return installExe(distPath, dest, options, callback);
-  if (EXTENSIONS_COMPRESSED.indexOf(ext) >= 0) return installCompressed(distPath, dest, options, callback);
   if (filename === 'src') return installSource(distPath, dest, options, callback);
+  if (ext === '.exe') return installExe(distPath, dest, options, callback);
+  if (EXTENSIONS_COMPRESSED.indexOf(ext) >= 0) {
+    // 7z is not supported by fast extract
+    if (ext === '.7z') return callback(new Error('7z not supported. Make a request feature request: https://github.com/kmalakoff/node-install-release/pulls'));
+    return installCompressed(distPath, dest, options, callback);
+  }
   callback(new Error(`Unable to install ${version} distPath: ${distPath}`));
 }
