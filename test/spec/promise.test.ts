@@ -1,5 +1,6 @@
 // remove NODE_OPTIONS from ts-dev-stack
 delete process.env.NODE_OPTIONS;
+import Pinkie from 'pinkie-promise';
 
 import assert from 'assert';
 import path from 'path';
@@ -19,31 +20,38 @@ const OPTIONS = {
   arch: 'x64' as NodeJS.Architecture,
 };
 
-import keys from 'lodash.keys';
 import resolveVersions from 'node-resolve-versions';
 const VERSIONS = resolveVersions.sync('>=0.8', { range: 'major,even' });
-VERSIONS.splice(0, VERSIONS.length, 'v0.8.28');
+VERSIONS.splice(0, VERSIONS.length, 'stable');
 
 import spawn from 'cross-spawn-cb';
 import { spawnOptions } from 'node-version-utils';
 import validate from '../lib/validate';
 
-const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.cjs');
+// @ts-ignore
+import install from 'node-install-release';
 
 function addTests(version) {
-  let installPath = null;
-
   describe(version, () => {
-    it('install', (done) => {
-      installPath = path.join(OPTIONS.storagePath, 'installed', version);
-      const args = [version, '--installPath', installPath, '--silent'];
-      keys(OPTIONS).forEach((key) => Array.prototype.push.apply(args, [`--${key}`, OPTIONS[key]]));
-
-      spawn(CLI, args, { stdio: 'inherit' }, (err) => {
-        if (err) return done(err);
-        validate(installPath, OPTIONS);
-        done();
+    (() => {
+      // patch and restore promise
+      // @ts-ignore
+      let rootPromise: Promise;
+      before(() => {
+        rootPromise = global.Promise;
+        global.Promise = Pinkie;
       });
+      after(() => {
+        global.Promise = rootPromise;
+      });
+    })();
+
+    let installPath = null;
+    it('install', async () => {
+      const res = await install(version, { name: version, ...OPTIONS });
+      if (res) installPath = res.installPath;
+      if (res) version = res.version;
+      validate(installPath, OPTIONS);
     });
 
     it('npm --version', (done) => {
@@ -67,7 +75,7 @@ function addTests(version) {
   });
 }
 
-describe('cli', () => {
+describe('promise', () => {
   before((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
 
   describe('happy path', () => {

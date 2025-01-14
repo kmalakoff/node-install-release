@@ -1,12 +1,13 @@
 import isVersion from 'is-version';
 import mkdirp from 'mkdirp-classic';
+import resolveVersions from 'node-resolve-versions';
 import Queue from 'queue-cb';
+
 import { DEFAULT_STORAGE_PATHS } from '../constants';
 
 import createResult from '../createResult';
 import createStoragePaths from '../createStoragePaths';
-
-import resolveVersions from 'node-resolve-versions';
+import getTarget from '../lib/getTarget';
 
 import installNPM from '../installNPM/index';
 import installNode from '../installNode/index';
@@ -20,8 +21,7 @@ function getVersions(versionExpression, options, callback) {
 
 export default function install(versionExpression, options, callback) {
   const storagePaths = options.storagePath ? createStoragePaths(options.storagePath) : DEFAULT_STORAGE_PATHS;
-
-  options = { ...storagePaths, ...options };
+  options = { ...storagePaths, ...options, ...getTarget(options) };
   getVersions(versionExpression, options, (err, versions) => {
     if (err) return callback(err);
     if (!versions.length) return callback(new Error(`Could not resolve versions for: ${versionExpression}`));

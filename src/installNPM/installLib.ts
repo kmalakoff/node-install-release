@@ -13,7 +13,7 @@ interface DistRecord {
 }
 
 export default function installLib(version, dest, options, callback) {
-  const platform = options.platform || process.platform;
+  const platform = options.platform;
   const libPath = platform === 'win32' ? dest : path.join(dest, 'lib');
   const installPath = path.join(libPath, 'node_modules', 'npm');
 

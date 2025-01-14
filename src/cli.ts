@@ -13,9 +13,7 @@ export default (argv) => {
     console.log('Missing command. Example usage: nir version [directory]');
     return exit(-1);
   }
-  console.log('cli', args[0], JSON.stringify(options));
   install(args[0], options as InstallOptions, (err, result) => {
-    console.log('cli res', args[0], JSON.stringify(options), err, JSON.stringify(result));
     if (!options.silent) {
       console.log('\n======================');
       if (err) console.log(`${args[0]} not installed. Error: ${err.message}`);

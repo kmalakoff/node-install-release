@@ -1,5 +1,5 @@
 import path from 'path';
-import { DEFAULT_STORAGE_PATHS, NODE, isWindows } from './constants';
+import { DEFAULT_STORAGE_PATHS, NODE_FILE_PATHS } from './constants';
 
 import createStoragePaths from './createStoragePaths';
 import type { InstallOptions, InstallResult } from './types';
@@ -10,7 +10,8 @@ export default function createResult(options: InstallOptions, version: string): 
 
   if (options.name) installPath = path.join(installPath, options.name);
   else if (!options.installPath) installPath = path.join(installPath, version);
-  const binRoot = isWindows ? installPath : path.join(installPath, 'bin');
-  const execPath = path.join(binRoot, NODE);
-  return { version, installPath, execPath };
+  const platform = options.platform;
+  const nodePath = NODE_FILE_PATHS[platform] || NODE_FILE_PATHS.posix;
+  const execPath = path.join(installPath, nodePath);
+  return { version, installPath, execPath, platform };
 }
