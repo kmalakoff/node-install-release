@@ -11,7 +11,7 @@ export default (argv) => {
   const args = argv.slice(0, 1).concat(options._);
   if (args.length < 1) {
     console.log('Missing command. Example usage: nir version [directory]');
-    return exit(-1);
+    return exit(1);
   }
   install(args[0], options as InstallOptions, (err, result) => {
     if (!options.silent) {
@@ -20,6 +20,6 @@ export default (argv) => {
       else console.log(`${result.version} installed in: ${result.installPath}`);
       console.log('======================');
     }
-    exit(err ? -1 : 0);
+    exit(err ? 1 : 0);
   });
 };
