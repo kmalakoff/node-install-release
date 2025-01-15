@@ -1,2 +1,2 @@
-ignores: ["@types/*", "node-install-release", "depcheck", "@biomejs/*", "function-exec-sync"]
+ignores: ["node-install-release", "function-exec-sync"]
 ignoreDirs: [".tmp"]
