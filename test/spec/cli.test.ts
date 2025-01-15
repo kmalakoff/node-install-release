@@ -40,7 +40,7 @@ function addTests(version) {
       keys(OPTIONS).forEach((key) => Array.prototype.push.apply(args, [`--${key}`, OPTIONS[key]]));
 
       spawn(CLI, args, { stdio: 'inherit' }, (err) => {
-        if (err) return done(err);
+        if (err) return done(err.message);
         validate(installPath, OPTIONS);
         done();
       });
@@ -48,7 +48,7 @@ function addTests(version) {
 
     it('npm --version', (done) => {
       spawn('npm', ['--version'], spawnOptions(installPath, { silent: true, encoding: 'utf8' }), (err, res) => {
-        if (err) return done(err);
+        if (err) return done(err.message);
         const lines = cr(res.stdout).split('\n');
         const resultVersion = lines.slice(-2, -1)[0];
         assert.ok(isVersion(resultVersion));
@@ -58,7 +58,7 @@ function addTests(version) {
 
     it('node --version', (done) => {
       spawn(NODE, ['--version'], spawnOptions(installPath, { silent: true, encoding: 'utf8' }), (err, res) => {
-        if (err) return done(err);
+        if (err) return done(err.message);
         const lines = cr(res.stdout).split('\n');
         assert.equal(lines.slice(-2, -1)[0], version);
         done();

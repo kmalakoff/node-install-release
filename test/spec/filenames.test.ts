@@ -83,7 +83,7 @@ function addTests(version, target) {
     it('npm --version', (done) => {
       if (!installPath) return done(); // failed to install
       spawn('npm', ['--version'], spawnOptions(installPath, { silent: true, encoding: 'utf8' }), (err, res) => {
-        if (err) return done(err);
+        if (err) return done(err.message);
         const lines = cr(res.stdout).split('\n');
         const resultVersion = lines.slice(-2, -1)[0];
         assert.ok(isVersion(resultVersion));
@@ -94,7 +94,7 @@ function addTests(version, target) {
     it('node --version', (done) => {
       if (!installPath) return done(); // failed to install
       spawn(NODE, ['--version'], spawnOptions(installPath, { silent: true, encoding: 'utf8' }), (err, res) => {
-        if (err) return done(err);
+        if (err) return done(err.message);
         const lines = cr(res.stdout).split('\n');
         assert.equal(lines.slice(-2, -1)[0], version);
         done();
@@ -103,7 +103,7 @@ function addTests(version, target) {
   });
 }
 
-describe('callback', () => {
+describe('filenames', () => {
   before((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
   after((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
 
