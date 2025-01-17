@@ -76,8 +76,8 @@ function addTests(version) {
 }
 
 describe('promise', () => {
-  before((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
-  after((cb) => rimraf2(TMP_DIR, { disableGlob: true }, cb.bind(null, null)));
+  before(rimraf2.bind(null, TMP_DIR, { disableGlob: true }));
+  after(rimraf2.bind(null, TMP_DIR, { disableGlob: true }));
 
   describe('happy path', () => {
     for (let i = 0; i < VERSIONS.length; i++) {

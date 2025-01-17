@@ -2,6 +2,8 @@ import exit from 'exit';
 import getopts from 'getopts-compat';
 import install, { type InstallOptions } from './index';
 
+const ERROR_CODE = 9;
+
 export default (argv) => {
   const options = getopts(argv.slice(1), {
     alias: { platform: 'p', arch: 'a', filename: 'f', installPath: 'i', storagePath: 'c', silent: 's' },
@@ -11,7 +13,7 @@ export default (argv) => {
   const args = argv.slice(0, 1).concat(options._);
   if (args.length < 1) {
     console.log('Missing command. Example usage: nir version [directory]');
-    return exit(8);
+    return exit(ERROR_CODE);
   }
   install(args[0], options as InstallOptions, (err, result) => {
     if (!options.silent) {
@@ -20,6 +22,6 @@ export default (argv) => {
       else console.log(`${result.version} installed in: ${result.installPath}`);
       console.log('======================');
     }
-    exit(err ? 9 : 0);
+    exit(err ? ERROR_CODE : 0);
   });
 };
