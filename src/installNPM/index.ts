@@ -1,5 +1,4 @@
 import Queue from 'queue-cb';
-import sll from 'single-line-log2';
 import installBin from './installBin';
 import installLib from './installLib';
 
@@ -15,7 +14,6 @@ export default function install(version, dest, options, callback) {
   );
   queue.defer(installBin.bind(null, version, dest, options));
   queue.await((err) => {
-    sll.stdout('');
     console.log(`npm ${npmVersion || ''} ${!err ? 'installed' : `install failed. Error: ${err.message}`}`);
     callback(err);
   });

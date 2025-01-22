@@ -1,4 +1,3 @@
-import sll from 'single-line-log2';
 import installFilename from './installFilename';
 
 import { FILES, FILE_PLATFORM_MAP } from '../constants';
@@ -29,7 +28,6 @@ export default function install(version, dest, options, callback) {
     installFilename(filenames.shift(), version, dest, options, (err) => (err ? tryNext(cb) : cb()));
   };
   tryNext((err) => {
-    sll.stdout('');
     console.log(`node ${version.slice(1)} ${!err ? 'installed' : `install failed. Error: ${err.message}`}`);
     callback(err);
   });
