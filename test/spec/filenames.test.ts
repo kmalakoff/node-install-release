@@ -112,7 +112,7 @@ describe('filenames', () => {
     VERSIONS.forEach((version) => {
       TARGETS.forEach((target) => addTests(version, target));
       find(dists, (dist) => dist.version === version)
-        .files.filter((x) => !SKIPS.find((s) => x.indexOf(s) >= 0))
+        .files.filter((x) => !find(SKIPS, (s) => x.indexOf(s) >= 0))
         .forEach((filename) => addTests(version, { filename }));
     });
   });
