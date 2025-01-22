@@ -6,6 +6,7 @@ import path from 'path';
 import url from 'url';
 import cr from 'cr';
 import isVersion from 'is-version';
+import find from 'lodash.find';
 import rimraf2 from 'rimraf2';
 
 const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
@@ -110,8 +111,7 @@ describe('filenames', () => {
   describe('matrix', () => {
     VERSIONS.forEach((version) => {
       TARGETS.forEach((target) => addTests(version, target));
-      dists
-        .find((dist) => dist.version === version)
+      find(dists, (dist) => dist.version === version)
         .files.filter((x) => !SKIPS.find((s) => x.indexOf(s) >= 0))
         .forEach((filename) => addTests(version, { filename }));
     });
