@@ -42,7 +42,7 @@
   "dependencies": {
     "cross-spawn-cb": "^2.1.21",
     "exit": "^0.1.2",
-    "fast-extract": "^1.3.30",
+    "fast-extract": "^1.3.31",
     "function-exec-sync": "^1.2.19",
     "get-remote": "^1.3.30",
     "getopts-compat": "^2.2.6",
@@ -50,7 +50,7 @@
     "is-version": "^0.2.12",
     "lodash.keys": "^4.2.0",
     "mkdirp-classic": "^0.5.3",
-    "node-filename-to-dist-paths": "^1.1.30",
+    "node-filename-to-dist-paths": "^1.1.31",
     "node-resolve-versions": "^1.0.30",
     "on-one": "^0.1.4",
     "pump": "^3.0.2",
