@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import fs from 'fs';
-import once from 'call-once-fn';
 import get from 'get-remote';
+import oo from 'on-one';
 import { NODE_DIST_BASE_URL } from '../constants';
 export default function validateDownload(distPath, installPath, callback) {
   const version = distPath.split('/')[0];
@@ -14,13 +14,9 @@ export default function validateDownload(distPath, installPath, callback) {
     const hash = crypto.createHash('sha256');
     const stream = fs.createReadStream(installPath);
     stream.on('data', (data) => hash.update(data));
-    const end = once((err) => {
+    oo(stream, ['error', 'end', 'close', 'finish'], (err) => {
       if (err) return callback(err);
       hash.digest('hex') !== expected ? callback(new Error(`${filename} checksum failed`)) : callback();
     });
-    stream.on('error', end);
-    stream.on('end', end);
-    stream.on('close', end);
-    stream.on('finish', end);
   });
 }
