@@ -6,7 +6,7 @@ const ERROR_CODE = 9;
 
 export default (argv) => {
   const options = getopts(argv.slice(1), {
-    alias: { platform: 'p', arch: 'a', filename: 'f', installPath: 'i', storagePath: 'c', silent: 's' },
+    alias: { platform: 'p', arch: 'a', filename: 'f', installPath: 'i', storagePath: 'c', silent: 'si' },
     boolean: ['silent'],
   });
 
