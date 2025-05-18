@@ -3,10 +3,10 @@ import path from 'path';
 import Queue from 'queue-cb';
 import rimraf2 from 'rimraf2';
 
-import { NODE_DIST_BASE_URL } from '../constants';
-import conditionalCache from '../lib/conditionalCache';
-import conditionalExtract from '../lib/conditionalExtract';
-import validateDownload from './validateDownload';
+import { NODE_DIST_BASE_URL } from '../constants.js';
+import conditionalCache from '../lib/conditionalCache.js';
+import conditionalExtract from '../lib/conditionalExtract.js';
+import validateDownload from './validateDownload.js';
 
 export default function installCompressed(distPath, dest, options, callback) {
   const platform = options.platform;

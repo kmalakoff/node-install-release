@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import get from 'get-remote';
 import oo from 'on-one';
-import { NODE_DIST_BASE_URL } from '../constants';
+import { NODE_DIST_BASE_URL } from '../constants.js';
 export default function validateDownload(distPath, installPath, callback) {
   const version = distPath.split('/')[0];
   const downloadPath = `${NODE_DIST_BASE_URL}/${version}/SHASUMS256.txt`;

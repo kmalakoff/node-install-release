@@ -1,6 +1,6 @@
 import exit from 'exit';
 import getopts from 'getopts-compat';
-import install, { type InstallOptions } from './index';
+import install, { type InstallOptions } from './index.js';
 
 const ERROR_CODE = 9;
 
