@@ -3,7 +3,7 @@ import home from 'homedir-polyfill';
 import keys from 'lodash.keys';
 // @ts-ignore
 import files from '../../assets/files.cjs';
-import createStoragePaths from './createStoragePaths';
+import createStoragePaths from './createStoragePaths.js';
 
 export const FILES = files;
 export const DEFAULT_STORAGE_PATH = path.join(home(), '.nir');

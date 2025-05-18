@@ -2,10 +2,10 @@ import fs from 'fs';
 import path from 'path';
 import Queue from 'queue-cb';
 
-import { NODE_DIST_BASE_URL, NODE_FILE_PATHS } from '../constants';
-import conditionalCache from '../lib/conditionalCache';
-import copyFile from '../lib/copyFile';
-import validateDownload from './validateDownload';
+import { NODE_DIST_BASE_URL, NODE_FILE_PATHS } from '../constants.js';
+import conditionalCache from '../lib/conditionalCache.js';
+import copyFile from '../lib/copyFile.js';
+import validateDownload from './validateDownload.js';
 
 export default function installExe(distPath, dest, options, callback) {
   const platform = options.platform;

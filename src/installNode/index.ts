@@ -1,6 +1,6 @@
-import installFilename from './installFilename';
+import installFilename from './installFilename.js';
 
-import { FILES, FILE_PLATFORM_MAP } from '../constants';
+import { FILES, FILE_PLATFORM_MAP } from '../constants.js';
 
 export default function install(version, dest, options, callback) {
   let filenames = null;
