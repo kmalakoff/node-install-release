@@ -1,6 +1,6 @@
 import Queue from 'queue-cb';
-import installBin from './installBin';
-import installLib from './installLib';
+import installBin from './installBin.js';
+import installLib from './installLib.js';
 
 export default function install(version, dest, options, callback) {
   let npmVersion = null;

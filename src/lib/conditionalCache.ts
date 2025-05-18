@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import get from 'get-remote';
 
-import ensureDestinationParent from './ensureDestinationParent';
+import ensureDestinationParent from './ensureDestinationParent.js';
 
 export default function conditionalCache(endpoint, dest, options, callback?) {
   if (typeof options === 'function') {

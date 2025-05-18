@@ -1,8 +1,8 @@
 import path from 'path';
 import Queue from 'queue-cb';
-import conditionalCopy from '../lib/conditionalCopy';
+import conditionalCopy from '../lib/conditionalCopy.js';
 
-import { NPM_FILE_PATHS } from '../constants';
+import { NPM_FILE_PATHS } from '../constants.js';
 
 export default function installBin(_version, dest, options, callback) {
   const platform = options.platform;

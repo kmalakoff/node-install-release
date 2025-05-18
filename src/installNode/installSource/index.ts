@@ -1,12 +1,12 @@
 import path from 'path';
 import Queue from 'queue-cb';
 
-import { NODE_DIST_BASE_URL } from '../../constants';
-import conditionalCache from '../../lib/conditionalCache';
-import conditionalExtract from '../../lib/conditionalExtract';
-import validateDownload from '../validateDownload';
-import buildPosix from './buildPosix';
-import buildWin32 from './buildWin32';
+import { NODE_DIST_BASE_URL } from '../../constants.js';
+import conditionalCache from '../../lib/conditionalCache.js';
+import conditionalExtract from '../../lib/conditionalExtract.js';
+import validateDownload from '../validateDownload.js';
+import buildPosix from './buildPosix.js';
+import buildWin32 from './buildWin32.js';
 
 export default function InstallSource(distPath, dest, options, callback) {
   const platform = options.platform;

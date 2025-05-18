@@ -1,5 +1,5 @@
 import fs from 'fs';
-import copyFile from './copyFile';
+import copyFile from './copyFile.js';
 
 export default function conditionalCopy(src, dest, optional, callback) {
   if (typeof optional === 'function') return callback(new Error('conditionalCopy missing options'));

@@ -3,10 +3,10 @@ import get from 'get-remote';
 import { getDist } from 'node-filename-to-dist-paths';
 import Queue from 'queue-cb';
 
-import conditionalCache from '../lib/conditionalCache';
-import conditionalExtract from '../lib/conditionalExtract';
+import conditionalCache from '../lib/conditionalCache.js';
+import conditionalExtract from '../lib/conditionalExtract.js';
 
-import { NPM_DIST_TAGS_URL, NPM_DIST_URL, NPM_MIN_VERSION } from '../constants';
+import { NPM_DIST_TAGS_URL, NPM_DIST_URL, NPM_MIN_VERSION } from '../constants.js';
 
 interface DistRecord {
   latest: string;
