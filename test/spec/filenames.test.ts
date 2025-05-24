@@ -31,9 +31,9 @@ interface Target {
 import * as resolveVersions from 'node-resolve-versions';
 const VERSIONS = resolveVersions.sync('>=0.8', { range: 'major,even' });
 VERSIONS.splice(0, VERSIONS.length, VERSIONS[0], VERSIONS[VERSIONS.length - 1]); // TEST SIMPLIFICATIOn
-const TARGETS = [{}] as Array<Target>;
+const TARGETS = [{}] as Target[];
 
-const PLATFORMS = ['win32', 'darwin', 'linux'] as Array<NodeJS.Platform>;
+const PLATFORMS = ['win32', 'darwin', 'linux'] as NodeJS.Platform[];
 PLATFORMS.forEach((platform) => TARGETS.push({ platform, arch: 'x64' }));
 
 import values from 'lodash.values';
