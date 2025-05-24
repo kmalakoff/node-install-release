@@ -45,7 +45,7 @@
     "exit": "^0.1.2",
     "fast-extract": "^1.4.3",
     "function-exec-sync": "^1.2.25",
-    "get-remote": "^1.4.4",
+    "get-remote": "^1.4.7",
     "getopts-compat": "^2.2.6",
     "homedir-polyfill": "^1.0.3",
     "is-version": "^0.2.15",
