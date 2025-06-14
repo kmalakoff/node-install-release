@@ -41,21 +41,21 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "cross-spawn-cb": "^2.2.6",
+    "cross-spawn-cb": "^2.2.7",
     "exit": "^0.1.2",
-    "fast-extract": "^1.4.5",
-    "function-exec-sync": "^1.2.26",
-    "get-remote": "^1.4.10",
+    "fast-extract": "^1.4.6",
+    "function-exec-sync": "^1.2.27",
+    "get-remote": "^1.4.11",
     "getopts-compat": "^2.2.6",
     "homedir-polyfill": "^1.0.3",
     "is-version": "^0.2.15",
     "lodash.keys": "^4.2.0",
     "mkdirp-classic": "^0.5.3",
-    "node-filename-to-dist-paths": "^1.1.42",
-    "node-resolve-versions": "^1.0.45",
+    "node-filename-to-dist-paths": "^1.1.43",
+    "node-resolve-versions": "^1.0.46",
     "on-one": "^0.1.7",
     "pump": "^3.0.2",
-    "queue-cb": "^1.5.1",
+    "queue-cb": "^1.5.2",
     "rimraf2": "^2.8.2"
   },
   "devDependencies": {
