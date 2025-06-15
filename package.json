@@ -41,9 +41,9 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "cross-spawn-cb": "^2.2.7",
+    "cross-spawn-cb": "^2.2.8",
     "exit": "^0.1.2",
-    "fast-extract": "^1.4.8",
+    "fast-extract": "^1.4.9",
     "function-exec-sync": "^1.2.27",
     "get-remote": "^1.4.11",
     "getopts-compat": "^2.2.6",
