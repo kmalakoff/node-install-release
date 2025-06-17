@@ -54,7 +54,7 @@
     "node-filename-to-dist-paths": "^1.1.43",
     "node-resolve-versions": "^1.0.46",
     "on-one": "^0.1.7",
-    "pump": "^3.0.2",
+    "pump": "^3.0.3",
     "queue-cb": "^1.5.2",
     "rimraf2": "^2.8.2"
   },
