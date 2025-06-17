@@ -43,9 +43,9 @@
   "dependencies": {
     "cross-spawn-cb": "^2.2.8",
     "exit": "^0.1.2",
-    "fast-extract": "^1.4.10",
+    "fast-extract": "^1.4.11",
     "function-exec-sync": "^1.2.27",
-    "get-remote": "^1.4.11",
+    "get-remote": "^1.4.12",
     "getopts-compat": "^2.2.6",
     "homedir-polyfill": "^1.0.3",
     "is-version": "^0.2.15",
@@ -54,7 +54,7 @@
     "node-filename-to-dist-paths": "^1.1.43",
     "node-resolve-versions": "^1.0.46",
     "on-one": "^0.1.7",
-    "pump": "^3.0.2",
+    "pump": "^3.0.3",
     "queue-cb": "^1.5.2",
     "rimraf2": "^2.8.2"
   },
