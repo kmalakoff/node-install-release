@@ -43,9 +43,9 @@
   "dependencies": {
     "cross-spawn-cb": "^2.2.8",
     "exit": "^0.1.2",
-    "fast-extract": "^1.4.10",
+    "fast-extract": "^1.4.11",
     "function-exec-sync": "^1.2.27",
-    "get-remote": "^1.4.11",
+    "get-remote": "^1.4.12",
     "getopts-compat": "^2.2.6",
     "homedir-polyfill": "^1.0.3",
     "is-version": "^0.2.15",
