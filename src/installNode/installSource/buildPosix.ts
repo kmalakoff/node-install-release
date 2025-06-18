@@ -1,6 +1,6 @@
+import spawn from 'cross-spawn-cb';
 import fs from 'fs';
 import path from 'path';
-import spawn from 'cross-spawn-cb';
 import Queue from 'queue-cb';
 
 export default function installPosix(buildPath, dest, _options, callback) {

@@ -1,6 +1,6 @@
-import path from 'path';
 import home from 'homedir-polyfill';
 import keys from 'lodash.keys';
+import path from 'path';
 // @ts-ignore
 import files from '../../assets/files.cjs';
 import createStoragePaths from './createStoragePaths.js';
