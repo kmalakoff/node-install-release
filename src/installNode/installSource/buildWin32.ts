@@ -1,8 +1,7 @@
-import path from 'path';
 import spawn from 'cross-spawn-cb';
-import Queue from 'queue-cb';
-
 import fs from 'fs';
+import path from 'path';
+import Queue from 'queue-cb';
 import conditionalCopy from '../../lib/conditionalCopy.js';
 
 export default function installWin32(buildPath, dest, _options, callback) {

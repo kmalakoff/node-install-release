@@ -1,5 +1,5 @@
-import path from 'path';
 import fromFilename from 'node-filename-to-dist-paths';
+import path from 'path';
 import { EXTENSIONS_COMPRESSED } from '../constants.js';
 
 import installCompressed from './installCompressed.js';
