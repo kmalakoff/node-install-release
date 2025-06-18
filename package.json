@@ -35,7 +35,7 @@
   ],
   "scripts": {
     "build": "tsds build",
-    "format": "biome check --write --unsafe src/ test/",
+    "format": "biome check --write --unsafe",
     "test": "tsds test:node --no-timeouts",
     "test:engines": "nvu 0.8,0.10,0.12,4,12,16,lts,stable npm test",
     "version": "tsds version"

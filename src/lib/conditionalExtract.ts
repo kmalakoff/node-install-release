@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
 import extract from 'fast-extract';
+import fs from 'fs';
 import mkdirp from 'mkdirp-classic';
+import path from 'path';
 import Queue from 'queue-cb';
 
 export default function conditionalExtract(src, dest, options, callback?) {

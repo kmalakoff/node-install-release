@@ -7,12 +7,12 @@ import { DEFAULT_STORAGE_PATHS } from '../constants.js';
 
 import createResult from '../createResult.js';
 import createStoragePaths from '../createStoragePaths.js';
-import getTarget from '../lib/getTarget.js';
+import installNode from '../installNode/index.js';
 
 import installNPM from '../installNPM/index.js';
-import installNode from '../installNode/index.js';
 import checkMissing from '../lib/checkMissing.js';
 import ensureDestinationParent from '../lib/ensureDestinationParent.js';
+import getTarget from '../lib/getTarget.js';
 
 // short circuit
 function getVersions(versionExpression, options, callback) {
