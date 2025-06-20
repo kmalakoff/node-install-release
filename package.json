@@ -27,7 +27,7 @@
   "main": "dist/cjs/index.js",
   "types": "dist/cjs/index.d.cts",
   "bin": {
-    "nir": "./bin/cli"
+    "nir": "./bin/cli.js"
   },
   "files": [
     "dist",
