@@ -50,7 +50,7 @@ import spawn from 'cross-spawn-cb';
 // @ts-ignore
 import install from 'node-install-release';
 import { spawnOptions } from 'node-version-utils';
-import validate from '../lib/validate';
+import validate from '../lib/validate.ts';
 
 function addTests(version, target) {
   const specifier = values(target).join('-') || 'local';
