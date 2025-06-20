@@ -27,7 +27,7 @@ VERSIONS.splice(0, VERSIONS.length, VERSIONS[0], VERSIONS[VERSIONS.length - 1]);
 
 import spawn from 'cross-spawn-cb';
 import { spawnOptions } from 'node-version-utils';
-import validate from '../lib/validate';
+import validate from '../lib/validate.ts';
 
 const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.cjs');
 
