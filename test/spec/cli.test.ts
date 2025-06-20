@@ -29,7 +29,7 @@ import spawn from 'cross-spawn-cb';
 import { spawnOptions } from 'node-version-utils';
 import validate from '../lib/validate.ts';
 
-const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.cjs');
+const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.js');
 
 function addTests(version) {
   let installPath = null;
