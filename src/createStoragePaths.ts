@@ -1,6 +1,6 @@
 import path from 'path';
 
-import type { StorageLocations } from './types.js';
+import type { StorageLocations } from './types.ts';
 
 export default function createStoragePaths(storagePath: string): StorageLocations {
   return {

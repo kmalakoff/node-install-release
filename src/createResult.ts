@@ -1,9 +1,9 @@
 import path from 'path';
-import { DEFAULT_STORAGE_PATHS, NODE_FILE_PATHS } from './constants.js';
+import { DEFAULT_STORAGE_PATHS, NODE_FILE_PATHS } from './constants.ts';
 
-import createStoragePaths from './createStoragePaths.js';
-import getTarget from './lib/getTarget.js';
-import type { InstallOptions, InstallResult } from './types.js';
+import createStoragePaths from './createStoragePaths.ts';
+import getTarget from './lib/getTarget.ts';
+import type { InstallOptions, InstallResult } from './types.ts';
 
 export default function createResult(options: InstallOptions, version: string): InstallResult {
   const storagePaths = options.storagePath ? createStoragePaths(options.storagePath) : DEFAULT_STORAGE_PATHS;
