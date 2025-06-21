@@ -1,10 +1,10 @@
 import fromFilename from 'node-filename-to-dist-paths';
 import path from 'path';
-import { EXTENSIONS_COMPRESSED } from '../constants.js';
+import { EXTENSIONS_COMPRESSED } from '../constants.ts';
 
-import installCompressed from './installCompressed.js';
-import installExe from './installExe.js';
-import installSource from './installSource/index.js';
+import installCompressed from './installCompressed.ts';
+import installExe from './installExe.ts';
+import installSource from './installSource/index.ts';
 
 export default function installFilename(filename, version, dest, options, callback) {
   const distPath = fromFilename(filename, version);

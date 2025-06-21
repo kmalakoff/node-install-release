@@ -3,7 +3,7 @@ import pump from 'pump';
 import Queue from 'queue-cb';
 import rimraf2 from 'rimraf2';
 
-import ensureDestinationParent from './ensureDestinationParent.js';
+import ensureDestinationParent from './ensureDestinationParent.ts';
 
 function streamCopyFile(src, dest, callback) {
   fs.stat(src, (err) => {

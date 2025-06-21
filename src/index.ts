@@ -1,7 +1,7 @@
-import type { InstallCallback, InstallOptions, InstallResult } from './types.js';
-import worker from './workers/install.js';
+import type { InstallCallback, InstallOptions, InstallResult } from './types.ts';
+import worker from './workers/install.ts';
 
-export type * from './types.js';
+export type * from './types.ts';
 export default function install(versionExpression: string, options?: InstallOptions | InstallCallback, callback?: InstallCallback): undefined | Promise<InstallResult> {
   if (typeof options === 'function') {
     callback = options as InstallCallback;
@@ -12,5 +12,5 @@ export default function install(versionExpression: string, options?: InstallOpti
   if (typeof callback === 'function') return worker(versionExpression, options, callback) as undefined;
   return new Promise((resolve, reject) => worker(versionExpression, options, (err, result) => (err ? reject(err) : resolve(result))));
 }
-export { default as createResult } from './createResult.js';
-export { default as createStoragePaths } from './createStoragePaths.js';
+export { default as createResult } from './createResult.ts';
+export { default as createStoragePaths } from './createStoragePaths.ts';

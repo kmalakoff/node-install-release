@@ -3,16 +3,16 @@ import mkdirp from 'mkdirp-classic';
 import resolveVersions from 'node-resolve-versions';
 import Queue from 'queue-cb';
 
-import { DEFAULT_STORAGE_PATHS } from '../constants.js';
+import { DEFAULT_STORAGE_PATHS } from '../constants.ts';
 
-import createResult from '../createResult.js';
-import createStoragePaths from '../createStoragePaths.js';
-import installNode from '../installNode/index.js';
+import createResult from '../createResult.ts';
+import createStoragePaths from '../createStoragePaths.ts';
+import installNode from '../installNode/index.ts';
 
-import installNPM from '../installNPM/index.js';
-import checkMissing from '../lib/checkMissing.js';
-import ensureDestinationParent from '../lib/ensureDestinationParent.js';
-import getTarget from '../lib/getTarget.js';
+import installNPM from '../installNPM/index.ts';
+import checkMissing from '../lib/checkMissing.ts';
+import ensureDestinationParent from '../lib/ensureDestinationParent.ts';
+import getTarget from '../lib/getTarget.ts';
 
 // short circuit
 function getVersions(versionExpression, options, callback) {
