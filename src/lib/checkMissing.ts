@@ -4,12 +4,16 @@ import Queue from 'queue-cb';
 
 import { NODE_FILE_PATHS, NPM_FILE_PATHS } from '../constants.ts';
 
-export default function checkMissing(dest, options, callback) {
+import type { InstallOptions } from '../types.ts';
+
+export type Callback = (error?: Error, missing?: string[]) => undefined;
+
+export default function checkMissing(dest: string, options: InstallOptions, callback: Callback): undefined {
   const platform = options.platform;
   const nodePath = NODE_FILE_PATHS[platform] || NODE_FILE_PATHS.posix;
   const npmPaths = NPM_FILE_PATHS[platform] || NPM_FILE_PATHS.posix;
 
-  const missing = [];
+  const missing: string[] = [];
   function check(filePath, key, cb) {
     fs.stat(path.join(dest, filePath), (err) => {
       if (err && missing.indexOf(key) < 0) missing.push(key);

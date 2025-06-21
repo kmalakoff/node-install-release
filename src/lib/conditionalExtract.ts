@@ -4,12 +4,14 @@ import mkdirp from 'mkdirp-classic';
 import path from 'path';
 import Queue from 'queue-cb';
 
-export default function conditionalExtract(src, dest, options, callback?) {
+import type { InstallOptions, NoParamCallback } from '../types.ts';
+
+export default function conditionalExtract(src: string, dest: string, options: InstallOptions | NoParamCallback, callback?: NoParamCallback): undefined {
   if (typeof options === 'function') {
     callback = options;
     options = null;
   }
-  options = options || {};
+  options = options || ({} as InstallOptions);
 
   fs.stat(dest, (err) => {
     if (!err) return callback(); // already exists

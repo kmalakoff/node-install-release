@@ -3,7 +3,10 @@ import fs from 'fs';
 import get from 'get-remote';
 import oo from 'on-one';
 import { NODE_DIST_BASE_URL } from '../constants.ts';
-export default function validateDownload(distPath, installPath, callback) {
+
+import type { NoParamCallback } from '../types.ts';
+
+export default function validateDownload(distPath: string, installPath: string, callback: NoParamCallback): undefined {
   const version = distPath.split('/')[0];
   const downloadPath = `${NODE_DIST_BASE_URL}/${version}/SHASUMS256.txt`;
   get(downloadPath).text((err, res) => {
@@ -14,8 +17,11 @@ export default function validateDownload(distPath, installPath, callback) {
     const hash = crypto.createHash('sha256');
     const stream = fs.createReadStream(installPath);
     stream.on('data', (data) => hash.update(data));
-    oo(stream, ['error', 'end', 'close', 'finish'], (err) => {
-      if (err) return callback(err);
+    oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
+      if (err) {
+        callback(err);
+        return;
+      }
       hash.digest('hex') !== expected ? callback(new Error(`${filename} checksum failed`)) : callback();
     });
   });

@@ -1,10 +1,10 @@
 import fs from 'fs';
 import get from 'get-remote';
 import path from 'path';
-
+import type { InstallOptions, NoParamCallback } from '../types.ts';
 import ensureDestinationParent from './ensureDestinationParent.ts';
 
-export default function conditionalCache(endpoint, dest, options, callback?) {
+export default function conditionalCache(endpoint: string, dest: string, options: InstallOptions, callback?: NoParamCallback): undefined {
   if (typeof options === 'function') {
     callback = options;
     options = null;

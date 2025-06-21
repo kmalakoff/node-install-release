@@ -10,7 +10,11 @@ interface DistRecord {
   latest: string;
 }
 
-export default function installLib(version, dest, options, callback) {
+import type { InstallOptions } from '../types.ts';
+
+export type Callback = (error?: Error, npmVersion?: string) => undefined;
+
+export default function installLib(version: string, dest: string, options: InstallOptions, callback: Callback): undefined {
   const platform = options.platform;
   const libPath = platform === 'win32' ? dest : path.join(dest, 'lib');
   const installPath = path.join(libPath, 'node_modules', 'npm');

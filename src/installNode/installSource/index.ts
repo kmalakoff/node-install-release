@@ -4,11 +4,12 @@ import Queue from 'queue-cb';
 import { NODE_DIST_BASE_URL } from '../../constants.ts';
 import conditionalCache from '../../lib/conditionalCache.ts';
 import conditionalExtract from '../../lib/conditionalExtract.ts';
+import type { InstallOptions, NoParamCallback } from '../../types.ts';
 import validateDownload from '../validateDownload.ts';
 import buildPosix from './buildPosix.ts';
 import buildWin32 from './buildWin32.ts';
 
-export default function InstallSource(distPath, dest, options, callback) {
+export default function InstallSource(distPath: string, dest: string, options: InstallOptions, callback: NoParamCallback): undefined {
   const platform = options.platform;
   const build = platform === 'win32' ? buildWin32 : buildPosix;
   const downloadPath = `${NODE_DIST_BASE_URL}/${distPath}`;

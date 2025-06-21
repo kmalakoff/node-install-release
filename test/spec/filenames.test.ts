@@ -85,7 +85,7 @@ function addTests(version, target) {
 
     it('npm --version', (done) => {
       if (!installPath) return done(); // failed to install
-      spawn('npm', ['--version'], spawnOptions(installPath, { silent: true, encoding: 'utf8' }), (err, res) => {
+      spawn('npm', ['--version'], spawnOptions(installPath, { encoding: 'utf8' }), (err, res) => {
         if (err) return done(err.message);
         const lines = cr(res.stdout).split('\n');
         const resultVersion = lines.slice(-2, -1)[0];
@@ -96,7 +96,7 @@ function addTests(version, target) {
 
     it('node --version', (done) => {
       if (!installPath) return done(); // failed to install
-      spawn(NODE, ['--version'], spawnOptions(installPath, { silent: true, encoding: 'utf8' }), (err, res) => {
+      spawn(NODE, ['--version'], spawnOptions(installPath, { encoding: 'utf8' }), (err, res) => {
         if (err) return done(err.message);
         const lines = cr(res.stdout).split('\n');
         assert.equal(lines.slice(-2, -1)[0], version);
