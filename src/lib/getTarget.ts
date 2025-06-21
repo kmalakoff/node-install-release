@@ -1,4 +1,4 @@
-import { FILE_PLATFORM_MAP, FILE_PLATFORMS } from '../constants.js';
+import { FILE_PLATFORM_MAP, FILE_PLATFORMS } from '../constants.ts';
 import machineArch from '../machine/arch.cjs';
 
 let archMachine: NodeJS.Architecture;

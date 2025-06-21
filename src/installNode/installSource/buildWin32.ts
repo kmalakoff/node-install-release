@@ -2,7 +2,7 @@ import spawn from 'cross-spawn-cb';
 import fs from 'fs';
 import path from 'path';
 import Queue from 'queue-cb';
-import conditionalCopy from '../../lib/conditionalCopy.js';
+import conditionalCopy from '../../lib/conditionalCopy.ts';
 
 export default function installWin32(buildPath, dest, _options, callback) {
   const buildSource = path.join(buildPath, 'out', 'Release', 'node.exe');

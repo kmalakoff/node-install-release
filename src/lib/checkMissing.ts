@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import Queue from 'queue-cb';
 
-import { NODE_FILE_PATHS, NPM_FILE_PATHS } from '../constants.js';
+import { NODE_FILE_PATHS, NPM_FILE_PATHS } from '../constants.ts';
 
 export default function checkMissing(dest, options, callback) {
   const platform = options.platform;
