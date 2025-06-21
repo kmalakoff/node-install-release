@@ -1,8 +1,13 @@
 import mkdirp from 'mkdirp-classic';
 import path from 'path';
 
-export default function ensureDestinationParent(dest, callback) {
+import type { NoParamCallback } from '../types.ts';
+
+export default function ensureDestinationParent(dest: string, callback: NoParamCallback): undefined {
   const parent = path.dirname(dest);
-  if (parent === '.' || parent === '/') return callback();
+  if (parent === '.' || parent === '/') {
+    callback();
+    return;
+  }
   mkdirp(parent, callback);
 }

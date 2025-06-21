@@ -1,8 +1,12 @@
 import fs from 'fs';
+import type { NoParamCallback } from '../types.ts';
 import copyFile from './copyFile.ts';
 
-export default function conditionalCopy(src, dest, optional, callback) {
-  if (typeof optional === 'function') return callback(new Error('conditionalCopy missing options'));
+export default function conditionalCopy(src: string, dest: string, optional: boolean, callback: NoParamCallback): undefined {
+  if (typeof optional === 'function') {
+    callback(new Error('conditionalCopy missing options'));
+    return;
+  }
 
   fs.stat(dest, (err) => {
     if (!err) return callback(); // already exists

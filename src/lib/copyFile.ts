@@ -1,11 +1,11 @@
-import fs from 'fs';
+import fs, { type NoParamCallback } from 'fs';
 import pump from 'pump';
 import Queue from 'queue-cb';
 import rimraf2 from 'rimraf2';
 
 import ensureDestinationParent from './ensureDestinationParent.ts';
 
-function streamCopyFile(src, dest, callback) {
+function streamCopyFile(src: string, dest: string, callback: NoParamCallback): undefined {
   fs.stat(src, (err) => {
     if (err) return callback(err);
     pump(fs.createReadStream(src), fs.createWriteStream(dest), callback);
@@ -14,7 +14,7 @@ function streamCopyFile(src, dest, callback) {
 
 const copyFile = fs.copyFile || streamCopyFile;
 
-export default function safeCopyFile(src, dest, callback) {
+export default function safeCopyFile(src: string, dest: string, callback: NoParamCallback) {
   const queue = new Queue(1);
 
   queue.defer(ensureDestinationParent.bind(null, dest));

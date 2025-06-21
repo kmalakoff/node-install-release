@@ -14,24 +14,39 @@ import checkMissing from '../lib/checkMissing.ts';
 import ensureDestinationParent from '../lib/ensureDestinationParent.ts';
 import getTarget from '../lib/getTarget.ts';
 
-// short circuit
-function getVersions(versionExpression, options, callback) {
+import type { InstallCallback, InstallOptions } from '../types.ts';
+
+type GetVersionsCallback = (error?: Error, results?: string[]) => undefined;
+function getVersions(versionExpression: string, options: InstallOptions, callback: GetVersionsCallback): undefined {
+  // short circuit
   isVersion(versionExpression) ? callback(null, [versionExpression]) : resolveVersions(versionExpression, options, callback);
 }
 
-export default function install(versionExpression, options, callback) {
+export default function install(versionExpression: string, options: InstallOptions, callback: InstallCallback): undefined {
   const storagePaths = options.storagePath ? createStoragePaths(options.storagePath) : DEFAULT_STORAGE_PATHS;
   options = { ...storagePaths, ...options, ...getTarget(options) };
-  getVersions(versionExpression, options, (err, versions) => {
-    if (err) return callback(err);
-    if (!versions.length) return callback(new Error(`Could not resolve versions for: ${versionExpression}`));
-    if (versions.length !== 1) return callback(new Error(`Version ${versionExpression} resolved to multiple versions: ${versions.map((x) => x.version)}. Expecting one.`));
+  getVersions(versionExpression, options, (err?: Error, versions?: string[]): undefined => {
+    if (err) {
+      callback(err);
+      return;
+    }
+    if (!versions.length) {
+      callback(new Error(`Could not resolve versions for: ${versionExpression}`));
+      return;
+    }
+    if (versions.length !== 1) {
+      callback(new Error(`Version ${versionExpression} resolved to multiple versions: ${versions.map((x) => x)}. Expecting one.`));
+      return;
+    }
 
     const version = versions[0];
     const result = createResult(options, version);
 
-    checkMissing(result.installPath, options, (err, missing) => {
-      if (err || !missing.length) return callback(err, result);
+    checkMissing(result.installPath, options, (err, missing): undefined => {
+      if (err || !missing.length) {
+        callback(err, result);
+        return;
+      }
 
       const queue = new Queue(1);
       queue.defer(mkdirp.bind(null, options.cachePath));
