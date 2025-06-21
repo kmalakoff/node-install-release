@@ -3,7 +3,9 @@ import Queue from 'queue-cb';
 import { NPM_FILE_PATHS } from '../constants.ts';
 import conditionalCopy from '../lib/conditionalCopy.ts';
 
-export default function installBin(_version, dest, options, callback) {
+import type { InstallOptions, NoParamCallback } from '../types.ts';
+
+export default function installBin(_version: string, dest: string, options: InstallOptions, callback: NoParamCallback) {
   const platform = options.platform;
   const files = NPM_FILE_PATHS[platform] || NPM_FILE_PATHS.posix;
 

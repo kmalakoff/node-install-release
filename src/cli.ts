@@ -4,7 +4,7 @@ import install, { type InstallOptions } from './index.ts';
 
 const ERROR_CODE = 9;
 
-export default (argv) => {
+export default (argv: string[]): undefined => {
   const options = getopts(argv.slice(1), {
     alias: { platform: 'p', arch: 'a', filename: 'f', installPath: 'i', storagePath: 'c', silent: 'si' },
     boolean: ['silent'],

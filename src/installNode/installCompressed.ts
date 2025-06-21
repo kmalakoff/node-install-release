@@ -6,9 +6,10 @@ import rimraf2 from 'rimraf2';
 import { NODE_DIST_BASE_URL } from '../constants.ts';
 import conditionalCache from '../lib/conditionalCache.ts';
 import conditionalExtract from '../lib/conditionalExtract.ts';
+import type { InstallOptions, NoParamCallback } from '../types.ts';
 import validateDownload from './validateDownload.ts';
 
-export default function installCompressed(distPath, dest, options, callback) {
+export default function installCompressed(distPath: string, dest: string, options: InstallOptions, callback: NoParamCallback): undefined {
   const platform = options.platform;
   const downloadPath = `${NODE_DIST_BASE_URL}/${distPath}`;
   const cachePath = path.join(options.cachePath, path.basename(downloadPath));
