@@ -31,7 +31,7 @@ interface Target {
 
 import * as resolveVersions from 'node-resolve-versions';
 
-const VERSIONS = resolveVersions.sync('>=0.8', { range: 'major,even' });
+const VERSIONS = resolveVersions.sync('>=0.8', { range: 'major,even' }) as string[];
 VERSIONS.splice(0, VERSIONS.length, VERSIONS[0], VERSIONS[VERSIONS.length - 1]); // TEST SIMPLIFICATIOn
 const TARGETS = [{}] as Target[];
 
@@ -86,7 +86,10 @@ function addTests(version, target) {
     it('npm --version', (done) => {
       if (!installPath) return done(); // failed to install
       spawn('npm', ['--version'], spawnOptions(installPath, { encoding: 'utf8' }), (err, res) => {
-        if (err) return done(err.message);
+        if (err) {
+          done(err.message);
+          return;
+        }
         const lines = cr(res.stdout).split('\n');
         const resultVersion = lines.slice(-2, -1)[0];
         assert.ok(isVersion(resultVersion));
@@ -97,7 +100,10 @@ function addTests(version, target) {
     it('node --version', (done) => {
       if (!installPath) return done(); // failed to install
       spawn(NODE, ['--version'], spawnOptions(installPath, { encoding: 'utf8' }), (err, res) => {
-        if (err) return done(err.message);
+        if (err) {
+          done(err.message);
+          return;
+        }
         const lines = cr(res.stdout).split('\n');
         assert.equal(lines.slice(-2, -1)[0], version);
         done();
