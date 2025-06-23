@@ -51,7 +51,7 @@
     "is-version": "^0.2.17",
     "lodash.keys": "^4.2.0",
     "mkdirp-classic": "^0.5.3",
-    "node-filename-to-dist-paths": "^1.2.4",
+    "node-filename-to-dist-paths": "^1.2.5",
     "node-resolve-versions": "^1.2.3",
     "on-one": "^0.1.9",
     "pump": "^3.0.3",
