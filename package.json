@@ -52,7 +52,7 @@
     "lodash.keys": "^4.2.0",
     "mkdirp-classic": "^0.5.3",
     "node-filename-to-dist-paths": "^1.2.9",
-    "node-resolve-versions": "^1.2.7",
+    "node-resolve-versions": "^1.2.8",
     "on-one": "^1.0.1",
     "pump": "^3.0.3",
     "queue-cb": "^1.5.5",
