@@ -41,11 +41,11 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "cross-spawn-cb": "^2.3.6",
+    "cross-spawn-cb": "^2.3.7",
     "exit": "^0.1.2",
     "fast-extract": "^1.6.3",
     "function-exec-sync": "^1.4.0",
-    "get-remote": "^2.0.7",
+    "get-remote": "^2.0.8",
     "getopts-compat": "^2.2.6",
     "homedir-polyfill": "^1.0.3",
     "is-version": "^0.2.17",
