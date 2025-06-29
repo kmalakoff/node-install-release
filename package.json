@@ -43,7 +43,7 @@
   "dependencies": {
     "cross-spawn-cb": "^2.3.10",
     "exit": "^0.1.2",
-    "fast-extract": "^1.6.4",
+    "fast-extract": "^1.6.6",
     "function-exec-sync": "^1.4.4",
     "get-remote": "^2.0.10",
     "getopts-compat": "^2.2.6",
