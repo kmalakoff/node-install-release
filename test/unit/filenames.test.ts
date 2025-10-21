@@ -36,7 +36,9 @@ VERSIONS.splice(0, VERSIONS.length, VERSIONS[0], VERSIONS[VERSIONS.length - 1]);
 const TARGETS = [{}] as Target[];
 
 const PLATFORMS = ['win32', 'darwin', 'linux'] as NodeJS.Platform[];
-PLATFORMS.forEach((platform) => TARGETS.push({ platform, arch: 'x64' }));
+PLATFORMS.forEach((platform) => {
+  TARGETS.push({ platform, arch: 'x64' });
+});
 
 import values from 'lodash.values';
 
@@ -47,7 +49,6 @@ const FILE_PLATFORM_MAP = {
 };
 
 import spawn from 'cross-spawn-cb';
-// @ts-ignore
 import install from 'node-install-release';
 import { spawnOptions } from 'node-version-utils';
 import validate from '../lib/validate.ts';
@@ -118,10 +119,14 @@ describe('filenames', () => {
 
   describe('matrix', () => {
     VERSIONS.forEach((version) => {
-      TARGETS.forEach((target) => addTests(version, target));
+      TARGETS.forEach((target) => {
+        addTests(version, target);
+      });
       find(dists, (dist) => dist.version === version)
         .files.filter((x) => !find(SKIPS, (s) => x.indexOf(s) >= 0))
-        .forEach((filename) => addTests(version, { filename }));
+        .forEach((filename) => {
+          addTests(version, { filename });
+        });
     });
   });
 });

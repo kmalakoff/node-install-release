@@ -38,7 +38,9 @@ function addTests(version) {
     it('install', (done) => {
       installPath = path.join(OPTIONS.storagePath, 'installed', version);
       const args = [version, '--installPath', installPath, '--silent'];
-      keys(OPTIONS).forEach((key) => Array.prototype.push.apply(args, [`--${key}`, OPTIONS[key]]));
+      keys(OPTIONS).forEach((key) => {
+        Array.prototype.push.apply(args, [`--${key}`, OPTIONS[key]]);
+      });
 
       spawn(CLI, args, { stdio: 'inherit' }, (err) => {
         if (err) {
