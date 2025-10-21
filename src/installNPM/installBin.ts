@@ -10,6 +10,8 @@ export default function installBin(_version: string, dest: string, options: Inst
   const files = NPM_FILE_PATHS[platform] || NPM_FILE_PATHS.posix;
 
   const queue = new Queue();
-  files.forEach((file) => queue.defer(conditionalCopy.bind(null, path.join(dest, file.src), path.join(dest, file.dest), file.optional)));
+  files.forEach((file) => {
+    queue.defer(conditionalCopy.bind(null, path.join(dest, file.src), path.join(dest, file.dest), file.optional));
+  });
   queue.await(callback);
 }
