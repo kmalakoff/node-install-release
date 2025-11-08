@@ -36,6 +36,7 @@
   "scripts": {
     "build": "tsds build",
     "format": "biome check --write --unsafe",
+    "prepublishOnly": "tsds validate",
     "test": "mocha --no-timeouts test/**/*.test.*",
     "test:engines": "nvu 0.8,0.10,0.12,4,12,16,lts,stable tsds test:node --no-timeouts",
     "version": "tsds version"
