@@ -1,2 +1,2 @@
-ignores: ["node-install-release", "function-exec-sync"]
+ignores: ["node-install-release"]
 ignoreDirs: [".tmp"]
