@@ -42,10 +42,10 @@
     "version": "tsds version"
   },
   "dependencies": {
+    "cpu-arch": "^0.1.0",
     "cross-spawn-cb": "*",
     "exit": "*",
     "fast-extract": "*",
-    "function-exec-sync": "*",
     "get-remote": "*",
     "getopts-compat": "*",
     "homedir-polyfill": "*",
