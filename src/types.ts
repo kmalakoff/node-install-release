@@ -42,5 +42,12 @@ export interface Target {
   arch: NodeJS.Architecture;
 }
 
+export type ChecksumResult = {
+  actual: string;
+  expected: string;
+  match: boolean;
+};
+
 export type InstallCallback = (err?: Error, result?: InstallResult) => void;
 export type NoParamCallback = (err?: Error) => void;
+export type ChecksumCallback = (err?: Error, checksum?: ChecksumResult) => void;

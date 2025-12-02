@@ -4,9 +4,9 @@ import get from 'get-remote';
 import oo from 'on-one';
 import { NODE_DIST_BASE_URL } from '../constants.ts';
 
-import type { NoParamCallback } from '../types.ts';
+import type { ChecksumCallback, ChecksumResult } from '../types.ts';
 
-export default function validateDownload(distPath: string, installPath: string, callback: NoParamCallback): undefined {
+export default function validateDownload(distPath: string, installPath: string, callback: ChecksumCallback): undefined {
   const version = distPath.split('/')[0];
   const downloadPath = `${NODE_DIST_BASE_URL}/${version}/SHASUMS256.txt`;
   get(downloadPath).text((err, res) => {
@@ -22,7 +22,10 @@ export default function validateDownload(distPath: string, installPath: string, 
         callback(err);
         return;
       }
-      hash.digest('hex') !== expected ? callback(new Error(`${filename} checksum failed`)) : callback();
+      const actual = hash.digest('hex');
+      const match = actual === expected;
+      const checksum: ChecksumResult = { actual, expected, match };
+      match ? callback(null, checksum) : callback(new Error(`${filename} checksum failed`), checksum);
     });
   });
 }
