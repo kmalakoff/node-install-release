@@ -1,5 +1,8 @@
+import crypto from 'crypto';
+import fs from 'fs';
 import get from 'get-remote';
 import { getDist } from 'node-filename-to-dist-paths';
+import oo from 'on-one';
 import path from 'path';
 import Queue from 'queue-cb';
 import { NPM_DIST_TAGS_URL, NPM_DIST_URL, NPM_MIN_VERSION } from '../constants.ts';
@@ -12,7 +15,17 @@ interface DistRecord {
 
 import type { InstallOptions } from '../types.ts';
 
-export type Callback = (error?: Error, npmVersion?: string) => undefined;
+export type Callback = (error?: Error, npmVersion?: string, checksum?: string) => undefined;
+
+function calculateChecksum(filePath: string, callback: (err?: Error, checksum?: string) => void): void {
+  const hash = crypto.createHash('sha256');
+  const stream = fs.createReadStream(filePath);
+  stream.on('data', (data) => hash.update(data));
+  oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
+    if (err) return callback(err);
+    callback(null, hash.digest('hex'));
+  });
+}
 
 export default function installLib(version: string, dest: string, options: InstallOptions, callback: Callback): undefined {
   const platform = options.platform;
@@ -30,11 +43,18 @@ export default function installLib(version: string, dest: string, options: Insta
     const downloadPath = `${NPM_DIST_URL}/-/npm-${npmVersion}.tgz`;
     const cachePath = path.join(options.cachePath, path.basename(downloadPath));
 
+    let checksum: string | undefined;
     const queue = new Queue(1);
     queue.defer(conditionalCache.bind(null, downloadPath, cachePath));
+    queue.defer((cb) => {
+      calculateChecksum(cachePath, (err, hash) => {
+        checksum = hash;
+        cb(err);
+      });
+    });
     queue.defer(conditionalExtract.bind(null, cachePath, installPath));
     queue.await((err) => {
-      err ? callback(err) : callback(null, npmVersion);
+      err ? callback(err) : callback(null, npmVersion, checksum);
     });
   });
 }
