@@ -3,6 +3,7 @@ delete process.env.NODE_OPTIONS;
 
 import assert from 'assert';
 import cr from 'cr';
+import fs from 'fs';
 import isVersion from 'is-version';
 import path from 'path';
 import rimraf2 from 'rimraf2';
@@ -30,6 +31,7 @@ import { spawnOptions } from 'node-version-utils';
 import validate from '../lib/validate.ts';
 
 const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.js');
+const PACKAGE_JSON = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'package.json'), 'utf8'));
 
 function addTests(version) {
   let installPath = null;
@@ -82,6 +84,49 @@ function addTests(version) {
 describe('cli', () => {
   before(rimraf2.bind(null, TMP_DIR, { disableGlob: true }));
   after(rimraf2.bind(null, TMP_DIR, { disableGlob: true }));
+
+  describe('--version', () => {
+    it('outputs version with --version', (done) => {
+      spawn(CLI, ['--version'], { encoding: 'utf8' }, (err, res) => {
+        if (err) return done(err.message);
+        const output = cr(res.stdout).trim();
+        assert.equal(output, PACKAGE_JSON.version);
+        done();
+      });
+    });
+
+    it('outputs version with -v', (done) => {
+      spawn(CLI, ['-v'], { encoding: 'utf8' }, (err, res) => {
+        if (err) return done(err.message);
+        const output = cr(res.stdout).trim();
+        assert.equal(output, PACKAGE_JSON.version);
+        done();
+      });
+    });
+  });
+
+  describe('--help', () => {
+    it('outputs help with --help', (done) => {
+      spawn(CLI, ['--help'], { encoding: 'utf8' }, (err, res) => {
+        if (err) return done(err.message);
+        const output = cr(res.stdout);
+        assert.ok(output.indexOf('Usage:') >= 0, 'Help output should contain Usage:');
+        assert.ok(output.indexOf('--version') >= 0, 'Help output should contain --version');
+        assert.ok(output.indexOf('--help') >= 0, 'Help output should contain --help');
+        assert.ok(output.indexOf(PACKAGE_JSON.version) >= 0, 'Help output should contain version');
+        done();
+      });
+    });
+
+    it('outputs help with -h', (done) => {
+      spawn(CLI, ['-h'], { encoding: 'utf8' }, (err, res) => {
+        if (err) return done(err.message);
+        const output = cr(res.stdout);
+        assert.ok(output.indexOf('Usage:') >= 0, 'Help output should contain Usage:');
+        done();
+      });
+    });
+  });
 
   describe('happy path', () => {
     for (let i = 0; i < VERSIONS.length; i++) {
