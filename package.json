@@ -46,6 +46,7 @@
     "cross-spawn-cb": "*",
     "exit": "*",
     "fast-extract": "*",
+    "fs-copy-compat": "*",
     "get-remote": "*",
     "getopts-compat": "*",
     "homedir-polyfill": "*",
@@ -55,7 +56,6 @@
     "node-filename-to-dist-paths": "*",
     "node-resolve-versions": "*",
     "on-one": "*",
-    "pump": "*",
     "queue-cb": "*",
     "rimraf2": "*"
   },
