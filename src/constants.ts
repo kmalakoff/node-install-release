@@ -1,13 +1,13 @@
-import home from 'homedir-polyfill';
 import keys from 'lodash.keys';
 import path from 'path';
+import { homedir } from './compat.ts';
 import createStoragePaths from './createStoragePaths.ts';
 import files from './files.ts';
 
 import type { FilePath } from './types.ts';
 
 export const FILES = files;
-export const DEFAULT_STORAGE_PATH = path.join(home(), '.nir') as string;
+export const DEFAULT_STORAGE_PATH = path.join(homedir(), '.nir') as string;
 export const DEFAULT_STORAGE_PATHS = createStoragePaths(DEFAULT_STORAGE_PATH);
 
 export const FILE_PLATFORMS = keys(FILES).filter((file) => ['src', 'headers'].indexOf(file) < 0) as string[];
