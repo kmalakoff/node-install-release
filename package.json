@@ -42,7 +42,7 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "cpu-arch": "^0.1.0",
+    "cpu-arch": "^1.0.1",
     "cross-spawn-cb": "*",
     "exit": "*",
     "fast-extract": "*",
