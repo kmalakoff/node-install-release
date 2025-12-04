@@ -25,6 +25,7 @@
     "./package.json": "./package.json"
   },
   "main": "dist/cjs/index.js",
+  "source": "src/index.ts",
   "types": "dist/cjs/index.d.ts",
   "bin": {
     "nir": "bin/cli.js"
@@ -42,7 +43,7 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "cpu-arch": "^1.0.1",
+    "cpu-arch": "^1.0.2",
     "cross-spawn-cb": "*",
     "exit": "*",
     "fast-extract": "*",
@@ -74,8 +75,5 @@
   },
   "engines": {
     "node": ">=0.8"
-  },
-  "tsds": {
-    "source": "src/index.ts"
   }
 }
