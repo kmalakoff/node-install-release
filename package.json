@@ -48,6 +48,7 @@
     "exit": "*",
     "fast-extract": "*",
     "fs-copy-compat": "*",
+    "fs-remove-compat": "*",
     "get-remote": "*",
     "getopts-compat": "*",
     "homedir-polyfill": "*",
@@ -57,8 +58,7 @@
     "node-filename-to-dist-paths": "*",
     "node-resolve-versions": "*",
     "on-one": "*",
-    "queue-cb": "*",
-    "rimraf2": "*"
+    "queue-cb": "*"
   },
   "devDependencies": {
     "@types/mocha": "*",
