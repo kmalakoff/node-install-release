@@ -1,7 +1,7 @@
 import fs from 'fs';
+import { safeRm } from 'fs-remove-compat';
 import path from 'path';
 import Queue from 'queue-cb';
-import rimraf2 from 'rimraf2';
 
 import { NODE_DIST_BASE_URL } from '../constants.ts';
 import conditionalCache from '../lib/conditionalCache.ts';
@@ -31,7 +31,7 @@ export default function installCompressed(distPath: string, dest: string, option
       // some compressed versions of node come with npm pre-installed, but we want to override with a specific version
       const libPath = platform === 'win32' ? dest : path.join(dest, 'lib');
       const installPath = path.join(libPath, 'node_modules', 'npm');
-      rimraf2(installPath, { disableGlob: true }, () => callback(err, checksum));
+      safeRm(installPath, () => callback(err, checksum));
     });
   });
 }

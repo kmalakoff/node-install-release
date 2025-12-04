@@ -1,7 +1,7 @@
 import type { NoParamCallback } from 'fs';
 import { copyFile } from 'fs-copy-compat';
+import { safeRm } from 'fs-remove-compat';
 import Queue from 'queue-cb';
-import rimraf2 from 'rimraf2';
 
 import ensureDestinationParent from './ensureDestinationParent.ts';
 
@@ -10,9 +10,7 @@ export default function safeCopyFile(src: string, dest: string, callback: NoPara
 
   queue.defer(ensureDestinationParent.bind(null, dest));
   queue.defer((callback) => {
-    rimraf2(dest, { disableGlob: true }, (err) => {
-      err && err.code !== 'EEXIST' ? callback(err) : callback();
-    });
+    safeRm(dest, callback);
   });
   queue.defer(copyFile.bind(null, src, dest));
   queue.await(callback);
