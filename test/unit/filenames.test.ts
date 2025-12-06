@@ -88,7 +88,7 @@ function addTests(version, target) {
       if (!installPath) return done(); // failed to install
       spawn('npm', ['--version'], spawnOptions(installPath, { encoding: 'utf8' }), (err, res) => {
         if (err) {
-          done(err.message);
+          done(err);
           return;
         }
         const lines = cr(res.stdout).split('\n');
@@ -102,7 +102,7 @@ function addTests(version, target) {
       if (!installPath) return done(); // failed to install
       spawn(NODE, ['--version'], spawnOptions(installPath, { encoding: 'utf8' }), (err, res) => {
         if (err) {
-          done(err.message);
+          done(err);
           return;
         }
         const lines = cr(res.stdout).split('\n');
