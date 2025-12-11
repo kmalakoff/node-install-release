@@ -1,4 +1,4 @@
-// remove NODE_OPTIONS from ts-dev-stack
+// remove NODE_OPTIONS to not interfere with tests
 delete process.env.NODE_OPTIONS;
 
 import assert from 'assert';
@@ -46,7 +46,7 @@ function addTests(version) {
 
       spawn(CLI, args, { stdio: 'inherit' }, (err) => {
         if (err) {
-          done(err.message);
+          done(err);
           return;
         }
         validate(installPath, OPTIONS);
@@ -57,7 +57,7 @@ function addTests(version) {
     it('npm --version', (done) => {
       spawn('npm', ['--version'], spawnOptions(installPath, { encoding: 'utf8' }), (err, res) => {
         if (err) {
-          done(err.message);
+          done(err);
           return;
         }
         const lines = cr(res.stdout).split('\n');
@@ -70,7 +70,7 @@ function addTests(version) {
     it('node --version', (done) => {
       spawn(NODE, ['--version'], spawnOptions(installPath, { encoding: 'utf8' }), (err, res) => {
         if (err) {
-          done(err.message);
+          done(err);
           return;
         }
         const lines = cr(res.stdout).split('\n');
@@ -88,7 +88,7 @@ describe('cli', () => {
   describe('--version', () => {
     it('outputs version with --version', (done) => {
       spawn(CLI, ['--version'], { encoding: 'utf8' }, (err, res) => {
-        if (err) return done(err.message);
+        if (err) return done(err);
         const output = cr(res.stdout).trim();
         assert.equal(output, PACKAGE_JSON.version);
         done();
@@ -97,7 +97,7 @@ describe('cli', () => {
 
     it('outputs version with -v', (done) => {
       spawn(CLI, ['-v'], { encoding: 'utf8' }, (err, res) => {
-        if (err) return done(err.message);
+        if (err) return done(err);
         const output = cr(res.stdout).trim();
         assert.equal(output, PACKAGE_JSON.version);
         done();
@@ -108,7 +108,7 @@ describe('cli', () => {
   describe('--help', () => {
     it('outputs help with --help', (done) => {
       spawn(CLI, ['--help'], { encoding: 'utf8' }, (err, res) => {
-        if (err) return done(err.message);
+        if (err) return done(err);
         const output = cr(res.stdout);
         assert.ok(output.indexOf('Usage:') >= 0, 'Help output should contain Usage:');
         assert.ok(output.indexOf('--version') >= 0, 'Help output should contain --version');
@@ -120,7 +120,7 @@ describe('cli', () => {
 
     it('outputs help with -h', (done) => {
       spawn(CLI, ['-h'], { encoding: 'utf8' }, (err, res) => {
-        if (err) return done(err.message);
+        if (err) return done(err);
         const output = cr(res.stdout);
         assert.ok(output.indexOf('Usage:') >= 0, 'Help output should contain Usage:');
         done();
