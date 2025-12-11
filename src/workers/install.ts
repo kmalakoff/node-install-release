@@ -1,6 +1,9 @@
+import { safeRm } from 'fs-remove-compat';
 import isVersion from 'is-version';
 import mkdirp from 'mkdirp-classic';
+import { getDist } from 'node-filename-to-dist-paths';
 import resolveVersions from 'node-resolve-versions';
+import path from 'path';
 import Queue from 'queue-cb';
 
 import { DEFAULT_STORAGE_PATHS } from '../constants.ts';
@@ -42,17 +45,53 @@ export default function install(versionExpression: string, options: InstallOptio
     const version = versions[0];
     const result = createResult(options, version);
 
+    // Check if node is missing first
     checkMissing(result.installPath, options, (err, missing): undefined => {
-      if (err || !missing.length) {
-        callback(err, result);
+      if (err) {
+        callback(err);
+        return;
+      }
+
+      // Early exit if both node and npm are already present
+      if (!missing.length) {
+        callback(null, result);
         return;
       }
 
       const queue = new Queue(1);
       queue.defer(mkdirp.bind(null, options.cachePath));
       queue.defer(ensureDestinationParent.bind(null, result.installPath));
+
+      // Install node if missing
       !~missing.indexOf('node') || queue.defer(installNode.bind(null, version, result.installPath, options));
-      !~missing.indexOf('npm') || queue.defer(installNPM.bind(null, version, result.installPath, options));
+
+      // Check and install npm AFTER node (so bundled npm is detected)
+      // Skip npm download only if bundled npm is modern (6+); old npm (<6) was buggy
+      queue.defer((cb) => {
+        checkMissing(result.installPath, options, (err, npmMissing): undefined => {
+          if (err) {
+            cb(err);
+            return;
+          }
+          if (!~npmMissing.indexOf('npm')) {
+            // npm is present - check if it's modern enough to keep (npm >= 3 is stable)
+            const dist = getDist(version);
+            const bundledNpmMajor = dist && dist.npm ? +dist.npm.split('.')[0] : 0;
+            if (bundledNpmMajor >= 3) {
+              cb(); // npm >= 3 bundled, skip download
+              return;
+            }
+            // old npm (<3) is buggy - delete it so installNPM can override
+            const platform = options.platform;
+            const libPath = platform === 'win32' ? result.installPath : path.join(result.installPath, 'lib');
+            const npmPath = path.join(libPath, 'node_modules', 'npm');
+            safeRm(npmPath, () => installNPM(version, result.installPath, options, cb));
+            return;
+          }
+          installNPM(version, result.installPath, options, cb);
+        });
+      });
+
       queue.await((err) => (err ? callback(err) : callback(null, result)));
     });
   });
