@@ -7,7 +7,7 @@ import path from 'path';
 import Queue from 'queue-cb';
 import { NPM_DIST_TAGS_URL, NPM_DIST_URL, NPM_MIN_VERSION } from '../constants.ts';
 import conditionalCache from '../lib/conditionalCache.ts';
-import conditionalExtract from '../lib/conditionalExtract.ts';
+import extract from '../lib/extract.ts';
 
 interface DistRecord {
   latest: string;
@@ -52,7 +52,7 @@ export default function installLib(version: string, dest: string, options: Insta
         cb(err);
       });
     });
-    queue.defer(conditionalExtract.bind(null, cachePath, installPath));
+    queue.defer(extract.bind(null, cachePath, installPath));
     queue.await((err) => {
       err ? callback(err) : callback(null, npmVersion, checksum);
     });

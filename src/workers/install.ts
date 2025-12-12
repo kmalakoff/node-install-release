@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { safeRm } from 'fs-remove-compat';
 import isVersion from 'is-version';
 import mkdirp from 'mkdirp-classic';
@@ -5,6 +6,7 @@ import { getDist } from 'node-filename-to-dist-paths';
 import resolveVersions from 'node-resolve-versions';
 import path from 'path';
 import Queue from 'queue-cb';
+import tempSuffix from 'temp-suffix';
 
 import { DEFAULT_STORAGE_PATHS } from '../constants.ts';
 
@@ -45,7 +47,7 @@ export default function install(versionExpression: string, options: InstallOptio
     const version = versions[0];
     const result = createResult(options, version);
 
-    // Check if node is missing first
+    // Fast path: check if installation is complete
     checkMissing(result.installPath, options, (err, missing): undefined => {
       if (err) {
         callback(err);
@@ -58,41 +60,68 @@ export default function install(versionExpression: string, options: InstallOptio
         return;
       }
 
-      const queue = new Queue(1);
-      queue.defer(mkdirp.bind(null, options.cachePath));
-      queue.defer(ensureDestinationParent.bind(null, result.installPath));
+      // Something is missing - use atomic pattern with temp folder
+      // First, remove any partial installation to avoid conflicts
+      safeRm(result.installPath, () => {
+        const tempPath = tempSuffix(result.installPath);
 
-      // Install node if missing
-      !~missing.indexOf('node') || queue.defer(installNode.bind(null, version, result.installPath, options));
+        const queue = new Queue(1);
+        queue.defer(mkdirp.bind(null, options.cachePath));
+        queue.defer(ensureDestinationParent.bind(null, tempPath));
 
-      // Check and install npm AFTER node (so bundled npm is detected)
-      // Skip npm download only if bundled npm is modern (6+); old npm (<6) was buggy
-      queue.defer((cb) => {
-        checkMissing(result.installPath, options, (err, npmMissing): undefined => {
-          if (err) {
-            cb(err);
-            return;
-          }
-          if (!~npmMissing.indexOf('npm')) {
-            // npm is present - check if it's modern enough to keep (npm >= 3 is stable)
-            const dist = getDist(version);
-            const bundledNpmMajor = dist && dist.npm ? +dist.npm.split('.')[0] : 0;
-            if (bundledNpmMajor >= 3) {
-              cb(); // npm >= 3 bundled, skip download
+        // Install node to temp folder
+        queue.defer(installNode.bind(null, version, tempPath, options));
+
+        // Check and install npm to temp folder
+        // Skip npm download only if bundled npm is modern (>= 3)
+        queue.defer((cb) => {
+          checkMissing(tempPath, options, (err, npmMissing): undefined => {
+            if (err) {
+              cb(err);
               return;
             }
-            // old npm (<3) is buggy - delete it so installNPM can override
-            const platform = options.platform;
-            const libPath = platform === 'win32' ? result.installPath : path.join(result.installPath, 'lib');
-            const npmPath = path.join(libPath, 'node_modules', 'npm');
-            safeRm(npmPath, () => installNPM(version, result.installPath, options, cb));
+            if (!~npmMissing.indexOf('npm')) {
+              // npm is present (bundled with node) - check if it's modern enough to keep
+              const dist = getDist(version);
+              const bundledNpmMajor = dist && dist.npm ? +dist.npm.split('.')[0] : 0;
+              if (bundledNpmMajor >= 3) {
+                cb(); // npm >= 3 bundled, skip download
+                return;
+              }
+              // old npm (<3) is buggy - delete it so installNPM can override
+              const platform = options.platform;
+              const libPath = platform === 'win32' ? tempPath : path.join(tempPath, 'lib');
+              const npmPath = path.join(libPath, 'node_modules', 'npm');
+              safeRm(npmPath, () => installNPM(version, tempPath, options, cb));
+              return;
+            }
+            installNPM(version, tempPath, options, cb);
+          });
+        });
+
+        // Atomic rename: move temp folder to final destination
+        queue.defer((cb) => {
+          fs.rename(tempPath, result.installPath, (err) => {
+            if (!err) return cb();
+            // Race condition: another process may have already created dest
+            if (err.code === 'EEXIST' || err.code === 'ENOTEMPTY' || err.code === 'EPERM') {
+              // Another process won the race - clean up temp and succeed
+              safeRm(tempPath, () => cb());
+              return;
+            }
+            cb(err);
+          });
+        });
+
+        queue.await((err) => {
+          if (err) {
+            // Clean up temp folder on error
+            safeRm(tempPath, () => callback(err));
             return;
           }
-          installNPM(version, result.installPath, options, cb);
+          callback(null, result);
         });
       });
-
-      queue.await((err) => (err ? callback(err) : callback(null, result)));
     });
   });
 }
