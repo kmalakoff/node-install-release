@@ -32,15 +32,20 @@ export const NPM_DIST_URL = 'https://registry.npmjs.org/npm';
 export const NPM_DIST_TAGS_URL = 'https://registry.npmjs.org/-/package/npm/dist-tags';
 export const NPM_MIN_VERSION = 3;
 
+export const NPM_PACKAGE_PATH = {
+  win32: path.join('node_modules', 'npm') as string,
+  posix: path.join('lib', 'node_modules', 'npm') as string,
+};
+
 export const NPM_FILE_PATHS = {
   win32: [
-    { src: path.join('node_modules', 'npm', 'bin', 'npm'), dest: 'npm' },
-    { src: path.join('node_modules', 'npm', 'bin', 'npm.cmd'), dest: 'npm.cmd' },
-    { src: path.join('node_modules', 'npm', 'bin', 'npx'), dest: 'npx', optional: true },
-    { src: path.join('node_modules', 'npm', 'bin', 'npx.cmd'), dest: 'npx.cmd', optional: true },
+    { src: path.join(NPM_PACKAGE_PATH.win32, 'bin', 'npm'), dest: 'npm' },
+    { src: path.join(NPM_PACKAGE_PATH.win32, 'bin', 'npm.cmd'), dest: 'npm.cmd' },
+    { src: path.join(NPM_PACKAGE_PATH.win32, 'bin', 'npx'), dest: 'npx', optional: true },
+    { src: path.join(NPM_PACKAGE_PATH.win32, 'bin', 'npx.cmd'), dest: 'npx.cmd', optional: true },
   ] as FilePath[],
   posix: [
-    { src: path.join('lib', 'node_modules', 'npm', 'bin', 'npm-cli.js'), dest: path.join('bin', 'npm') },
-    { src: path.join('lib', 'node_modules', 'npm', 'bin', 'npx-cli.js'), dest: path.join('bin', 'npx'), optional: true },
+    { src: path.join(NPM_PACKAGE_PATH.posix, 'bin', 'npm-cli.js'), dest: path.join('bin', 'npm') },
+    { src: path.join(NPM_PACKAGE_PATH.posix, 'bin', 'npx-cli.js'), dest: path.join('bin', 'npx'), optional: true },
   ] as FilePath[],
 };

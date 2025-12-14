@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import Queue from 'queue-cb';
 
-import { NODE_FILE_PATHS, NPM_FILE_PATHS } from '../constants.ts';
+import { NODE_FILE_PATHS, NPM_PACKAGE_PATH } from '../constants.ts';
 
 import type { InstallOptions } from '../types.ts';
 
@@ -11,7 +11,7 @@ export type Callback = (error?: Error, missing?: string[]) => undefined;
 export default function checkMissing(dest: string, options: InstallOptions, callback: Callback): undefined {
   const platform = options.platform;
   const nodePath = NODE_FILE_PATHS[platform] || NODE_FILE_PATHS.posix;
-  const npmPaths = NPM_FILE_PATHS[platform] || NPM_FILE_PATHS.posix;
+  const npmPackagePath = NPM_PACKAGE_PATH[platform] || NPM_PACKAGE_PATH.posix;
 
   const missing: string[] = [];
   function check(filePath, key, cb) {
@@ -23,8 +23,6 @@ export default function checkMissing(dest: string, options: InstallOptions, call
 
   const queue = new Queue();
   queue.defer(check.bind(null, nodePath, 'node'));
-  for (const key in npmPaths) {
-    if (!npmPaths[key].optional) queue.defer(check.bind(null, npmPaths[key].dest, 'npm'));
-  }
+  queue.defer(check.bind(null, npmPackagePath, 'npm'));
   queue.await(() => callback(null, missing));
 }
