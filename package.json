@@ -48,7 +48,7 @@
     "exit-compat": "^1.0.4",
     "fast-extract": "^1.8.16",
     "fs-copy-compat": "^0.1.5",
-    "fs-remove-compat": "^0.2.3",
+    "fs-remove-compat": "^0.2.4",
     "get-remote": "^2.3.4",
     "getopts-compat": "^2.2.6",
     "homedir-polyfill": "^1.0.3",
