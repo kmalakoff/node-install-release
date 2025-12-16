@@ -5,9 +5,9 @@ import assert from 'assert';
 import cr from 'cr';
 import { safeRm } from 'fs-remove-compat';
 import isVersion from 'is-version';
-import find from 'lodash.find';
 import path from 'path';
 import url from 'url';
+import { arrayFind } from '../lib/compat.ts';
 
 const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
 const NODE = isWindows ? 'node.exe' : 'node';
@@ -122,8 +122,8 @@ describe('filenames', () => {
       TARGETS.forEach((target) => {
         addTests(version, target);
       });
-      find(dists, (dist) => dist.version === version)
-        .files.filter((x) => !find(SKIPS, (s) => x.indexOf(s) >= 0))
+      arrayFind(dists, (dist) => dist.version === version)
+        .files.filter((x) => !arrayFind(SKIPS, (s) => x.indexOf(s) >= 0))
         .forEach((filename) => {
           addTests(version, { filename });
         });
