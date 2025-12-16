@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import fs from 'fs';
-import get from 'get-remote';
+import { getContent } from 'get-file-compat';
 import oo from 'on-one';
 import { NODE_DIST_BASE_URL } from '../constants.ts';
 
@@ -9,9 +9,9 @@ import type { ChecksumCallback, ChecksumResult } from '../types.ts';
 export default function validateDownload(distPath: string, installPath: string, callback: ChecksumCallback): undefined {
   const version = distPath.split('/')[0];
   const downloadPath = `${NODE_DIST_BASE_URL}/${version}/SHASUMS256.txt`;
-  get(downloadPath).text((err, res) => {
+  getContent(downloadPath, 'utf8', (err, res) => {
     if (err) return callback(err);
-    const text = res.body;
+    const text = res.content;
     const filename = distPath.split('/').slice(1).join('/');
     const expected = text.split(filename)[0].split('\n').pop().trim();
     const hash = crypto.createHash('sha256');

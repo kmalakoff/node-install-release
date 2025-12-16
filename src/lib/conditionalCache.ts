@@ -1,6 +1,5 @@
 import fs from 'fs';
-import get from 'get-remote';
-import path from 'path';
+import { getFile } from 'get-file-compat';
 import type { InstallOptions, NoParamCallback } from '../types.ts';
 import ensureDestinationParent from './ensureDestinationParent.ts';
 
@@ -16,7 +15,7 @@ export default function conditionalCache(endpoint: string, dest: string, options
 
     ensureDestinationParent(dest, (err) => {
       if (err) return callback(err);
-      get(endpoint, { filename: path.basename(dest), time: 1000 }).file(path.dirname(dest), callback);
+      getFile(endpoint, dest, callback);
     });
   });
 }
