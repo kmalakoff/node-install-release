@@ -11,7 +11,7 @@ import validateDownload from '../validateDownload.ts';
 import buildPosix from './buildPosix.ts';
 import buildWin32 from './buildWin32.ts';
 
-export default function InstallSource(distPath: string, dest: string, options: InstallOptions, callback: NoParamCallback): undefined {
+export default function InstallSource(distPath: string, dest: string, options: InstallOptions, callback: NoParamCallback): void {
   const platform = options.platform;
   const build = platform === 'win32' ? buildWin32 : buildPosix;
   const downloadPath = `${NODE_DIST_BASE_URL}/${distPath}`;

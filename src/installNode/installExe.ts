@@ -8,7 +8,7 @@ import copyFile from '../lib/copyFile.ts';
 import type { InstallOptions, NoParamCallback } from '../types.ts';
 import validateDownload from './validateDownload.ts';
 
-export default function installExe(distPath: string, dest: string, options: InstallOptions, callback: NoParamCallback): undefined {
+export default function installExe(distPath: string, dest: string, options: InstallOptions, callback: NoParamCallback): void {
   const platform = options.platform;
   const downloadPath = `${NODE_DIST_BASE_URL}/${distPath}`;
   const cachePath = path.join(options.cachePath, `node-${distPath}.exe`);

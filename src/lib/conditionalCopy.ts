@@ -2,7 +2,7 @@ import fs from 'fs';
 import type { NoParamCallback } from '../types.ts';
 import copyFile from './copyFile.ts';
 
-export default function conditionalCopy(src: string, dest: string, optional: boolean, callback: NoParamCallback): undefined {
+export default function conditionalCopy(src: string, dest: string, optional: boolean, callback: NoParamCallback): void {
   if (typeof optional === 'function') {
     callback(new Error('conditionalCopy missing options'));
     return;

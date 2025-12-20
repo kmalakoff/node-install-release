@@ -10,7 +10,7 @@ interface ExtractOptions {
   time?: number;
 }
 
-export default function extract(src: string, dest: string, options: ExtractOptions | NoParamCallback, callback?: NoParamCallback): undefined {
+export default function extract(src: string, dest: string, options: ExtractOptions | NoParamCallback, callback?: NoParamCallback): void {
   if (typeof options === 'function') {
     callback = options;
     options = {};

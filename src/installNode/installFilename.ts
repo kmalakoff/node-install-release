@@ -6,7 +6,7 @@ import installCompressed from './installCompressed.ts';
 import installExe from './installExe.ts';
 import installSource from './installSource/index.ts';
 
-export default function installFilename(filename: string, version: string, dest: string, options: InstallOptions, callback: ChecksumCallback): undefined {
+export default function installFilename(filename: string, version: string, dest: string, options: InstallOptions, callback: ChecksumCallback): void {
   const distPath = fromFilename(filename, version);
   if (!distPath) {
     callback(new Error('Not found'));

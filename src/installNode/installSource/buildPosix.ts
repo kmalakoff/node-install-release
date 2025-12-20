@@ -5,7 +5,7 @@ import Queue from 'queue-cb';
 
 import type { InstallOptions, NoParamCallback } from '../../types.ts';
 
-export default function installPosix(buildPath: string, dest: string, _options: InstallOptions, callback: NoParamCallback): undefined {
+export default function installPosix(buildPath: string, dest: string, _options: InstallOptions, callback: NoParamCallback): void {
   const buildTarget = path.join(dest, 'node');
 
   fs.stat(buildTarget, (err) => {

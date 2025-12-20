@@ -21,20 +21,17 @@ import getTarget from '../lib/getTarget.ts';
 
 import type { InstallCallback, InstallOptions } from '../types.ts';
 
-type GetVersionsCallback = (error?: Error, results?: string[]) => undefined;
-function getVersions(versionExpression: string, options: InstallOptions, callback: GetVersionsCallback): undefined {
+type GetVersionsCallback = (error?: Error, results?: string[]) => void;
+function getVersions(versionExpression: string, options: InstallOptions, callback: GetVersionsCallback) {
   // short circuit
   isVersion(versionExpression) ? callback(null, [versionExpression]) : resolveVersions(versionExpression, options, callback);
 }
 
-export default function install(versionExpression: string, options: InstallOptions, callback: InstallCallback): undefined {
+export default function install(versionExpression: string, options: InstallOptions, callback: InstallCallback): void {
   const storagePaths = options.storagePath ? createStoragePaths(options.storagePath) : DEFAULT_STORAGE_PATHS;
   options = { ...storagePaths, ...options, ...getTarget(options) };
-  getVersions(versionExpression, options, (err?: Error, versions?: string[]): undefined => {
-    if (err) {
-      callback(err);
-      return;
-    }
+  getVersions(versionExpression, options, (err?: Error, versions?: string[]): void => {
+    if (err) return callback(err);
     if (!versions.length) {
       callback(new Error(`Could not resolve versions for: ${versionExpression}`));
       return;
@@ -49,10 +46,7 @@ export default function install(versionExpression: string, options: InstallOptio
 
     // Fast path: with atomic installs, folder exists = complete installation
     fs.stat(result.installPath, (err) => {
-      if (!err) {
-        callback(null, result);
-        return;
-      }
+      if (!err) return callback(null, result);
 
       // Folder doesn't exist - do atomic install with temp folder
       const tempPath = tempSuffix(result.installPath);
@@ -67,7 +61,7 @@ export default function install(versionExpression: string, options: InstallOptio
       // Check and install npm to temp folder
       // Skip npm download only if bundled npm is modern (>= 3)
       queue.defer((cb) => {
-        checkMissing(tempPath, options, (err, npmMissing): undefined => {
+        checkMissing(tempPath, options, (err, npmMissing): void => {
           if (err) {
             cb(err);
             return;

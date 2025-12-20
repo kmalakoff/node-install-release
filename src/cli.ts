@@ -34,7 +34,7 @@ function printHelp(name: string): void {
   console.log('  -h, --help           Show this help message');
 }
 
-export default (argv: string[], name?: string): undefined => {
+export default (argv: string[], name?: string): void => {
   const cliName = name || 'nir';
   const options = getopts(argv, {
     alias: { platform: 'p', arch: 'a', filename: 'f', installPath: 'i', storagePath: 'c', silent: 'si', version: 'v', help: 'h' },
