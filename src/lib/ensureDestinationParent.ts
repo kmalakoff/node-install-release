@@ -3,11 +3,8 @@ import path from 'path';
 
 import type { NoParamCallback } from '../types.ts';
 
-export default function ensureDestinationParent(dest: string, callback: NoParamCallback): undefined {
+export default function ensureDestinationParent(dest: string, callback: NoParamCallback): void {
   const parent = path.dirname(dest);
-  if (parent === '.' || parent === '/') {
-    callback();
-    return;
-  }
+  if (parent === '.' || parent === '/') return callback();
   mkdirp(parent, callback);
 }

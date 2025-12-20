@@ -3,7 +3,7 @@ import type { InstallOptions, NoParamCallback } from '../types.ts';
 import installBin from './installBin.ts';
 import installLib from './installLib.ts';
 
-export default function install(version: string, dest: string, options: InstallOptions, callback: NoParamCallback): undefined {
+export default function install(version: string, dest: string, options: InstallOptions, callback: NoParamCallback): void {
   let npmVersion: string | null = null;
   let checksum: string | undefined;
 
