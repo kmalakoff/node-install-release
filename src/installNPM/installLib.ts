@@ -15,7 +15,7 @@ interface DistRecord {
 
 import type { InstallOptions } from '../types.ts';
 
-export type Callback = (error?: Error, npmVersion?: string, checksum?: string) => undefined;
+export type Callback = (error?: Error, npmVersion?: string, checksum?: string) => void;
 
 function calculateChecksum(filePath: string, callback: (err?: Error, checksum?: string) => void): void {
   const hash = crypto.createHash('sha256');
@@ -27,7 +27,7 @@ function calculateChecksum(filePath: string, callback: (err?: Error, checksum?: 
   });
 }
 
-export default function installLib(version: string, dest: string, options: InstallOptions, callback: Callback): undefined {
+export default function installLib(version: string, dest: string, options: InstallOptions, callback: Callback): void {
   const platform = options.platform;
   const libPath = platform === 'win32' ? dest : path.join(dest, 'lib');
   const installPath = path.join(libPath, 'node_modules', 'npm');

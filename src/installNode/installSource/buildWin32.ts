@@ -6,7 +6,7 @@ import conditionalCopy from '../../lib/conditionalCopy.ts';
 
 import type { InstallOptions, NoParamCallback } from '../../types.ts';
 
-export default function installWin32(buildPath: string, dest: string, _options: InstallOptions, callback: NoParamCallback): undefined {
+export default function installWin32(buildPath: string, dest: string, _options: InstallOptions, callback: NoParamCallback): void {
   const buildSource = path.join(buildPath, 'out', 'Release', 'node.exe');
   const buildTarget = path.join(dest, 'node.exe');
 
