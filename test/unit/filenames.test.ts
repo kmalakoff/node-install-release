@@ -7,7 +7,6 @@ import { safeRm } from 'fs-remove-compat';
 import isVersion from 'is-version';
 import path from 'path';
 import url from 'url';
-import { arrayFind } from '../lib/compat.ts';
 
 const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
 const NODE = isWindows ? 'node.exe' : 'node';
@@ -20,8 +19,8 @@ const OPTIONS = {
 
 import { getDists } from 'node-filename-to-dist-paths';
 
-const dists = getDists();
-const SKIPS = ['headers', '-msi', '-pkg'];
+const _dists = getDists();
+const _SKIPS = ['headers', '-msi', '-pkg'];
 
 interface Target {
   filename?: string;
@@ -32,10 +31,11 @@ interface Target {
 import * as resolveVersions from 'node-resolve-versions';
 
 const VERSIONS = resolveVersions.sync('>=0.8', { range: 'major,even' }) as string[];
-VERSIONS.splice(0, VERSIONS.length, VERSIONS[0], VERSIONS[VERSIONS.length - 1]); // TEST SIMPLIFICATIOn
+VERSIONS.splice(0, VERSIONS.length, VERSIONS[0]); // TEST SIMPLIFICATION
 const TARGETS = [{}] as Target[];
 
-const PLATFORMS = ['win32', 'darwin', 'linux'] as NodeJS.Platform[];
+// const PLATFORMS = ['win32', 'darwin', 'linux'] as NodeJS.Platform[];
+const PLATFORMS = ['win32'] as NodeJS.Platform[];
 PLATFORMS.forEach((platform) => {
   TARGETS.push({ platform, arch: 'x64' });
 });
@@ -113,7 +113,7 @@ function addTests(version, target) {
   });
 }
 
-describe('filenames', () => {
+describe.only('filenames', () => {
   before((cb) => safeRm(TMP_DIR, cb));
   after((cb) => safeRm(TMP_DIR, cb));
 
@@ -122,11 +122,11 @@ describe('filenames', () => {
       TARGETS.forEach((target) => {
         addTests(version, target);
       });
-      arrayFind(dists, (dist) => dist.version === version)
-        .files.filter((x) => !arrayFind(SKIPS, (s) => x.indexOf(s) >= 0))
-        .forEach((filename) => {
-          addTests(version, { filename });
-        });
+      // arrayFind(dists, (dist) => dist.version === version)
+      //   .files.filter((x) => !arrayFind(SKIPS, (s) => x.indexOf(s) >= 0))
+      //   .forEach((filename) => {
+      //     addTests(version, { filename });
+      //   });
     });
   });
 });

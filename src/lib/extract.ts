@@ -11,13 +11,10 @@ interface ExtractOptions {
 }
 
 export default function extract(src: string, dest: string, options: ExtractOptions | NoParamCallback, callback?: NoParamCallback): void {
-  if (typeof options === 'function') {
-    callback = options;
-    options = {};
-  }
+  callback = typeof options === 'function' ? options : callback;
+  options = typeof options === 'function' ? {} : options;
 
   const extractOptions = { strip: 1, time: 1000, ...options };
-
   const queue = new Queue(1);
   queue.defer(mkdirp.bind(null, path.dirname(dest)));
   queue.defer(fastExtract.bind(null, src, dest, extractOptions));
