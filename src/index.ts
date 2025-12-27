@@ -9,11 +9,11 @@ export default function install(versionExpression: string, options: InstallOptio
 export default function install(versionExpression: string, callback: InstallCallback): void;
 export default function install(versionExpression: string, options: InstallOptions, callback: InstallCallback): void;
 
-export default function install(versionExpression: string, optionsOrCallback?: InstallOptions | InstallCallback, callback?: InstallCallback): void | Promise<InstallResult> {
-  const options = typeof optionsOrCallback === 'function' ? {} : ((optionsOrCallback || {}) as InstallOptions);
-  const cb = typeof optionsOrCallback === 'function' ? optionsOrCallback : callback;
+export default function install(versionExpression: string, options?: InstallOptions | InstallCallback, callback?: InstallCallback): void | Promise<InstallResult> {
+  callback = typeof options === 'function' ? options : callback;
+  options = typeof options === 'function' ? {} : ((options || {}) as InstallOptions);
 
-  if (typeof cb === 'function') return worker(versionExpression, options, cb);
+  if (typeof callback === 'function') return worker(versionExpression, options, callback);
   return new Promise((resolve, reject) => worker(versionExpression, options, (err, result) => (err ? reject(err) : resolve(result))));
 }
 export { default as createResult } from './createResult.ts';
