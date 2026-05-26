@@ -6,7 +6,7 @@ import { NODE_FILE_PATHS, NPM_PACKAGE_PATH } from '../constants.ts';
 
 import type { InstallOptions } from '../types.ts';
 
-export type Callback = (error?: Error, missing?: string[]) => void;
+export type Callback = (error?: Error | null, missing?: string[]) => void;
 
 export default function checkMissing(dest: string, options: InstallOptions, callback: Callback): void {
   const platform = options.platform;

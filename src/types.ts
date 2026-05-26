@@ -48,6 +48,6 @@ export type ChecksumResult = {
   match: boolean;
 };
 
-export type InstallCallback = (err?: Error, result?: InstallResult) => void;
-export type NoParamCallback = (err?: Error) => void;
-export type ChecksumCallback = (err?: Error, checksum?: ChecksumResult) => void;
+export type InstallCallback = (err?: Error | null, result?: InstallResult) => void;
+export type NoParamCallback = (err?: Error | null) => void;
+export type ChecksumCallback = (err?: Error | null, checksum?: ChecksumResult) => void;
