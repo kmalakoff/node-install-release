@@ -10,7 +10,7 @@ export default function conditionalCache(endpoint: string, dest: string, options
   fs.stat(dest, (err) => {
     if (!err) return callback?.(); // already exists
     ensureDestinationParent(dest, (err) => {
-      err ? callback?.(err) : getFile(endpoint, dest, (err: Error | null) => callback?.(err ?? undefined));
+      err ? callback?.(err) : getFile(endpoint, dest, (err: Error | null) => callback?.(err));
     });
   });
 }

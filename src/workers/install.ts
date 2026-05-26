@@ -21,17 +21,17 @@ import getTarget from '../lib/getTarget.ts';
 
 import type { InstallCallback, InstallOptions } from '../types.ts';
 
-type GetVersionsCallback = (error?: Error, results?: string[]) => void;
+type GetVersionsCallback = (error?: Error | null, results?: string[]) => void;
 function getVersions(versionExpression: string, options: InstallOptions, callback: GetVersionsCallback) {
   // short circuit
   if (isVersion(versionExpression)) callback(undefined, [versionExpression]);
-  else resolveVersions(versionExpression, options, (err?: Error, result?: string[] | unknown[]) => callback(err, result as string[] | undefined));
+  else resolveVersions(versionExpression, options, (err?: Error | null, result?: string[] | unknown[]) => callback(err, result as string[] | undefined));
 }
 
 export default function install(versionExpression: string, options: InstallOptions, callback: InstallCallback): void {
   const storagePaths = options.storagePath ? createStoragePaths(options.storagePath) : DEFAULT_STORAGE_PATHS;
   options = { ...storagePaths, ...options, ...getTarget(options) };
-  getVersions(versionExpression, options, (err?: Error, versions?: string[]): void => {
+  getVersions(versionExpression, options, (err?: Error | null, versions?: string[]): void => {
     if (err) return callback(err);
     if (!versions || !versions.length) {
       callback(new Error(`Could not resolve versions for: ${versionExpression}`));
@@ -53,7 +53,7 @@ export default function install(versionExpression: string, options: InstallOptio
       const tempPath = tempSuffix(result.installPath);
 
       const queue = new Queue(1);
-      queue.defer((cb) => mkdirp(options.cachePath!, (err) => cb(err ?? undefined)));
+      queue.defer((cb) => mkdirp(options.cachePath!, (err) => cb(err)));
       queue.defer(ensureDestinationParent.bind(null, tempPath));
 
       // Install node to temp folder

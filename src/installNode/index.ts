@@ -25,12 +25,12 @@ export default function install(version: string, dest: string, options: InstallO
     filenames = filenames?.filter((filename, i) => filenames?.indexOf(filename) === i);
   }
 
-  const tryNext = (cb: (err?: Error, checksum?: ChecksumResult) => void, lastErr?: Error) => {
+  const tryNext = (cb: (err?: Error | null, checksum?: ChecksumResult) => void, lastErr?: Error) => {
     if (filenames == null || filenames.length === 0) {
       const msg = `Failed to find installable for ${version}${options.filename ? ` Filename: ${options.filename}` : ''}`;
       return cb(new Error(lastErr ? `${msg}: ${lastErr.message}` : msg));
     }
-    const filename = filenames.shift()!;
+    const filename = filenames.shift() as string;
     installFilename(filename, version, dest, options, (err, checksum) => (err ? tryNext(cb, err) : cb(undefined, checksum)));
   };
   tryNext((err, checksum) => {

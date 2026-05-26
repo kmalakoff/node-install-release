@@ -10,15 +10,11 @@ import { NPM_DIST_TAGS_URL, NPM_DIST_URL, NPM_MIN_VERSION } from '../constants.t
 import conditionalCache from '../lib/conditionalCache.ts';
 import extract from '../lib/extract.ts';
 
-interface DistRecord {
-  latest: string;
-}
-
 import type { InstallOptions } from '../types.ts';
 
-export type Callback = (error?: Error, npmVersion?: string, checksum?: string) => void;
+export type Callback = (error?: Error | null, npmVersion?: string, checksum?: string) => void;
 
-function calculateChecksum(filePath: string, callback: (err?: Error, checksum?: string) => void): void {
+function calculateChecksum(filePath: string, callback: (err?: Error | null, checksum?: string) => void): void {
   const hash = crypto.createHash('sha256');
   const stream = fs.createReadStream(filePath);
   stream.on('data', (data) => hash.update(data));
