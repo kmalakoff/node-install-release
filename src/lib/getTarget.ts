@@ -10,7 +10,7 @@ export default function getTarget(options: InstallOptions): Target {
   let arch = options.arch;
   if (options.filename) {
     const filePlatform = options.filename.split('-')[0];
-    if (FILE_PLATFORMS.indexOf(filePlatform) >= 0) platform = FILE_PLATFORM_MAP[filePlatform] || filePlatform;
+    if (FILE_PLATFORMS.indexOf(filePlatform) >= 0) platform = ((FILE_PLATFORM_MAP as Record<string, string>)[filePlatform] || filePlatform) as NodeJS.Platform;
     arch = options.filename.split('-')[1] as NodeJS.Architecture;
   }
   if (!platform) platform = process.platform;

@@ -4,7 +4,7 @@ import installBin from './installBin.ts';
 import installLib from './installLib.ts';
 
 export default function install(version: string, dest: string, options: InstallOptions, callback: NoParamCallback): void {
-  let npmVersion: string | null = null;
+  let npmVersion: string | null | undefined = null;
   let checksum: string | undefined;
 
   const queue = new Queue(1);

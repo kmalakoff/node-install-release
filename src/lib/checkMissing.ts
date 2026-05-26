@@ -10,11 +10,11 @@ export type Callback = (error?: Error, missing?: string[]) => void;
 
 export default function checkMissing(dest: string, options: InstallOptions, callback: Callback): void {
   const platform = options.platform;
-  const nodePath = NODE_FILE_PATHS[platform] || NODE_FILE_PATHS.posix;
-  const npmPackagePath = NPM_PACKAGE_PATH[platform] || NPM_PACKAGE_PATH.posix;
+  const nodePath = (NODE_FILE_PATHS as Record<string, string>)[platform as string] || NODE_FILE_PATHS.posix;
+  const npmPackagePath = (NPM_PACKAGE_PATH as Record<string, string>)[platform as string] || NPM_PACKAGE_PATH.posix;
 
   const missing: string[] = [];
-  function check(filePath, key, cb) {
+  function check(filePath: string, key: string, cb: () => void) {
     fs.stat(path.join(dest, filePath), (err) => {
       if (err && missing.indexOf(key) < 0) missing.push(key);
       cb();
@@ -24,5 +24,5 @@ export default function checkMissing(dest: string, options: InstallOptions, call
   const queue = new Queue();
   queue.defer(check.bind(null, nodePath, 'node'));
   queue.defer(check.bind(null, npmPackagePath, 'npm'));
-  queue.await(() => callback(null, missing));
+  queue.await(() => callback(undefined, missing));
 }

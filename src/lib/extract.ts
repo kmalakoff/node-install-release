@@ -16,7 +16,7 @@ export default function extract(src: string, dest: string, options: ExtractOptio
 
   const extractOptions = { strip: 1, time: 1000, ...options };
   const queue = new Queue(1);
-  queue.defer(mkdirp.bind(null, path.dirname(dest)));
+  queue.defer((cb) => mkdirp(path.dirname(dest), (err) => cb(err ?? undefined)));
   queue.defer(fastExtract.bind(null, src, dest, extractOptions));
-  queue.await(callback);
+  queue.await(callback!);
 }

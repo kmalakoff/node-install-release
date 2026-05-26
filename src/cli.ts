@@ -63,7 +63,7 @@ export default (argv: string[], name?: string): void => {
     if (!options.silent) {
       console.log('\n======================');
       if (err) console.log(`${args[0]} not installed. Error: ${err.message}`);
-      else console.log(`${result.version} installed in: ${result.installPath}`);
+      else console.log(`${result?.version} installed in: ${result?.installPath}`);
       console.log('======================');
     }
     exit(err ? ERROR_CODE : 0);
