@@ -9,7 +9,7 @@ export default function safeCopyFile(src: string, dest: string, callback: NoPara
   const queue = new Queue(1);
 
   queue.defer(ensureDestinationParent.bind(null, dest));
-  queue.defer((cb) => safeRm(dest, (err) => cb(err ?? undefined)));
-  queue.defer((cb) => copyFile(src, dest, (err) => cb(err ?? undefined)));
+  queue.defer((cb) => safeRm(dest, (err) => cb(err)));
+  queue.defer((cb) => copyFile(src, dest, (err) => cb(err)));
   queue.await(callback);
 }

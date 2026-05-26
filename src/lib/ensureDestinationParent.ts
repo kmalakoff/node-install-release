@@ -6,5 +6,5 @@ import type { NoParamCallback } from '../types.ts';
 export default function ensureDestinationParent(dest: string, callback: NoParamCallback): void {
   const parent = path.dirname(dest);
   if (parent === '.' || parent === '/') return callback();
-  mkdirp(parent, (err) => callback(err ?? undefined));
+  mkdirp(parent, (err) => callback(err));
 }
