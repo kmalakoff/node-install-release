@@ -9,7 +9,7 @@ export default function conditionalCopy(src: string, dest: string, optional: boo
     if (!err) return callback(); // already exists
 
     fs.stat(src, (err) => {
-      err && optional ? callback() : copyFile(src, dest, callback); // optional file missing
+      err && optional ? callback() : copyFile(src, dest, (e) => callback(e ?? undefined)); // optional file missing
     });
   });
 }

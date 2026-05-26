@@ -24,7 +24,8 @@ import type { InstallCallback, InstallOptions } from '../types.ts';
 type GetVersionsCallback = (error?: Error, results?: string[]) => void;
 function getVersions(versionExpression: string, options: InstallOptions, callback: GetVersionsCallback) {
   // short circuit
-  isVersion(versionExpression) ? callback(null, [versionExpression]) : resolveVersions(versionExpression, options, callback);
+  if (isVersion(versionExpression)) callback(undefined, [versionExpression]);
+  else resolveVersions(versionExpression, options, (err?: Error, result?: string[] | unknown[]) => callback(err, result as string[] | undefined));
 }
 
 export default function install(versionExpression: string, options: InstallOptions, callback: InstallCallback): void {
@@ -32,7 +33,7 @@ export default function install(versionExpression: string, options: InstallOptio
   options = { ...storagePaths, ...options, ...getTarget(options) };
   getVersions(versionExpression, options, (err?: Error, versions?: string[]): void => {
     if (err) return callback(err);
-    if (!versions.length) {
+    if (!versions || !versions.length) {
       callback(new Error(`Could not resolve versions for: ${versionExpression}`));
       return;
     }
@@ -46,13 +47,13 @@ export default function install(versionExpression: string, options: InstallOptio
 
     // Fast path: with atomic installs, folder exists = complete installation
     fs.stat(result.installPath, (err) => {
-      if (!err) return callback(null, result);
+      if (!err) return callback(undefined, result);
 
       // Folder doesn't exist - do atomic install with temp folder
       const tempPath = tempSuffix(result.installPath);
 
       const queue = new Queue(1);
-      queue.defer(mkdirp.bind(null, options.cachePath));
+      queue.defer((cb) => mkdirp(options.cachePath!, (err) => cb(err ?? undefined)));
       queue.defer(ensureDestinationParent.bind(null, tempPath));
 
       // Install node to temp folder
@@ -62,11 +63,8 @@ export default function install(versionExpression: string, options: InstallOptio
       // Skip npm download only if bundled npm is modern (>= 3)
       queue.defer((cb) => {
         checkMissing(tempPath, options, (err, npmMissing): void => {
-          if (err) {
-            cb(err);
-            return;
-          }
-          if (!~npmMissing.indexOf('npm')) {
+          if (err) return cb(err);
+          if (!~(npmMissing || []).indexOf('npm')) {
             // npm is present (bundled with node) - check if it's modern enough to keep
             const dist = getDist(version);
             const bundledNpmMajor = dist && dist.npm ? +dist.npm.split('.')[0] : 0;
@@ -100,12 +98,10 @@ export default function install(versionExpression: string, options: InstallOptio
       });
 
       queue.await((err) => {
-        if (err) {
-          // Clean up temp folder on error
-          safeRm(tempPath, () => callback(err));
-          return;
-        }
-        callback(null, result);
+        // Clean up temp folder on error
+        if (err) return safeRm(tempPath, () => callback(err));
+
+        callback(undefined, result);
       });
     });
   });

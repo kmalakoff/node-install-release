@@ -12,8 +12,8 @@ export default function installPosix(buildPath: string, dest: string, _options: 
     if (!err) return callback(); // already exists
 
     const queue = new Queue(1);
-    queue.defer(spawn.bind(null, './configure', [`--prefix=${dest}`], { stdio: 'inherit', cwd: buildPath }));
-    queue.defer(spawn.bind(null, 'make', ['install'], { stdio: 'inherit', cwd: buildPath }, callback));
+    queue.defer((cb) => spawn('./configure', [`--prefix=${dest}`], { stdio: 'inherit', cwd: buildPath }, (err) => cb(err)));
+    queue.defer((cb) => spawn('make', ['install'], { stdio: 'inherit', cwd: buildPath }, (err) => cb(err)));
     queue.await(callback);
   });
 }
