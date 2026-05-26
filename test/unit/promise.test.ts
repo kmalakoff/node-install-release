@@ -9,7 +9,7 @@ import path from 'path';
 import Pinkie from 'pinkie-promise';
 import url from 'url';
 
-const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
+const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE ?? '');
 const NODE = isWindows ? 'node.exe' : 'node';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
@@ -30,7 +30,7 @@ import install from 'node-install-release';
 import { spawnOptions } from 'node-version-utils';
 import validate from '../lib/validate.ts';
 
-function addTests(version) {
+function addTests(version: string) {
   describe(version, () => {
     (() => {
       // patch and restore promise
@@ -44,18 +44,19 @@ function addTests(version) {
       });
     })();
 
-    let installPath = null;
+    let installPath: string | null = null;
     it('install', async () => {
       const res = await install(version, { name: version, ...OPTIONS });
       if (res) installPath = res.installPath;
       if (res) version = res.version;
-      validate(installPath, OPTIONS);
+      validate(installPath!, OPTIONS);
     });
 
     it('npm --version', (done) => {
-      spawn('npm', ['--version'], spawnOptions(installPath, { encoding: 'utf8' }), (err, res) => {
-        if (err) {
-          done(err);
+      spawn('npm', ['--version'], spawnOptions(installPath!, { encoding: 'utf8' }), (err, res) => {
+        if (err) return done(err);
+        if (!res) {
+          done(new Error('No response'));
           return;
         }
         const lines = cr(res.stdout).split('\n');
@@ -66,9 +67,10 @@ function addTests(version) {
     });
 
     it('node --version', (done) => {
-      spawn(NODE, ['--version'], spawnOptions(installPath, { encoding: 'utf8' }), (err, res) => {
-        if (err) {
-          done(err);
+      spawn(NODE, ['--version'], spawnOptions(installPath!, { encoding: 'utf8' }), (err, res) => {
+        if (err) return done(err);
+        if (!res) {
+          done(new Error('No response'));
           return;
         }
         const lines = cr(res.stdout).split('\n');

@@ -9,7 +9,7 @@ import isVersion from 'is-version';
 import path from 'path';
 import url from 'url';
 
-const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
+const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE ?? '');
 const NODE = isWindows ? 'node.exe' : 'node';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
@@ -33,31 +33,29 @@ import validate from '../lib/validate.ts';
 const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.js');
 const PACKAGE_JSON = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'package.json'), 'utf8'));
 
-function addTests(version) {
-  let installPath = null;
+function addTests(version: string) {
+  let installPath: string | null = null;
 
   describe(version, () => {
     it('install', (done) => {
       installPath = path.join(OPTIONS.storagePath, 'installed', version);
       const args = [version, '--installPath', installPath, '--silent'];
       keys(OPTIONS).forEach((key) => {
-        Array.prototype.push.apply(args, [`--${key}`, OPTIONS[key]]);
+        Array.prototype.push.apply(args, [`--${key}`, (OPTIONS as Record<string, unknown>)[key] as string]);
       });
 
       spawn(CLI, args, { stdio: 'inherit' }, (err) => {
-        if (err) {
-          done(err);
-          return;
-        }
-        validate(installPath, OPTIONS);
+        if (err) return done(err);
+        validate(installPath!, OPTIONS);
         done();
       });
     });
 
     it('npm --version', (done) => {
-      spawn('npm', ['--version'], spawnOptions(installPath, { encoding: 'utf8' }), (err, res) => {
-        if (err) {
-          done(err);
+      spawn('npm', ['--version'], spawnOptions(installPath!, { encoding: 'utf8' }), (err, res) => {
+        if (err) return done(err);
+        if (!res) {
+          done(new Error('No response'));
           return;
         }
         const lines = cr(res.stdout).split('\n');
@@ -68,9 +66,10 @@ function addTests(version) {
     });
 
     it('node --version', (done) => {
-      spawn(NODE, ['--version'], spawnOptions(installPath, { encoding: 'utf8' }), (err, res) => {
-        if (err) {
-          done(err);
+      spawn(NODE, ['--version'], spawnOptions(installPath!, { encoding: 'utf8' }), (err, res) => {
+        if (err) return done(err);
+        if (!res) {
+          done(new Error('No response'));
           return;
         }
         const lines = cr(res.stdout).split('\n');
@@ -89,6 +88,7 @@ describe('cli', () => {
     it('outputs version with --version', (done) => {
       spawn(CLI, ['--version'], { encoding: 'utf8' }, (err, res) => {
         if (err) return done(err);
+        if (!res) return done(new Error('No response'));
         const output = cr(res.stdout).trim();
         assert.equal(output, PACKAGE_JSON.version);
         done();
@@ -98,6 +98,7 @@ describe('cli', () => {
     it('outputs version with -v', (done) => {
       spawn(CLI, ['-v'], { encoding: 'utf8' }, (err, res) => {
         if (err) return done(err);
+        if (!res) return done(new Error('No response'));
         const output = cr(res.stdout).trim();
         assert.equal(output, PACKAGE_JSON.version);
         done();
@@ -109,6 +110,7 @@ describe('cli', () => {
     it('outputs help with --help', (done) => {
       spawn(CLI, ['--help'], { encoding: 'utf8' }, (err, res) => {
         if (err) return done(err);
+        if (!res) return done(new Error('No response'));
         const output = cr(res.stdout);
         assert.ok(output.indexOf('Usage:') >= 0, 'Help output should contain Usage:');
         assert.ok(output.indexOf('--version') >= 0, 'Help output should contain --version');
@@ -121,6 +123,7 @@ describe('cli', () => {
     it('outputs help with -h', (done) => {
       spawn(CLI, ['-h'], { encoding: 'utf8' }, (err, res) => {
         if (err) return done(err);
+        if (!res) return done(new Error('No response'));
         const output = cr(res.stdout);
         assert.ok(output.indexOf('Usage:') >= 0, 'Help output should contain Usage:');
         done();

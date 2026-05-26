@@ -10,7 +10,7 @@ export const FILES = files;
 export const DEFAULT_STORAGE_PATH = path.join(homedir(), '.nir') as string;
 export const DEFAULT_STORAGE_PATHS = createStoragePaths(DEFAULT_STORAGE_PATH);
 
-export const FILE_PLATFORMS = keys(FILES).filter((file) => ['src', 'headers'].indexOf(file) < 0) as string[];
+export const FILE_PLATFORMS = keys(FILES).filter((file: string) => ['src', 'headers'].indexOf(file) < 0) as string[];
 
 export const FILE_PLATFORM_MAP = {
   win: 'win32',

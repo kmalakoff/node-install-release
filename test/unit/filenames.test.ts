@@ -8,7 +8,7 @@ import isVersion from 'is-version';
 import path from 'path';
 import url from 'url';
 
-const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
+const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE ?? '');
 const NODE = isWindows ? 'node.exe' : 'node';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
@@ -43,7 +43,7 @@ PLATFORMS.forEach((platform) => {
 import values from 'lodash.values';
 
 // TARGETS.splice(0, TARGETS.length, { filename: 'osx-x64-tar'})
-const FILE_PLATFORM_MAP = {
+const FILE_PLATFORM_MAP: Record<string, string> = {
   win: 'win32',
   osx: 'darwin',
 };
@@ -53,19 +53,19 @@ import install from 'node-install-release';
 import { spawnOptions } from 'node-version-utils';
 import validate from '../lib/validate.ts';
 
-function addTests(version, target) {
-  const specifier = values(target).join('-') || 'local';
+function addTests(version: string, target: Target) {
+  const specifier = (values(target) as string[]).join('-') || 'local';
   let { filename, platform, arch } = target;
   if (filename) {
     const filePlatform = filename.split('-')[0];
-    platform = ['headers', 'src'].indexOf(filePlatform) >= 0 ? process.platform : FILE_PLATFORM_MAP[filePlatform] || filePlatform;
-    arch = filename.split('-')[1];
+    platform = (['headers', 'src'].indexOf(filePlatform) >= 0 ? process.platform : FILE_PLATFORM_MAP[filePlatform] || filePlatform) as NodeJS.Platform;
+    arch = filename.split('-')[1] as NodeJS.Architecture;
   }
   if (!platform) platform = process.platform;
-  if (!arch) arch = process.arch;
+  if (!arch) arch = process.arch as NodeJS.Architecture;
 
   describe(`${version}-${specifier}`, () => {
-    let installPath = null;
+    let installPath: string | null = null;
     it('install', (done) => {
       if (specifier === 'src') {
         console.log('Skipping src');
@@ -76,7 +76,7 @@ function addTests(version, target) {
         if (err) return err.message.indexOf('Failed to find installable') >= 0 ? done() : done(err);
         if (res) installPath = res.installPath;
         if (res) version = res.version;
-        validate(installPath, target);
+        validate(installPath!, target);
         done();
       });
     });
@@ -87,8 +87,9 @@ function addTests(version, target) {
     it('npm --version', (done) => {
       if (!installPath) return done(); // failed to install
       spawn('npm', ['--version'], spawnOptions(installPath, { encoding: 'utf8' }), (err, res) => {
-        if (err) {
-          done(err);
+        if (err) return done(err);
+        if (!res) {
+          done(new Error('No response'));
           return;
         }
         const lines = cr(res.stdout).split('\n');
@@ -101,8 +102,9 @@ function addTests(version, target) {
     it('node --version', (done) => {
       if (!installPath) return done(); // failed to install
       spawn(NODE, ['--version'], spawnOptions(installPath, { encoding: 'utf8' }), (err, res) => {
-        if (err) {
-          done(err);
+        if (err) return done(err);
+        if (!res) {
+          done(new Error('No response'));
           return;
         }
         const lines = cr(res.stdout).split('\n');
@@ -122,11 +124,6 @@ describe.only('filenames', () => {
       TARGETS.forEach((target) => {
         addTests(version, target);
       });
-      // arrayFind(dists, (dist) => dist.version === version)
-      //   .files.filter((x) => !arrayFind(SKIPS, (s) => x.indexOf(s) >= 0))
-      //   .forEach((filename) => {
-      //     addTests(version, { filename });
-      //   });
     });
   });
 });

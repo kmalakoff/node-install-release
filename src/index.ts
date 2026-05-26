@@ -14,7 +14,13 @@ export default function install(versionExpression: string, options?: InstallOpti
   options = typeof options === 'function' ? {} : ((options || {}) as InstallOptions);
 
   if (typeof callback === 'function') return worker(versionExpression, options, callback);
-  return new Promise((resolve, reject) => worker(versionExpression, options, (err, result) => (err ? reject(err) : resolve(result))));
+  return new Promise((resolve, reject) =>
+    worker(versionExpression, options, (err, result) => {
+      if (err) return reject(err);
+      if (result === undefined) return reject(new Error('Result is undefined'));
+      resolve(result);
+    })
+  );
 }
 export { default as createResult } from './createResult.ts';
 export { default as createStoragePaths } from './createStoragePaths.ts';

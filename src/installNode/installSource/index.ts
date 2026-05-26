@@ -16,14 +16,14 @@ export default function InstallSource(distPath: string, dest: string, options: I
   const build = platform === 'win32' ? buildWin32 : buildPosix;
   const downloadPath = `${NODE_DIST_BASE_URL}/${distPath}`;
   // Use temp build path to avoid race conditions with parallel builds
-  const tempBuildPath = tempSuffix(path.join(options.buildPath, path.basename(distPath)));
-  const cachePath = path.join(options.cachePath, path.basename(downloadPath));
+  const tempBuildPath = tempSuffix(path.join(options.buildPath!, path.basename(distPath)));
+  const cachePath = path.join(options.cachePath!, path.basename(downloadPath));
 
   const queue = new Queue(1);
-  queue.defer(conditionalCache.bind(null, downloadPath, cachePath));
-  queue.defer(validateDownload.bind(null, distPath, cachePath));
-  queue.defer(extract.bind(null, cachePath, tempBuildPath));
-  queue.defer(build.bind(null, tempBuildPath, dest, options));
+  queue.defer((cb) => conditionalCache(downloadPath, cachePath, options, (err) => cb(err)));
+  queue.defer((cb) => validateDownload(distPath, cachePath, (err) => cb(err)));
+  queue.defer((cb) => extract(cachePath, tempBuildPath, (err) => cb(err)));
+  queue.defer((cb) => build(tempBuildPath, dest, options, (err) => cb(err)));
   queue.await((err) => {
     // Always clean up temp build directory
     safeRm(tempBuildPath, () => callback(err));

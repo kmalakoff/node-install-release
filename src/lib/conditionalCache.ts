@@ -8,9 +8,9 @@ export default function conditionalCache(endpoint: string, dest: string, options
   options = typeof options === 'function' ? {} : ((options || {}) as InstallOptions);
 
   fs.stat(dest, (err) => {
-    if (!err) return callback(); // already exists
+    if (!err) return callback?.(); // already exists
     ensureDestinationParent(dest, (err) => {
-      err ? callback(err) : getFile(endpoint, dest, callback);
+      err ? callback?.(err) : getFile(endpoint, dest, (err: Error | null) => callback?.(err ?? undefined));
     });
   });
 }

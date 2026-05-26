@@ -11,18 +11,18 @@ export default function validateDownload(distPath: string, installPath: string, 
   const downloadPath = `${NODE_DIST_BASE_URL}/${version}/SHASUMS256.txt`;
   getContent(downloadPath, 'utf8', (err, res) => {
     if (err) return callback(err);
-    const text = res.content;
+    const text = res?.content ?? '';
     const filename = distPath.split('/').slice(1).join('/');
-    const expected = text.split(filename)[0].split('\n').pop().trim();
+    const expected = (text.split(filename)[0].split('\n').pop() ?? '').trim();
     const hash = crypto.createHash('sha256');
     const stream = fs.createReadStream(installPath);
     stream.on('data', (data) => hash.update(data));
-    oo(stream, ['error', 'end', 'close', 'finish'], (err?: Error) => {
+    oo(stream, ['error', 'end', 'close', 'finish'], (err: Error | null) => {
       if (err) return callback(err);
       const actual = hash.digest('hex');
       const match = actual === expected;
       const checksum: ChecksumResult = { actual, expected, match };
-      match ? callback(null, checksum) : callback(new Error(`${filename} checksum failed`), checksum);
+      match ? callback(undefined, checksum) : callback(new Error(`${filename} checksum failed`), checksum);
     });
   });
 }
