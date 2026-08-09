@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import fs from 'fs';
 import { getContent } from 'get-file-compat';
-import { getDist } from 'node-filename-to-dist-paths';
+import { getDistAsync } from 'node-filename-to-dist-paths';
 import oo from 'on-one';
 import path from 'path';
 import Queue from 'queue-cb';
@@ -29,33 +29,34 @@ export default function installLib(version: string, dest: string, options: Insta
   const libPath = platform === 'win32' ? dest : path.join(dest, 'lib');
   const installPath = path.join(libPath, 'node_modules', 'npm');
 
-  const dist = getDist(version);
-  const npmMajorPair = dist && dist.npm ? +dist.npm.split('.')[0] : NPM_MIN_VERSION;
-  const npmMajor = Math.max(npmMajorPair, NPM_MIN_VERSION);
+  getDistAsync(version, (_err, dist) => {
+    // pin the npm major only when the dist index knows this version; unknown means use latest
+    const npmMajor = dist && dist.npm ? Math.max(+dist.npm.split('.')[0], NPM_MIN_VERSION) : null;
 
-  getContent(NPM_DIST_TAGS_URL, 'utf8', (err, res) => {
-    if (err) return callback(err);
-    try {
-      const distTags = JSON.parse(res?.content ?? '{}') as Record<string, string>;
-      const npmVersion = distTags[`latest-${npmMajor}`] || distTags[`next-${npmMajor}`] || distTags.latest;
-      const downloadPath = `${NPM_DIST_URL}/-/npm-${npmVersion}.tgz`;
-      const cachePath = path.join(options.cachePath ?? tmpdir(), path.basename(downloadPath));
+    getContent(NPM_DIST_TAGS_URL, 'utf8', (err, res) => {
+      if (err) return callback(err);
+      try {
+        const distTags = JSON.parse(res?.content ?? '{}') as Record<string, string>;
+        const npmVersion = npmMajor === null ? distTags.latest : distTags[`latest-${npmMajor}`] || distTags[`next-${npmMajor}`] || distTags.latest;
+        const downloadPath = `${NPM_DIST_URL}/-/npm-${npmVersion}.tgz`;
+        const cachePath = path.join(options.cachePath ?? tmpdir(), path.basename(downloadPath));
 
-      let checksum: string | undefined;
-      const queue = new Queue(1);
-      queue.defer((cb) => conditionalCache(downloadPath, cachePath, options, (err) => cb(err)));
-      queue.defer((cb) => {
-        calculateChecksum(cachePath, (err, hash) => {
-          checksum = hash;
-          cb(err);
+        let checksum: string | undefined;
+        const queue = new Queue(1);
+        queue.defer((cb) => conditionalCache(downloadPath, cachePath, options, (err) => cb(err)));
+        queue.defer((cb) => {
+          calculateChecksum(cachePath, (err, hash) => {
+            checksum = hash;
+            cb(err);
+          });
         });
-      });
-      queue.defer((cb) => extract(cachePath, installPath, (err) => cb(err)));
-      queue.await((err) => {
-        err ? callback(err) : callback(undefined, npmVersion, checksum);
-      });
-    } catch (_e) {
-      return callback(new Error('Failed to parse npm dist-tags'));
-    }
+        queue.defer((cb) => extract(cachePath, installPath, (err) => cb(err)));
+        queue.await((err) => {
+          err ? callback(err) : callback(undefined, npmVersion, checksum);
+        });
+      } catch (_e) {
+        return callback(new Error('Failed to parse npm dist-tags'));
+      }
+    });
   });
 }
