@@ -2,7 +2,7 @@ import fs from 'fs';
 import { safeRm } from 'fs-remove-compat';
 import isVersion from 'is-version';
 import mkdirp from 'mkdirp-classic';
-import { getDist } from 'node-filename-to-dist-paths';
+import { getDistAsync } from 'node-filename-to-dist-paths';
 import resolveVersions from 'node-resolve-versions';
 import path from 'path';
 import Queue from 'queue-cb';
@@ -64,22 +64,20 @@ export default function install(versionExpression: string, options: InstallOptio
       queue.defer((cb) => {
         checkMissing(tempPath, options, (err, npmMissing): void => {
           if (err) return cb(err);
-          if (!~(npmMissing || []).indexOf('npm')) {
-            // npm is present (bundled with node) - check if it's modern enough to keep
-            const dist = getDist(version);
-            const bundledNpmMajor = dist && dist.npm ? +dist.npm.split('.')[0] : 0;
-            if (bundledNpmMajor >= 3) {
-              cb(); // npm >= 3 bundled, skip download
-              return;
-            }
+          // npm not bundled with node - download it
+          if (~(npmMissing || []).indexOf('npm')) return installNPM(version, tempPath, options, cb);
+
+          // npm is present (bundled with node) - keep it unless the dist index positively says it is ancient (<3)
+          getDistAsync(version, (_err, dist) => {
+            const bundledNpmIsAncient = dist && dist.npm && +dist.npm.split('.')[0] < 3;
+            if (!bundledNpmIsAncient) return cb(); // unknown version keeps the bundled npm
+
             // old npm (<3) is buggy - delete it so installNPM can override
             const platform = options.platform;
             const libPath = platform === 'win32' ? tempPath : path.join(tempPath, 'lib');
             const npmPath = path.join(libPath, 'node_modules', 'npm');
             safeRm(npmPath, () => installNPM(version, tempPath, options, cb));
-            return;
-          }
-          installNPM(version, tempPath, options, cb);
+          });
         });
       });
 
