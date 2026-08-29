@@ -1,2 +1,2 @@
-ignores: ["node-version-use", "ts-dev-stack", "node-install-release"]
+ignores: ["node-version-use", "ts-dev-stack", "node-install-release", "fast-extract", "get-file-compat", "node-filename-to-dist-paths", "fs-copy-compat", "node-resolve-versions"]
 ignoreDirs: [".tmp"]

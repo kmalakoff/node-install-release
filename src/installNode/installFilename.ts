@@ -1,4 +1,4 @@
-import fromFilename from 'node-filename-to-dist-paths';
+import Module from 'module';
 import path from 'path';
 import { EXTENSIONS_COMPRESSED } from '../constants.ts';
 import type { ChecksumCallback, InstallOptions } from '../types.ts';
@@ -6,7 +6,12 @@ import installCompressed from './installCompressed.ts';
 import installExe from './installExe.ts';
 import installSource from './installSource/index.ts';
 
+const _require = typeof require === 'undefined' ? Module.createRequire(import.meta.url) : require;
+
 export default function installFilename(filename: string, version: string, dest: string, options: InstallOptions, callback: ChecksumCallback): void {
+  // deferred: node-filename-to-dist-paths pulls fetch-json-cache, only needed to actually resolve an install
+  const fromFilenameModule = _require('node-filename-to-dist-paths');
+  const fromFilename = fromFilenameModule.default || fromFilenameModule;
   const distPath = fromFilename(filename, version);
   if (!distPath) {
     callback(new Error('Not found'));

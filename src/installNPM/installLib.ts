@@ -1,7 +1,6 @@
 import crypto from 'crypto';
 import fs from 'fs';
-import { getContent } from 'get-file-compat';
-import { getDistAsync } from 'node-filename-to-dist-paths';
+import Module from 'module';
 import oo from 'on-one';
 import path from 'path';
 import Queue from 'queue-cb';
@@ -11,6 +10,8 @@ import conditionalCache from '../lib/conditionalCache.ts';
 import extract from '../lib/extract.ts';
 
 import type { InstallOptions } from '../types.ts';
+
+const _require = typeof require === 'undefined' ? Module.createRequire(import.meta.url) : require;
 
 export type Callback = (error?: Error | null, npmVersion?: string, checksum?: string) => void;
 
@@ -29,11 +30,14 @@ export default function installLib(version: string, dest: string, options: Insta
   const libPath = platform === 'win32' ? dest : path.join(dest, 'lib');
   const installPath = path.join(libPath, 'node_modules', 'npm');
 
-  getDistAsync(version, (_err, dist) => {
+  // deferred: both pull fetch-json-cache / get-file-compat, only needed to actually install npm
+  const { getDistAsync } = _require('node-filename-to-dist-paths');
+  const { getContent } = _require('get-file-compat');
+  getDistAsync(version, (_err: Error | null, dist: { npm?: string }) => {
     // pin the npm major only when the dist index knows this version; unknown means use latest
     const npmMajor = dist && dist.npm ? Math.max(+dist.npm.split('.')[0], NPM_MIN_VERSION) : null;
 
-    getContent(NPM_DIST_TAGS_URL, 'utf8', (err, res) => {
+    getContent(NPM_DIST_TAGS_URL, 'utf8', (err: Error | null, res: { content?: string }) => {
       if (err) return callback(err);
       try {
         const distTags = JSON.parse(res?.content ?? '{}') as Record<string, string>;

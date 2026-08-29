@@ -2,8 +2,7 @@ import fs from 'fs';
 import { safeRm } from 'fs-remove-compat';
 import isVersion from 'is-version';
 import mkdirp from 'mkdirp-classic';
-import { getDistAsync } from 'node-filename-to-dist-paths';
-import resolveVersions from 'node-resolve-versions';
+import Module from 'module';
 import path from 'path';
 import Queue from 'queue-cb';
 import tempSuffix from 'temp-suffix';
@@ -21,11 +20,16 @@ import getTarget from '../lib/getTarget.ts';
 
 import type { InstallCallback, InstallOptions } from '../types.ts';
 
+const _require = typeof require === 'undefined' ? Module.createRequire(import.meta.url) : require;
+
 type GetVersionsCallback = (error?: Error | null, results?: string[]) => void;
 function getVersions(versionExpression: string, options: InstallOptions, callback: GetVersionsCallback) {
   // short circuit
-  if (isVersion(versionExpression)) callback(undefined, [versionExpression]);
-  else resolveVersions(versionExpression, options, (err?: Error | null, result?: string[] | unknown[]) => callback(err, result as string[] | undefined));
+  if (isVersion(versionExpression)) return callback(undefined, [versionExpression]);
+  // deferred: node-resolve-versions pulls node-semvers/fetch-json-cache, only needed for a non-literal version expression
+  const resolveVersionsModule = _require('node-resolve-versions');
+  const resolveVersions = resolveVersionsModule.default || resolveVersionsModule;
+  resolveVersions(versionExpression, options, (err?: Error | null, result?: string[] | unknown[]) => callback(err, result as string[] | undefined));
 }
 
 export default function install(versionExpression: string, options: InstallOptions, callback: InstallCallback): void {
@@ -68,7 +72,9 @@ export default function install(versionExpression: string, options: InstallOptio
           if (~(npmMissing || []).indexOf('npm')) return installNPM(version, tempPath, options, cb);
 
           // npm is present (bundled with node) - keep it unless the dist index positively says it is ancient (<3)
-          getDistAsync(version, (_err, dist) => {
+          // deferred: node-filename-to-dist-paths pulls fetch-json-cache, only needed to check a bundled npm's age
+          const { getDistAsync } = _require('node-filename-to-dist-paths');
+          getDistAsync(version, (_err: Error | null, dist: { npm?: string }) => {
             const bundledNpmIsAncient = dist && dist.npm && +dist.npm.split('.')[0] < 3;
             if (!bundledNpmIsAncient) return cb(); // unknown version keeps the bundled npm
 
