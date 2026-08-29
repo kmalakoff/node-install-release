@@ -49,11 +49,13 @@ function addTests(version: string) {
       const res = await install(version, { name: version, ...OPTIONS });
       if (res) installPath = res.installPath;
       if (res) version = res.version;
-      validate(installPath!, OPTIONS);
+      assert.ok(installPath, 'install spec must run first');
+      validate(installPath, OPTIONS);
     });
 
     it('npm --version', (done) => {
-      spawn('npm', ['--version'], spawnOptions(installPath!, { encoding: 'utf8' }), (err, res) => {
+      assert.ok(installPath, 'install spec must run first');
+      spawn('npm', ['--version'], spawnOptions(installPath, { encoding: 'utf8' }), (err, res) => {
         if (err) return done(err);
         if (!res) {
           done(new Error('No response'));
@@ -67,7 +69,8 @@ function addTests(version: string) {
     });
 
     it('node --version', (done) => {
-      spawn(NODE, ['--version'], spawnOptions(installPath!, { encoding: 'utf8' }), (err, res) => {
+      assert.ok(installPath, 'install spec must run first');
+      spawn(NODE, ['--version'], spawnOptions(installPath, { encoding: 'utf8' }), (err, res) => {
         if (err) return done(err);
         if (!res) {
           done(new Error('No response'));

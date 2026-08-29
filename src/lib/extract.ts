@@ -13,15 +13,13 @@ interface ExtractOptions {
 }
 
 export default function extract(src: string, dest: string, options: ExtractOptions | NoParamCallback, callback?: NoParamCallback): void {
-  callback = typeof options === 'function' ? options : callback;
-  options = typeof options === 'function' ? {} : options;
-
-  const extractOptions = { strip: 1, time: 1000, ...options };
+  const done = (typeof options === 'function' ? options : callback) as NoParamCallback;
+  const extractOptions = { strip: 1, time: 1000, ...(typeof options === 'function' ? {} : options) };
   // deferred: fast-extract pulls tar/zip/7z/xz/bzip2 decompressors, only needed when an archive is actually extracted
   const fastExtractModule = _require('fast-extract');
   const fastExtract = fastExtractModule.default || fastExtractModule;
   const queue = new Queue(1);
   queue.defer((cb) => mkdirp(path.dirname(dest), (err) => cb(err)));
   queue.defer(fastExtract.bind(null, src, dest, extractOptions));
-  queue.await(callback!);
+  queue.await(done);
 }
