@@ -1,8 +1,8 @@
 import { FILE_PLATFORM_MAP, FILES } from '../constants.ts';
-import type { ChecksumResult, InstallOptions, NoParamCallback } from '../types.ts';
+import type { ChecksumResult, NoParamCallback, ResolvedInstallOptions } from '../types.ts';
 import installFilename from './installFilename.ts';
 
-export default function install(version: string, dest: string, options: InstallOptions, callback: NoParamCallback): void {
+export default function install(version: string, dest: string, options: ResolvedInstallOptions, callback: NoParamCallback): void {
   let filenames: string[] | null = null;
 
   // a specific filename

@@ -18,7 +18,7 @@ import checkMissing from '../lib/checkMissing.ts';
 import ensureDestinationParent from '../lib/ensureDestinationParent.ts';
 import getTarget from '../lib/getTarget.ts';
 
-import type { InstallCallback, InstallOptions } from '../types.ts';
+import type { InstallCallback, InstallOptions, ResolvedInstallOptions } from '../types.ts';
 
 const _require = typeof require === 'undefined' ? Module.createRequire(import.meta.url) : require;
 
@@ -34,8 +34,15 @@ function getVersions(versionExpression: string, options: InstallOptions, callbac
 
 export default function install(versionExpression: string, options: InstallOptions, callback: InstallCallback): void {
   const storagePaths = options.storagePath ? createStoragePaths(options.storagePath) : DEFAULT_STORAGE_PATHS;
-  options = { ...storagePaths, ...options, ...getTarget(options) };
-  getVersions(versionExpression, options, (err?: Error | null, versions?: string[]): void => {
+  // ?? not spread order: an explicitly-undefined path in the caller's options would overwrite the default
+  const resolved: ResolvedInstallOptions = {
+    ...options,
+    ...getTarget(options),
+    cachePath: options.cachePath ?? storagePaths.cachePath,
+    buildPath: options.buildPath ?? storagePaths.buildPath,
+    installPath: options.installPath ?? storagePaths.installPath,
+  };
+  getVersions(versionExpression, resolved, (err?: Error | null, versions?: string[]): void => {
     if (err) return callback(err);
     if (!versions || !versions.length) {
       callback(new Error(`Could not resolve versions for: ${versionExpression}`));
@@ -47,7 +54,7 @@ export default function install(versionExpression: string, options: InstallOptio
     }
 
     const version = versions[0];
-    const result = createResult(options, version);
+    const result = createResult(resolved, version);
 
     // Fast path: with atomic installs, folder exists = complete installation
     fs.stat(result.installPath, (err) => {
@@ -57,19 +64,19 @@ export default function install(versionExpression: string, options: InstallOptio
       const tempPath = tempSuffix(result.installPath);
 
       const queue = new Queue(1);
-      queue.defer((cb) => mkdirp(options.cachePath!, (err) => cb(err)));
+      queue.defer((cb) => mkdirp(resolved.cachePath, (err) => cb(err)));
       queue.defer(ensureDestinationParent.bind(null, tempPath));
 
       // Install node to temp folder
-      queue.defer(installNode.bind(null, version, tempPath, options));
+      queue.defer(installNode.bind(null, version, tempPath, resolved));
 
       // Check and install npm to temp folder
       // Skip npm download only if bundled npm is modern (>= 3)
       queue.defer((cb) => {
-        checkMissing(tempPath, options, (err, npmMissing): void => {
+        checkMissing(tempPath, resolved, (err, npmMissing): void => {
           if (err) return cb(err);
           // npm not bundled with node - download it
-          if (~(npmMissing || []).indexOf('npm')) return installNPM(version, tempPath, options, cb);
+          if (~(npmMissing || []).indexOf('npm')) return installNPM(version, tempPath, resolved, cb);
 
           // npm is present (bundled with node) - keep it unless the dist index positively says it is ancient (<3)
           // deferred: node-filename-to-dist-paths pulls fetch-json-cache, only needed to check a bundled npm's age
@@ -82,7 +89,7 @@ export default function install(versionExpression: string, options: InstallOptio
             const platform = options.platform;
             const libPath = platform === 'win32' ? tempPath : path.join(tempPath, 'lib');
             const npmPath = path.join(libPath, 'node_modules', 'npm');
-            safeRm(npmPath, () => installNPM(version, tempPath, options, cb));
+            safeRm(npmPath, () => installNPM(version, tempPath, resolved, cb));
           });
         });
       });

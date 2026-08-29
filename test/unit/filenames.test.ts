@@ -76,7 +76,8 @@ function addTests(version: string, target: Target) {
         if (err) return err.message.indexOf('Failed to find installable') >= 0 ? done() : done(err);
         if (res) installPath = res.installPath;
         if (res) version = res.version;
-        validate(installPath!, target);
+        assert.ok(installPath, 'install spec must run first');
+        validate(installPath, target);
         done();
       });
     });

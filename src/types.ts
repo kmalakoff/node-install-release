@@ -37,6 +37,9 @@ export interface InstallOptions extends VersionOptions {
   cachePath?: string;
 }
 
+// InstallOptions after createStoragePaths/DEFAULT_STORAGE_PATHS have been merged in.
+export type ResolvedInstallOptions = InstallOptions & StorageLocations;
+
 export interface Target {
   platform: NodeJS.Platform;
   arch: NodeJS.Architecture;
