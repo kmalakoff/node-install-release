@@ -3,7 +3,7 @@ import fs from 'fs';
 import getopts from 'getopts-compat';
 import path from 'path';
 import url from 'url';
-import install, { type InstallOptions } from './index.ts';
+import type { InstallOptions, InstallResult } from './index.ts';
 
 const ERROR_CODE = 9;
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
@@ -59,7 +59,7 @@ export default (argv: string[], name?: string): void => {
     exit(ERROR_CODE);
     return;
   }
-  install(args[0], options as InstallOptions, (err, result) => {
+  const report = (err?: Error | null, result?: InstallResult) => {
     if (!options.silent) {
       console.log('\n======================');
       if (err) console.log(`${args[0]} not installed. Error: ${err.message}`);
@@ -67,5 +67,25 @@ export default (argv: string[], name?: string): void => {
       console.log('======================');
     }
     exit(err ? ERROR_CODE : 0);
-  });
+  };
+  // deferred: index.ts pulls the whole download+extract+build pipeline. require() cannot load this
+  // ESM sibling below Node 20.19 (require(esm)), so the ESM half needs a real dynamic import; the
+  // CJS half's sibling is genuine CommonJS, so a plain synchronous require avoids depending on
+  // Promise, which isn't global before Node 0.12.
+  loadIndex((err, install) => (err || !install ? report(err) : install(args[0], options as InstallOptions, report)));
 };
+
+type InstallFn = (versionExpression: string, options: InstallOptions, callback: (err?: Error | null, result?: InstallResult) => void) => void;
+
+function loadIndex(callback: (err: Error | null, install?: InstallFn) => void): void {
+  if (typeof require === 'undefined') {
+    import('./index.js').then((mod) => callback(null, mod.default || mod)).catch((err) => callback(err instanceof Error ? err : new Error(String(err))));
+  } else {
+    try {
+      const mod = require('./index.js');
+      callback(null, mod.default || mod);
+    } catch (err) {
+      callback(err instanceof Error ? err : new Error(String(err)));
+    }
+  }
+}
