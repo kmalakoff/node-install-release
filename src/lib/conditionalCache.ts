@@ -1,7 +1,9 @@
 import fs from 'fs';
-import { getFile } from 'get-file-compat';
+import Module from 'module';
 import type { InstallOptions, NoParamCallback } from '../types.ts';
 import ensureDestinationParent from './ensureDestinationParent.ts';
+
+const _require = typeof require === 'undefined' ? Module.createRequire(import.meta.url) : require;
 
 export default function conditionalCache(endpoint: string, dest: string, options: InstallOptions, callback?: NoParamCallback): void {
   callback = typeof options === 'function' ? options : callback;
@@ -10,7 +12,10 @@ export default function conditionalCache(endpoint: string, dest: string, options
   fs.stat(dest, (err) => {
     if (!err) return callback?.(); // already exists
     ensureDestinationParent(dest, (err) => {
-      err ? callback?.(err) : getFile(endpoint, dest, (err: Error | null) => callback?.(err));
+      if (err) return callback?.(err);
+      // deferred: get-file-compat is only needed when the file is actually missing from cache
+      const { getFile } = _require('get-file-compat');
+      getFile(endpoint, dest, (err: Error | null) => callback?.(err));
     });
   });
 }
