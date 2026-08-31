@@ -116,7 +116,7 @@ function addTests(version: string, target: Target) {
   });
 }
 
-describe.only('filenames', () => {
+describe('filenames', () => {
   before((cb) => safeRm(TMP_DIR, cb));
   after((cb) => safeRm(TMP_DIR, cb));
 

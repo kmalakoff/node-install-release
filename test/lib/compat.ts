@@ -2,6 +2,7 @@
  * Compatibility Layer for Node.js 0.8+
  * Local to this package - contains only needed functions.
  */
+import fs from 'fs';
 
 /**
  * Array.prototype.find wrapper for Node.js 0.8+
@@ -18,4 +19,13 @@ export function arrayFind<T>(arr: T[], predicate: (item: T, index: number, arr: 
     if (predicate(arr[i], i, arr)) return arr[i];
   }
   return undefined;
+}
+
+export function existsSync(test: string): boolean {
+  try {
+    (fs.accessSync || fs.statSync)(test);
+    return true;
+  } catch (_) {
+    return false;
+  }
 }
