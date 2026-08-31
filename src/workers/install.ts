@@ -86,7 +86,8 @@ export default function install(versionExpression: string, options: InstallOptio
             if (!bundledNpmIsAncient) return cb(); // unknown version keeps the bundled npm
 
             // old npm (<3) is buggy - delete it so installNPM can override
-            const platform = options.platform;
+            // resolved, not options: callers omit platform and getTarget fills it
+            const platform = resolved.platform;
             const libPath = platform === 'win32' ? tempPath : path.join(tempPath, 'lib');
             const npmPath = path.join(libPath, 'node_modules', 'npm');
             safeRm(npmPath, () => installNPM(version, tempPath, resolved, cb));
