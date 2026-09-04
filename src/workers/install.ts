@@ -99,11 +99,13 @@ export default function install(versionExpression: string, options: InstallOptio
       queue.defer((cb) => {
         fs.rename(tempPath, result.installPath, (err) => {
           if (!err) return cb();
-          // Race condition: another process may have already created dest
+          // Another process may have won the race; only trust that if the destination exists.
+          // Windows also reports EPERM when a handle is held on a file inside tempPath.
           if (err.code === 'EEXIST' || err.code === 'ENOTEMPTY' || err.code === 'EPERM') {
-            // Another process won the race - clean up temp and succeed
-            safeRm(tempPath, () => cb());
-            return;
+            return fs.stat(result.installPath, (statErr) => {
+              if (statErr) return cb(err);
+              safeRm(tempPath, () => cb());
+            });
           }
           cb(err);
         });
