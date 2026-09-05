@@ -8,6 +8,7 @@ import { tmpdir } from '../compat.ts';
 import { NPM_DIST_TAGS_URL, NPM_DIST_URL, NPM_MIN_VERSION } from '../constants.ts';
 import conditionalCache from '../lib/conditionalCache.ts';
 import extract from '../lib/extract.ts';
+import httpStatusError from '../lib/httpStatusError.ts';
 
 import type { InstallOptions } from '../types.ts';
 
@@ -37,8 +38,10 @@ export default function installLib(version: string, dest: string, options: Insta
     // pin the npm major only when the dist index knows this version; unknown means use latest
     const npmMajor = dist && dist.npm ? Math.max(+dist.npm.split('.')[0], NPM_MIN_VERSION) : null;
 
-    getContent(NPM_DIST_TAGS_URL, 'utf8', (err: Error | null, res: { content?: string }) => {
+    getContent(NPM_DIST_TAGS_URL, 'utf8', (err: Error | null, res: { content?: string; statusCode?: number }) => {
       if (err) return callback(err);
+      const statusErr = httpStatusError(NPM_DIST_TAGS_URL, res?.statusCode);
+      if (statusErr) return callback(statusErr);
       try {
         const distTags = JSON.parse(res?.content ?? '{}') as Record<string, string>;
         const npmVersion = npmMajor === null ? distTags.latest : distTags[`latest-${npmMajor}`] || distTags[`next-${npmMajor}`] || distTags.latest;

@@ -31,38 +31,34 @@ interface Target {
 import * as resolveVersions from 'node-resolve-versions';
 
 const VERSIONS = resolveVersions.sync('>=0.8', { range: 'major,even' }) as string[];
+const NEWEST_VERSION = VERSIONS[VERSIONS.length - 1];
 VERSIONS.splice(0, VERSIONS.length, VERSIONS[0]); // TEST SIMPLIFICATION
 const TARGETS = [{}] as Target[];
 
 // const PLATFORMS = ['win32', 'darwin', 'linux'] as NodeJS.Platform[];
-const PLATFORMS = ['win32'] as NodeJS.Platform[];
+const PLATFORMS = ['win32', 'linux'] as NodeJS.Platform[];
 PLATFORMS.forEach((platform) => {
   TARGETS.push({ platform, arch: 'x64' });
 });
 
-import values from 'lodash.values';
-
-// TARGETS.splice(0, TARGETS.length, { filename: 'osx-x64-tar'})
-const FILE_PLATFORM_MAP: Record<string, string> = {
-  win: 'win32',
-  osx: 'darwin',
-};
+// nodejs.org ships a musl build for linux-x64 only, from v24.20.0 and v26.8.0 up
+const MUSL_MIN_MAJOR = 24;
+const MUSL_TARGET = { filename: 'linux-x64-musl' } as Target;
 
 import spawn from 'cross-spawn-cb';
-import install from 'node-install-release';
+import values from 'lodash.values';
+import install, { isMusl } from 'node-install-release';
 import { spawnOptions } from 'node-version-utils';
+import getTarget from '../../src/lib/getTarget.ts';
+import installsMusl from '../lib/installsMusl.ts';
 import validate from '../lib/validate.ts';
 
 function addTests(version: string, target: Target) {
   const specifier = (values(target) as string[]).join('-') || 'local';
-  let { filename, platform, arch } = target;
-  if (filename) {
-    const filePlatform = filename.split('-')[0];
-    platform = (['headers', 'src'].indexOf(filePlatform) >= 0 ? process.platform : FILE_PLATFORM_MAP[filePlatform] || filePlatform) as NodeJS.Platform;
-    arch = filename.split('-')[1] as NodeJS.Architecture;
-  }
-  if (!platform) platform = process.platform;
-  if (!arch) arch = process.arch as NodeJS.Architecture;
+  const resolved = getTarget(target);
+  const platform = resolved.platform;
+  // the running node's arch, not the CPU's, for a target that names neither: a Rosetta node reports x64 and execs an x64 install
+  const arch = target.filename || target.arch ? resolved.arch : (process.arch as NodeJS.Architecture);
 
   describe(`${version}-${specifier}`, () => {
     let installPath: string | null = null;
@@ -73,7 +69,7 @@ function addTests(version: string, target: Target) {
       }
 
       install(version, { name: `${version}-${specifier}`, ...OPTIONS, ...target }, (err, res) => {
-        if (err) return err.message.indexOf('Failed to find installable') >= 0 ? done() : done(err);
+        if (err) return done(err);
         if (res) installPath = res.installPath;
         if (res) version = res.version;
         assert.ok(installPath, 'install spec must run first');
@@ -82,8 +78,9 @@ function addTests(version: string, target: Target) {
       });
     });
 
-    // skipped or not runnable locally
+    // skipped or not runnable locally: a glibc binary cannot exec on a musl host, nor a musl one on glibc
     if (platform !== process.platform || arch !== process.arch || specifier === 'src') return;
+    if (installsMusl(version, target) !== isMusl()) return;
 
     it('npm --version', (done) => {
       if (!installPath) return done(); // failed to install
@@ -126,5 +123,7 @@ describe('filenames', () => {
         addTests(version, target);
       });
     });
+    if (parseInt(NEWEST_VERSION.replace(/^v/, ''), 10) >= MUSL_MIN_MAJOR) addTests(NEWEST_VERSION, MUSL_TARGET);
+    addTests(NEWEST_VERSION, {});
   });
 });

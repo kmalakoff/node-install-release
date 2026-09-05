@@ -1,5 +1,5 @@
 import assert from 'assert';
-import install, { createResult, createStoragePaths } from 'node-install-release';
+import install, { createResult, createStoragePaths, isMusl } from 'node-install-release';
 
 describe('exports .ts', () => {
   it('default', () => {
@@ -10,5 +10,8 @@ describe('exports .ts', () => {
   });
   it('createStoragePaths', () => {
     assert.equal(typeof createStoragePaths, 'function');
+  });
+  it('isMusl', () => {
+    assert.equal(typeof isMusl, 'function');
   });
 });

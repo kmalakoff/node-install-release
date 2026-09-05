@@ -5,6 +5,11 @@ export interface File {
   starting: string;
 }
 
+// process.report.getReport().header: glibcVersionRuntime is a string on glibc and absent on musl
+export interface ReportHeader {
+  glibcVersionRuntime?: string;
+}
+
 export interface FilePath {
   src: string;
   dest: string;

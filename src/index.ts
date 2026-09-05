@@ -24,3 +24,4 @@ export default function install(versionExpression: string, options?: InstallOpti
 }
 export { default as createResult } from './createResult.ts';
 export { default as createStoragePaths } from './createStoragePaths.ts';
+export { default as isMusl } from './lib/isMusl.ts';
