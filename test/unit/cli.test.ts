@@ -27,7 +27,9 @@ const VERSIONS = resolveVersions.sync('>=0.8', { range: 'major,even' }) as strin
 VERSIONS.splice(0, VERSIONS.length, VERSIONS[0], VERSIONS[VERSIONS.length - 1]); // TEST SIMPLIFICATIOn
 
 import spawn from 'cross-spawn-cb';
+import { isMusl } from 'node-install-release';
 import { spawnOptions } from 'node-version-utils';
+import installsMusl from '../lib/installsMusl.ts';
 import validate from '../lib/validate.ts';
 
 const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.js');
@@ -51,6 +53,9 @@ function addTests(version: string) {
         done();
       });
     });
+
+    // a glibc binary cannot exec on a musl host, and no musl build exists below v24.20.0
+    if (installsMusl(version, OPTIONS) !== isMusl()) return;
 
     it('npm --version', (done) => {
       assert.ok(installPath, 'install spec must run first');

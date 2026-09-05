@@ -22,3 +22,7 @@ jobs:
       - run: npm run prepublishOnly
       - run: npm run test
       - run: npm run test:engines
+      # libatomic: nodejs.org's linux-x64-musl binaries link it and node:alpine does not ship it
+      - name: test on alpine (musl)
+        if: runner.os == 'Linux'
+        run: docker run --rm -v "$PWD":/w -v /w/node_modules -w /w node:26-alpine sh -c "apk add --no-cache git libatomic && npm ci && npm test"

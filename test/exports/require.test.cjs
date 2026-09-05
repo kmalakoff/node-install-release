@@ -11,4 +11,7 @@ describe('exports .cjs', () => {
   it('createStoragePaths', () => {
     assert.equal(typeof install.createStoragePaths, 'function');
   });
+  it('isMusl', () => {
+    assert.equal(typeof install.isMusl, 'function');
+  });
 });
