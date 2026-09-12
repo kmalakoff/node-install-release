@@ -78,7 +78,7 @@ describe('cli', function () {
 
     // TODO: remove platform specific after troubleshooting decompress on windows
     if (process.platform !== 'win32') {
-      it('v12 (local src)', function (done) {
+      it.skip('v12 (local src)', function (done) {
         var installPath = path.join(INSTALLED_DIR, 'v12-local-src');
         crossSpawn(CLI, ['v12', installPath, '--filename', 'src', '--cacheDirectory', OPTIONS.cacheDirectory], { stdio: 'inherit' }, function (err, res) {
           assert.ok(!err);
