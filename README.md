@@ -2,6 +2,16 @@
 
 Cross-platform solution for installing releases of Node.js.
 
+Code:
+
+```
+$ npm install node-install-release -g
+$ nir 14
+// installed to ./v14.x.x
+```
+
+Code:
+
 ```
 var assert = require('assert')
 var installRelease = require('node-install-release')

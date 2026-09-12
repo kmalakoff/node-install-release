@@ -17,6 +17,9 @@
   },
   "license": "MIT",
   "main": "index.js",
+  "bin": {
+    "nir": "./bin/node-install-release"
+  },
   "scripts": {
     "compat": "nvs --engines -- mocha-compat test/spec/**/*.test.js --no-timeouts",
     "format": "prettier --write '**/*.js'",

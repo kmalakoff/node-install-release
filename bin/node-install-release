@@ -2,7 +2,7 @@
 
 var program = require('commander');
 var assign = require('object.assign');
-var path = require('path');
+var nir = require('..');
 
 program.option('-a, --platform [platform]', 'Platform like darwin');
 program.option('-a, --arch [arch]', 'Architecure x64, x86, arm-pi');
@@ -16,13 +16,12 @@ if (args.length < 1) {
   return process.exit(-1);
 }
 
-var nir = require('..');
-if (args.length === 1) args.push(path.join(process.cwd(), args[0]));
-
-nir(args[0], args[1], assign({ stdio: 'inherit' }, program), function (err) {
+var installPath = args.length > 1 ? args[1] : null;
+nir(args[0], installPath, assign({ stdio: 'inherit' }, program), function (err, installPath) {
   if (err) {
     console.log(err.message);
     return process.exit(err.code || -1);
   }
+  console.log('Installed Node.js in ' + installPath);
   process.exit(0);
 });
