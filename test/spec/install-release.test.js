@@ -14,6 +14,7 @@ var OPTIONS = {
 };
 var VERSIONS = ['v14', 'v12', 'v10', 'v8', 'v6', 'v4', 'v0.10', 'v0.8'];
 var TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
+// TARGETS = [{}];
 
 function addTests(version, target) {
   var platform = target.platform || 'local';
