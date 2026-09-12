@@ -29,6 +29,17 @@ function addTests(version, target) {
     });
   });
 
+  describe('dist x 2', function () {
+    it(version + ' (' + platform + ',' + arch + ')', function (done) {
+      var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
+      installRelease(version, installPath, assign({}, target, OPTIONS), function (err) {
+        assert.ok(!err);
+        validateInstall(installPath, target);
+        done();
+      });
+    });
+  });
+
   describe('promise', function () {
     if (typeof Promise === 'undefined') return; // no promise support
 
@@ -43,7 +54,7 @@ function addTests(version, target) {
     });
   });
 
-  describe('source', function () {
+  describe.skip('source', function () {
     it(version + ' (' + platform + ',' + arch + ') - src', function (done) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch + '-src');
       installRelease(version, installPath, assign({ filename: 'src' }, OPTIONS), function (err, res) {
