@@ -4,7 +4,7 @@ import { safeRm } from 'fs-remove-compat';
 import { createServer } from 'http';
 import path from 'path';
 import url from 'url';
-import conditionalCache from '../../../src/lib/conditionalCache.ts';
+import conditionalCache from '../../src/lib/conditionalCache.ts';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const TMP_DIR = path.join(__dirname, '..', '..', '..', '.tmp', 'conditionalCache');
