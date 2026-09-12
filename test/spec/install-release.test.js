@@ -34,7 +34,7 @@ function addTests(version, target) {
     it('dist', (done) => {
       const installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}`);
       installRelease(version, installPath, Object.assign({}, target, OPTIONS), (err) => {
-        assert.ok(!err);
+        assert.ok(!err, err ? err.message : '');
         validateInstall(version, installPath, target, done);
       });
     });
@@ -51,7 +51,7 @@ function addTests(version, target) {
     it.skip('source', (done) => {
       const installPath = path.join(INSTALLED_DIR, `${version}-${platform}-${arch}-src`);
       installRelease(version, installPath, Object.assign({ filename: 'src' }, OPTIONS), (err, _res) => {
-        assert.ok(!err);
+        assert.ok(!err, err ? err.message : '');
         validateInstall(version, installPath, done);
       });
     });

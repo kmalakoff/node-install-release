@@ -6,7 +6,7 @@ const resolveVersions = require('node-resolve-versions');
 
 const installVersion = require('./installVersion');
 
-const NIR_DIR = path.join(require('osenv').home(), '.nir');
+const NIR_DIR = path.join(require('homedir-polyfill')(), '.nir');
 const DEFAULT_OPTIONS = {
   cacheDirectory: path.join(NIR_DIR, 'cache'),
   buildDirectory: path.join(NIR_DIR, 'build'),
