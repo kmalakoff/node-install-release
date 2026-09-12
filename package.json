@@ -18,18 +18,19 @@
   "license": "MIT",
   "main": "index.js",
   "bin": {
-    "nir": "./bin/node-install-release"
+    "nir": "./bin/node-install-release.js"
   },
   "scripts": {
-    "format": "eslint . --fix",
+    "format": "prettier --write .",
     "lint": "eslint .",
     "test": "mocha-compat test/spec/**/*.test.js --no-timeouts"
   },
   "dependencies": {
     "arch": "^2.1.2",
-    "cross-spawn-cb": "^0.2.4",
+    "cross-spawn-cb": "^0.3.1",
+    "end-of-stream": "^1.4.4",
     "end-with": "^1.0.2",
-    "fast-extract": "^0.1.11",
+    "fast-extract": "^0.1.15",
     "fs-access-compat": "^1.0.1",
     "get-remote": "^0.4.11",
     "getopts-compat": "^2.2.5",
@@ -44,8 +45,7 @@
     "object-assign": "^4.1.1",
     "osenv": "^0.1.5",
     "queue-cb": "^1.1.4",
-    "rimraf": "^1.0.9",
-    "semver": "^5.7.1",
+    "rimraf": "^2.7.1",
     "single-line-log": "^1.1.2"
   },
   "devDependencies": {
