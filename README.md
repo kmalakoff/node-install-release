@@ -6,7 +6,7 @@ Cross-platform solution for installing releases of Node.js.
 var assert = require('assert')
 var installRelease = require('node-install-release')
 
-var installPath = path.join(INSTALL_DIR, 'v12-darwin-x64');
+var installPath = path.join(INSTALLED_DIR, 'v12-darwin-x64');
 
 // callback - choose the platform and arch
 installRelease('v12', installPath, { platform: 'darwin', arch: 'x64' }, function (err, res) {
