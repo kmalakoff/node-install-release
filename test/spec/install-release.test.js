@@ -11,8 +11,9 @@ var INSTALLED_DIR = path.join(TMP_DIR, 'installed');
 var OPTIONS = {
   cacheDirectory: path.join(TMP_DIR, 'cache'),
 };
-var VERSIONS = ['v12', 'v0.8'];
+var VERSIONS = ['v12', 'v4', 'v0.8'];
 var TARGETS = [{ platform: 'darwin', arch: 'x64' }, { platform: 'linux', arch: 'x64' }, { platform: 'win32', arch: 'x64' }, {}];
+TARGETS = [{}];
 
 function addTests(version, target) {
   var platform = target.platform || 'local';
@@ -27,9 +28,7 @@ function addTests(version, target) {
         done();
       });
     });
-  });
 
-  describe('dist x 2', function () {
     it(version + ' (' + platform + ',' + arch + ')', function (done) {
       var installPath = path.join(INSTALLED_DIR, version + '-' + platform + '-' + arch);
       installRelease(version, installPath, assign({}, target, OPTIONS), function (err) {
