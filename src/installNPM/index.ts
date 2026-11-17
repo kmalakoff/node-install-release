@@ -1,9 +1,9 @@
 import Queue from 'queue-cb';
-import type { InstallOptions, NoParamCallback } from '../types.ts';
+import type { NoParamCallback, ResolvedInstallOptions } from '../types.ts';
 import installBin from './installBin.ts';
 import installLib from './installLib.ts';
 
-export default function install(version: string, dest: string, options: InstallOptions, callback: NoParamCallback): void {
+export default function install(version: string, dest: string, options: ResolvedInstallOptions, callback: NoParamCallback): void {
   let npmVersion: string | null | undefined = null;
   let checksum: string | undefined;
 

@@ -4,13 +4,12 @@ import Module from 'module';
 import oo from 'on-one';
 import path from 'path';
 import Queue from 'queue-cb';
-import { tmpdir } from '../compat.ts';
 import { NPM_DIST_TAGS_URL, NPM_DIST_URL, NPM_MIN_VERSION } from '../constants.ts';
 import conditionalCache from '../lib/conditionalCache.ts';
 import extract from '../lib/extract.ts';
 import httpStatusError from '../lib/httpStatusError.ts';
 
-import type { InstallOptions } from '../types.ts';
+import type { ResolvedInstallOptions } from '../types.ts';
 
 const _require = typeof require === 'undefined' ? Module.createRequire(import.meta.url) : require;
 
@@ -26,7 +25,7 @@ function calculateChecksum(filePath: string, callback: (err?: Error | null, chec
   });
 }
 
-export default function installLib(version: string, dest: string, options: InstallOptions, callback: Callback): void {
+export default function installLib(version: string, dest: string, options: ResolvedInstallOptions, callback: Callback): void {
   const platform = options.platform;
   const libPath = platform === 'win32' ? dest : path.join(dest, 'lib');
   const installPath = path.join(libPath, 'node_modules', 'npm');
@@ -46,7 +45,7 @@ export default function installLib(version: string, dest: string, options: Insta
         const distTags = JSON.parse(res?.content ?? '{}') as Record<string, string>;
         const npmVersion = npmMajor === null ? distTags.latest : distTags[`latest-${npmMajor}`] || distTags[`next-${npmMajor}`] || distTags.latest;
         const downloadPath = `${NPM_DIST_URL}/-/npm-${npmVersion}.tgz`;
-        const cachePath = path.join(options.cachePath ?? tmpdir(), path.basename(downloadPath));
+        const cachePath = path.join(options.cachePath, path.basename(downloadPath));
 
         let checksum: string | undefined;
         const queue = new Queue(1);
