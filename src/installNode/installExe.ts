@@ -3,10 +3,9 @@ import path from 'path';
 import Queue from 'queue-cb';
 
 import { NODE_DIST_BASE_URL, NODE_FILE_PATHS } from '../constants.ts';
-import conditionalCache from '../lib/conditionalCache.ts';
 import copyFile from '../lib/copyFile.ts';
 import type { NoParamCallback, ResolvedInstallOptions } from '../types.ts';
-import validateDownload from './validateDownload.ts';
+import downloadValidated from './downloadValidated.ts';
 
 export default function installExe(distPath: string, dest: string, options: ResolvedInstallOptions, callback: NoParamCallback): void {
   const platform = options.platform;
@@ -19,8 +18,7 @@ export default function installExe(distPath: string, dest: string, options: Reso
     if (!err) return callback(); // already exists
 
     const queue = new Queue(1);
-    queue.defer((cb) => conditionalCache(downloadPath, cachePath, options, (err) => cb(err)));
-    queue.defer((cb) => validateDownload(distPath, cachePath, (err) => cb(err)));
+    queue.defer((cb) => downloadValidated(distPath, downloadPath, cachePath, options, (err) => cb(err)));
     queue.defer((cb) => copyFile(cachePath, execPath, (err) => cb(err)));
     queue.await(callback);
   });

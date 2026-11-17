@@ -2,10 +2,9 @@ import path from 'path';
 import Queue from 'queue-cb';
 
 import { NODE_DIST_BASE_URL } from '../constants.ts';
-import conditionalCache from '../lib/conditionalCache.ts';
 import extract from '../lib/extract.ts';
 import type { ChecksumCallback, ChecksumResult, ResolvedInstallOptions } from '../types.ts';
-import validateDownload from './validateDownload.ts';
+import downloadValidated from './downloadValidated.ts';
 
 export default function installCompressed(distPath: string, dest: string, options: ResolvedInstallOptions, callback: ChecksumCallback): void {
   const downloadPath = `${NODE_DIST_BASE_URL}/${distPath}`;
@@ -13,9 +12,8 @@ export default function installCompressed(distPath: string, dest: string, option
 
   let checksum: ChecksumResult | undefined;
   const queue = new Queue(1);
-  queue.defer((cb) => conditionalCache(downloadPath, cachePath, options, (err) => cb(err)));
   queue.defer((cb) => {
-    validateDownload(distPath, cachePath, (err, result) => {
+    downloadValidated(distPath, downloadPath, cachePath, options, (err, result) => {
       checksum = result;
       cb(err);
     });
