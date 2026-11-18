@@ -21,7 +21,7 @@ export default function install(version: string, dest: string, options: Resolved
       if (checksum) message += ` (${checksum.actual.slice(0, 8)})`;
     } else {
       message += ' install failed';
-      if (checksum) message += ` (${checksum.actual} expecting ${checksum.expected})`;
+      if (checksum) message += checksum.actual ? ` (${checksum.actual} expecting ${checksum.expected})` : ` (expecting ${checksum.expected})`;
       message += `. Error: ${err.message}`;
     }
     console.log(message);

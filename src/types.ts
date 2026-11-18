@@ -50,6 +50,7 @@ export interface Target {
   arch: NodeJS.Architecture;
 }
 
+// actual is '' when a download failed its checksum: the check reports a match, not the digest it computed
 export type ChecksumResult = {
   actual: string;
   expected: string;

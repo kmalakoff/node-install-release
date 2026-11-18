@@ -5,7 +5,7 @@ import mkdirp from 'mkdirp-classic';
 import Module from 'module';
 import path from 'path';
 import Queue from 'queue-cb';
-import tempSuffix from 'temp-suffix';
+import { stagedCache } from 'staged-cache';
 
 import { DEFAULT_STORAGE_PATHS } from '../constants.ts';
 
@@ -56,67 +56,62 @@ export default function install(versionExpression: string, options: InstallOptio
     const version = versions[0];
     const result = createResult(resolved, version);
 
-    // Fast path: with atomic installs, folder exists = complete installation
-    fs.stat(result.installPath, (err) => {
-      if (!err) return callback(undefined, result);
-
-      // Folder doesn't exist - do atomic install with temp folder
-      const tempPath = tempSuffix(result.installPath);
-
-      const queue = new Queue(1);
-      queue.defer((cb) => mkdirp(resolved.cachePath, (err) => cb(err)));
-      queue.defer(ensureDestinationParent.bind(null, tempPath));
-
-      // Install node to temp folder
-      queue.defer(installNode.bind(null, version, tempPath, resolved));
-
-      // Check and install npm to temp folder
-      // Skip npm download only if bundled npm is modern (>= 3)
-      queue.defer((cb) => {
-        checkMissing(tempPath, resolved, (err, npmMissing): void => {
-          if (err) return cb(err);
-          // npm not bundled with node - download it
-          if (~(npmMissing || []).indexOf('npm')) return installNPM(version, tempPath, resolved, cb);
-
-          // npm is present (bundled with node) - keep it unless the dist index positively says it is ancient (<3)
-          // deferred: node-filename-to-dist-paths pulls fetch-json-cache, only needed to check a bundled npm's age
-          const { getDistAsync } = _require('node-filename-to-dist-paths');
-          getDistAsync(version, (_err: Error | null, dist: { npm?: string }) => {
-            const bundledNpmIsAncient = dist && dist.npm && +dist.npm.split('.')[0] < 3;
-            if (!bundledNpmIsAncient) return cb(); // unknown version keeps the bundled npm
-
-            // old npm (<3) is buggy - delete it so installNPM can override
-            // resolved, not options: callers omit platform and getTarget fills it
-            const platform = resolved.platform;
-            const libPath = platform === 'win32' ? tempPath : path.join(tempPath, 'lib');
-            const npmPath = path.join(libPath, 'node_modules', 'npm');
-            safeRm(npmPath, () => installNPM(version, tempPath, resolved, cb));
-          });
-        });
-      });
-
-      // Atomic rename: move temp folder to final destination
-      queue.defer((cb) => {
-        fs.rename(tempPath, result.installPath, (err) => {
-          if (!err) return cb();
-          // Another process may have won the race; only trust that if the destination exists.
-          // Windows also reports EPERM when a handle is held on a file inside tempPath.
-          if (err.code === 'EEXIST' || err.code === 'ENOTEMPTY' || err.code === 'EPERM') {
-            return fs.stat(result.installPath, (statErr) => {
-              if (statErr) return cb(err);
-              safeRm(tempPath, () => cb());
+    // an install is complete when it holds a node binary. This tool only ever builds into a path that is missing or an empty folder:
+    // anything else at installPath that is not a complete install was not made by us (installs are staged and renamed in whole,
+    // so a partial one never appears there) and is never removed or built over.
+    const nodePath = path.relative(result.installPath, result.execPath);
+    const hasNode = (installed: string, cb: (ok: boolean) => void) => fs.stat(path.join(installed, nodePath), (err, stats) => cb(!err && stats.isFile()));
+    stagedCache(
+      result.installPath,
+      {
+        verify: (installed, cb) =>
+          hasNode(installed, (ok) => {
+            if (ok || installed !== result.installPath) return cb(null, ok);
+            // stagedCache asks this of installPath before it removes anything: an error here stops it
+            fs.lstat(installed, (err, stats) => {
+              if (err) return err.code === 'ENOENT' ? cb(null, false) : cb(err); // missing: build; unreadable: stop
+              const foreign = () => cb(new Error(`${installed} exists and is not an install of node ${version}; not changing it`));
+              if (!stats.isDirectory()) return foreign(); // a file or a link of any kind is never replaced
+              fs.readdir(installed, (err, entries) => (err ? cb(err) : entries.length === 0 ? cb(null, false) : foreign()));
             });
-          }
-          cb(err);
-        });
-      });
+          }),
+        build: (tempPath, buildCallback) => {
+          const queue = new Queue(1);
+          queue.defer((cb) => mkdirp(resolved.cachePath, (err) => cb(err)));
+          queue.defer(ensureDestinationParent.bind(null, tempPath));
 
-      queue.await((err) => {
-        // Clean up temp folder on error
-        if (err) return safeRm(tempPath, () => callback(err));
+          // Install node to temp folder
+          queue.defer(installNode.bind(null, version, tempPath, resolved));
 
-        callback(undefined, result);
-      });
-    });
+          // Check and install npm to temp folder
+          // Skip npm download only if bundled npm is modern (>= 3)
+          queue.defer((cb) => {
+            checkMissing(tempPath, resolved, (err, npmMissing): void => {
+              if (err) return cb(err);
+              // npm not bundled with node - download it
+              if (~(npmMissing || []).indexOf('npm')) return installNPM(version, tempPath, resolved, cb);
+
+              // npm is present (bundled with node) - keep it unless the dist index positively says it is ancient (<3)
+              // deferred: node-filename-to-dist-paths pulls fetch-json-cache, only needed to check a bundled npm's age
+              const { getDistAsync } = _require('node-filename-to-dist-paths');
+              getDistAsync(version, (_err: Error | null, dist: { npm?: string }) => {
+                const bundledNpmIsAncient = dist && dist.npm && +dist.npm.split('.')[0] < 3;
+                if (!bundledNpmIsAncient) return cb(); // unknown version keeps the bundled npm
+
+                // old npm (<3) is buggy - delete it so installNPM can override
+                // resolved, not options: callers omit platform and getTarget fills it
+                const platform = resolved.platform;
+                const libPath = platform === 'win32' ? tempPath : path.join(tempPath, 'lib');
+                const npmPath = path.join(libPath, 'node_modules', 'npm');
+                safeRm(npmPath, () => installNPM(version, tempPath, resolved, cb));
+              });
+            });
+          });
+
+          queue.await((err) => buildCallback(err));
+        },
+      },
+      (err) => (err ? callback(err) : callback(undefined, result))
+    );
   });
 }

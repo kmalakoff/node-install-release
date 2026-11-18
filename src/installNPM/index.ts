@@ -5,13 +5,11 @@ import installLib from './installLib.ts';
 
 export default function install(version: string, dest: string, options: ResolvedInstallOptions, callback: NoParamCallback): void {
   let npmVersion: string | null | undefined = null;
-  let checksum: string | undefined;
 
   const queue = new Queue(1);
   queue.defer((cb) =>
-    installLib(version, dest, options, (err, _npmVersion, _checksum) => {
+    installLib(version, dest, options, (err, _npmVersion) => {
       npmVersion = _npmVersion;
-      checksum = _checksum;
       cb(err);
     })
   );
@@ -20,7 +18,6 @@ export default function install(version: string, dest: string, options: Resolved
     let message = `npm ${npmVersion || ''}`;
     if (!err) {
       message += ' installed';
-      if (checksum) message += ` (${checksum.slice(0, 8)})`;
     } else {
       message += ` install failed. Error: ${err.message}`;
     }

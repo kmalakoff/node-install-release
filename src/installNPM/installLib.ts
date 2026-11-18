@@ -1,29 +1,17 @@
-import crypto from 'crypto';
-import fs from 'fs';
 import Module from 'module';
-import oo from 'on-one';
 import path from 'path';
 import Queue from 'queue-cb';
 import { NPM_DIST_TAGS_URL, NPM_DIST_URL, NPM_MIN_VERSION } from '../constants.ts';
-import conditionalCache from '../lib/conditionalCache.ts';
+import cacheDownload from '../lib/cacheDownload.ts';
 import extract from '../lib/extract.ts';
 import httpStatusError from '../lib/httpStatusError.ts';
+import isNonEmptyFile from '../lib/isNonEmptyFile.ts';
 
 import type { ResolvedInstallOptions } from '../types.ts';
 
 const _require = typeof require === 'undefined' ? Module.createRequire(import.meta.url) : require;
 
-export type Callback = (error?: Error | null, npmVersion?: string, checksum?: string) => void;
-
-function calculateChecksum(filePath: string, callback: (err?: Error | null, checksum?: string) => void): void {
-  const hash = crypto.createHash('sha256');
-  const stream = fs.createReadStream(filePath);
-  stream.on('data', (data) => hash.update(data));
-  oo(stream, ['error', 'end', 'close', 'finish'], (err: Error | null) => {
-    if (err) return callback(err);
-    callback(undefined, hash.digest('hex'));
-  });
-}
+export type Callback = (error?: Error | null, npmVersion?: string) => void;
 
 export default function installLib(version: string, dest: string, options: ResolvedInstallOptions, callback: Callback): void {
   const platform = options.platform;
@@ -47,18 +35,12 @@ export default function installLib(version: string, dest: string, options: Resol
         const downloadPath = `${NPM_DIST_URL}/-/npm-${npmVersion}.tgz`;
         const cachePath = path.join(options.cachePath, path.basename(downloadPath));
 
-        let checksum: string | undefined;
+        // npm publishes no sha256 for its tarballs, so a cached one is only checked to be a file with content
         const queue = new Queue(1);
-        queue.defer((cb) => conditionalCache(downloadPath, cachePath, options, (err) => cb(err)));
-        queue.defer((cb) => {
-          calculateChecksum(cachePath, (err, hash) => {
-            checksum = hash;
-            cb(err);
-          });
-        });
+        queue.defer((cb) => cacheDownload(downloadPath, cachePath, isNonEmptyFile, (err) => cb(err)));
         queue.defer((cb) => extract(cachePath, installPath, (err) => cb(err)));
         queue.await((err) => {
-          err ? callback(err) : callback(undefined, npmVersion, checksum);
+          err ? callback(err) : callback(undefined, npmVersion);
         });
       } catch (_e) {
         return callback(new Error('Failed to parse npm dist-tags'));

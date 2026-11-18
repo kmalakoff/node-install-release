@@ -4,10 +4,9 @@ import Queue from 'queue-cb';
 import tempSuffix from 'temp-suffix';
 
 import { NODE_DIST_BASE_URL } from '../../constants.ts';
-import conditionalCache from '../../lib/conditionalCache.ts';
 import extract from '../../lib/extract.ts';
 import type { NoParamCallback, ResolvedInstallOptions } from '../../types.ts';
-import validateDownload from '../validateDownload.ts';
+import downloadValidated from '../downloadValidated.ts';
 import buildPosix from './buildPosix.ts';
 import buildWin32 from './buildWin32.ts';
 
@@ -20,8 +19,7 @@ export default function InstallSource(distPath: string, dest: string, options: R
   const cachePath = path.join(options.cachePath, path.basename(downloadPath));
 
   const queue = new Queue(1);
-  queue.defer((cb) => conditionalCache(downloadPath, cachePath, options, (err) => cb(err)));
-  queue.defer((cb) => validateDownload(distPath, cachePath, (err) => cb(err)));
+  queue.defer((cb) => downloadValidated(distPath, downloadPath, cachePath, options, (err) => cb(err)));
   queue.defer((cb) => extract(cachePath, tempBuildPath, (err) => cb(err)));
   queue.defer((cb) => build(tempBuildPath, dest, options, (err) => cb(err)));
   queue.await((err) => {
