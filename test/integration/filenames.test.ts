@@ -15,6 +15,7 @@ const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : 
 const TMP_DIR = path.join(path.join(__dirname, '..', '..', '.tmp'));
 const OPTIONS = {
   storagePath: path.join(TMP_DIR),
+  cachePath: CACHE_PATH,
 };
 
 import { getDists } from 'node-filename-to-dist-paths';
@@ -50,6 +51,7 @@ import values from 'lodash.values';
 import install, { isMusl } from 'node-install-release';
 import { spawnOptions } from 'node-version-utils';
 import getTarget from '../../src/lib/getTarget.ts';
+import { CACHE_PATH } from '../lib/constants.ts';
 import installsMusl from '../lib/installsMusl.ts';
 import validate from '../lib/validate.ts';
 

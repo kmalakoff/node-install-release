@@ -8,14 +8,13 @@ import mkdirp from 'mkdirp-classic';
 import install, { isMusl } from 'node-install-release';
 import path from 'path';
 import url from 'url';
+import { CACHE_PATH } from '../lib/constants.ts';
 import installsMusl from '../lib/installsMusl.ts';
 import validate from '../lib/validate.ts';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..', '..');
 const TMP_DIR = path.join(ROOT, '.tmp', 'installStaged');
-// release tarballs are named by version and verified against nodejs.org's SHASUMS256.txt, then never change: safe to share between worktrees
-const CACHE_PATH = path.join(ROOT, '.cache', 'shared', 'node-install-release');
 const VERSION = 'v0.8.28';
 const INSTALL_PATH = path.join(TMP_DIR, 'installed', VERSION);
 const OPTIONS = {
